@@ -11,8 +11,25 @@ const url2 =
 async function getData(url) {
 	const api = await fetch(url);
 	const apiJson = await api.json();
-
-	return console.log(apiJson.result.records);
+	console.log(apiJson.result.records);
+	return apiJson.result.records;
 }
 
-getData(url1);
+// $(document).ready(function () {
+// 	let mydata = getData(url1);
+// 	// Use the given data to create
+// 	// the table and display it
+// 	$("table").bootstrapTable({
+// 		data: mydata,
+// 	});
+// });
+
+async function loadTable() {
+	const table = document.querySelector(".table");
+	let mydata = await getData(url1);
+	$("table").bootstrapTable({
+		data: mydata,
+	});
+}
+
+loadTable();

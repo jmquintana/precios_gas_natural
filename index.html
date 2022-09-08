@@ -11,6 +11,9 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <title>Web App</title>
+    <!-- Include the Bootstrap Table CSS
+  for the table -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
 </head>
 
 <body>
@@ -26,11 +29,91 @@
         </ul>
     </div>
     <div class="container">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+        <h1 class="text text-success text-center " style="display:none">
+            GeeksforGeeks
+        </h1>
+        <h6 class="text text-success text-center" style="display:none">
+            A computer science portal for geeks
+        </h6>
+        <div>
+            <table class="table table-striped border-success" table-hover>
+                <thead>
+                    <tr>
+                        <th data-field="anio" data-sortable="true">
+                            <span class="text-success">
+                                Año
+                            </span>
+                        </th>
+                        <th data-field="contrato" data-sortable="true">
+                            <span class="text-success">
+                                Contrato
+                            </span>
+                        </th>
+                        <th data-field="cuenca" data-sortable="true">
+                            <span class="text-success">
+                                Cuenca
+                            </span>
+                        </th>
+                        <!-- <th data-field="id_pub" data-sortable="true">
+                        <span class="text-success">
+                            ID
+                        </span>
+                    </th> -->
+                        <th data-field="indice_tiempo" data-sortable="true">
+                            <span class="text-success">
+                                Año-Mes
+                            </span>
+                        </th>
+                        <!-- <th data-field="mes">
+                        <span class="text-success" data-sortable="true">
+                            Mes
+                        </span>
+                    </th> -->
+                        <th data-field="precio_distribuidora" data-sortable="true">
+                            <span class="text-success">
+                                Distribuidora
+                            </span>
+                        </th>
+                        <th data-field="precio_expo" data-sortable="true">
+                            <span class="text-success">
+                                Expo
+                            </span>
+                        </th>
+                        <th data-field="precio_gnc" data-sortable="true">
+                            <span class="text-success">
+                                GNC
+                            </span>
+                        </th>
+                        <th data-field="precio_industria" data-sortable="true">
+                            <span class="text-success">
+                                Industria
+                            </span>
+                        </th>
+                        <th data-field="precio_otros" data-sortable="true">
+                            <span class="text-success">
+                                Otros
+                            </span>
+                        </th>
+                        <th data-field="precio_usina" data-sortable="true">
+                            <span class="text-success">
+                                Usina
+                            </span>
+                        </th>
+                        <th data-field="precio_ppp" data-sortable="true">
+                            <span class="text-success">
+                                PPP
+                            </span>
+                        </th>
 
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </body>
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
 <script type="text/javascript" src="./JS/index.js"></script>
 
 </html>
