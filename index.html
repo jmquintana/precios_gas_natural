@@ -17,24 +17,24 @@
 </head>
 
 <body>
-
-    <div class="dropdown container">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Dropdown item</a></li>
-            <li><a class="dropdown-item" href="#">Dropdown item</a></li>
-            <li><a class="dropdown-item" href="#">Dropdown item</a></li>
-        </ul>
-    </div>
     <div class="container">
-        <h1 class="text text-success text-center " style="display:none">
-            GeeksforGeeks
-        </h1>
-        <h6 class="text text-success text-center" style="display:none">
-            A computer science portal for geeks
-        </h6>
+        <div class="form">
+            <select class="form-select" aria-label="Anio" width="20%">
+                <option selected>Año</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+            </select>
+            <select class="form-select" aria-label="Cuenca" width="20%">
+                <option selected>Cuenca</option>
+                <option value="2019">Noroeste</option>
+                <option value="2020">Neuquina</option>
+                <option value="2021">Golfo de San Jorge</option>
+                <option value="2022">Austral Santa Cruz</option>
+                <option value="2022">Austral Tierra del Fuego</option>
+            </select>
+        </div>
         <div>
             <table id="data-table" class="table table-striped hover compact">
                 <!-- <thead>
@@ -55,7 +55,7 @@
                     </tr>
                 </thead> -->
                 <tfoot>
-                    <tr>
+                    <!-- <tr>
                         <th>Año</th>
                         <th>Contrato</th>
                         <th>Mes</th>
@@ -69,7 +69,7 @@
                         <th>Usina</th>
                         <th>Año</th>
                         <th>Año</th>
-                    </tr>
+                    </tr> -->
                 </tfoot>
             </table>
             <table class="table table-striped border-success" table-hover id="data-table1" style="display:none">

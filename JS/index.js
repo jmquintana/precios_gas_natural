@@ -50,16 +50,20 @@ const columns = [
 	},
 ];
 
-$(document).ready(async function () {
-	let myData = await getData(url1);
-	const data = await myData.records.map((el) => Object.values(el));
-	// const keys = Object.keys(myData.records[0]);
-	// let columns = [];
-	// keys.forEach((title) => {
-	// 	columns.push({ title });
-	// });
-	// console.log(myData.records);
-	console.log(columns);
+$(document).ready(async () => {
+	// Promise.all([]).then(() => {});
+	let myData = [];
+	let data = [];
+	const filters = {
+		anio: 2022,
+		contrato: "TOTAL",
+	};
+	try {
+		myData = await getData(url1, filters);
+		data = await myData.records.map((el) => Object.values(el));
+	} catch (e) {
+		console.error(e);
+	}
 	$("#data-table").DataTable({
 		// initComplete: function () {
 		// 	this.api()

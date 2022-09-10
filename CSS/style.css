@@ -24,10 +24,26 @@ body {
 }
 
 .container {
-    padding: 0.5rem;
+    padding: 0.2rem 0.2rem;
 }
 
 th,
 td {
     white-space: nowrap;
+}
+
+.form {
+    /* display: grid; */
+    /* grid-template-columns: 1fr 1fr; */
+    display: flex;
+    /* margin: 0.5rem; */
+}
+
+.form .form-select {
+    margin: 1rem;
+
+}
+
+table.dataTable td {
+    font-size: 0.9em;
 }
