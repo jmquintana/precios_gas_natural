@@ -1,7 +1,6 @@
 console.log("hola mundo");
 
-const alertList = document.querySelectorAll(".alert");
-const alerts = [...alertList].map((element) => new bootstrap.Alert(element));
+let table = $("#data-table");
 
 const url1 =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
@@ -50,52 +49,57 @@ const columns = [
 	},
 ];
 
-$(document).ready(async () => {
-	// Promise.all([]).then(() => {});
+async function loadData() {
 	let myData = [];
 	let data = [];
-	const filters = {
-		anio: 2022,
-		contrato: "TOTAL",
-	};
 	try {
 		myData = await getData(url1, filters);
 		data = await myData.records.map((el) => Object.values(el));
+		return data;
 	} catch (e) {
 		console.error(e);
+		return;
 	}
-	$("#data-table").DataTable({
-		// initComplete: function () {
-		// 	this.api()
-		// 		.columns()
-		// 		.every(function () {
-		// 			var column = this;
-		// 			var select = $('<select><option value=""></option></select>')
-		// 				.appendTo($(column.footer()).empty())
-		// 				.on("change", function () {
-		// 					var val = $.fn.dataTable.util.escapeRegex($(this).val());
+}
 
-		// 					column.search(val ? "^" + val + "$" : "", true, false).draw();
-		// 				});
-
-		// 			column
-		// 				.data()
-		// 				.unique()
-		// 				.sort()
-		// 				.each(function (d, j) {
-		// 					select.append('<option value="' + d + '">' + d + "</option>");
-		// 				});
-		// 		});
-		// },
-		// ajax: url1,
-		// data: "result",
-		data: data,
+async function showTable() {
+	table.DataTable({
+		data: await loadData(),
 		dom: "Bfrtip",
-		// buttons: ["colvis", "excel", "print"],
 		columns: columns,
-		language: {
-			decimal: ".",
-			thousands: ",",
-		},
+	});
+}
+
+function destroyTable() {
+	table.DataTable().destroy();
+}
+
+function recalcTable() {
+	table.responsive.recalc();
+}
+
+const anioSelector = document.getElementById("anio");
+
+const filterSeletors = document.querySelectorAll(".form-select");
+
+filterSeletors.forEach((filterSelector) => {
+	filterSelector.addEventListener("change", async () => {
+		if (
+			!(filterSelector.value === "Todos") &&
+			!(filterSelector.value === "Todas")
+		) {
+			filters[filterSelector.id] =
+				parseInt(filterSelector.value) || filterSelector.value;
+		} else {
+			delete filters[filterSelector.id];
+		}
+		console.log(filters);
+		table.hide();
+		destroyTable();
+		await showTable();
+		table.show();
+		// recalcTable();
 	});
 });
+
+$(document).ready(showTable);

@@ -14,15 +14,30 @@ function isEmpty(obj) {
 	return JSON.stringify(obj) === JSON.stringify({});
 }
 
-async function getData(endpoint, filters = {}) {
-	let fullUrl = `http://datos.energia.gob.ar${endpoint}`;
-	if (!isEmpty(filters)) {
-		fullUrl += `&filters={`;
+let filters = {
+	// anio: 2022,
+	// cuenca: "Noroeste",
+	// contrato: "TOTAL",
+};
+
+function urlFilters(filters) {
+	let string = "";
+	if (isEmpty(filters)) {
+		return string;
+	} else {
+		string += `&filters={`;
 		Object.keys(filters).forEach((key) => {
-			fullUrl += `%22${key}%22:[%22${filters[key]}%22],`;
+			string += `%22${key}%22:[%22${filters[key]}%22],`;
 		});
-		fullUrl = fullUrl.slice(0, -1) + `}#`;
+		string = string.slice(0, -1) + `}#`;
 	}
+	console.log(string);
+	return string;
+}
+
+async function getData(endpoint, filters = {}) {
+	let filterString = urlFilters(filters);
+	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
 	console.log(fullUrl);
 	try {
 		const api = await fetch(fullUrl);

@@ -33,14 +33,19 @@ td {
 }
 
 .form {
-    /* display: grid; */
-    /* grid-template-columns: 1fr 1fr; */
     display: flex;
+    justify-content: space-between;
     /* margin: 0.5rem; */
 }
 
-.form .form-select {
-    margin: 1rem;
+.form .selector {
+    margin: 1rem 1rem;
+    width: 100%;
+
+}
+
+.form .selector h5 {
+    margin: 0.4rem 0.8rem 0.4rem 0.8rem;
 
 }
 

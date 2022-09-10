@@ -19,21 +19,36 @@
 <body>
     <div class="container">
         <div class="form">
-            <select class="form-select" aria-label="Anio" width="20%">
-                <option selected>Año</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-            </select>
-            <select class="form-select" aria-label="Cuenca" width="20%">
-                <option selected>Cuenca</option>
-                <option value="2019">Noroeste</option>
-                <option value="2020">Neuquina</option>
-                <option value="2021">Golfo de San Jorge</option>
-                <option value="2022">Austral Santa Cruz</option>
-                <option value="2022">Austral Tierra del Fuego</option>
-            </select>
+            <div class="selector">
+                <h5>Año</h5>
+                <select id="anio" class="form-select" aria-label="Anio">
+                    <option selected>Todos</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                </select>
+            </div>
+            <div class="selector">
+                <h5>Cuenca</h6>
+                    <select id="cuenca" class="form-select" aria-label="Cuenca">
+                        <option selected>Todas</option>
+                        <option value="Noroeste">Noroeste</option>
+                        <option value="Neuquina">Neuquina</option>
+                        <option value="Golfo de San Jorge">Golfo de San Jorge</option>
+                        <option value="Austral Santa Cruz">Austral Santa Cruz</option>
+                        <option value="Austral Tierra del Fuego">Austral Tierra del Fuego</option>
+                    </select>
+            </div>
+            <div class="selector">
+                <h5>Contrato</h5>
+                <select id="contrato" class="form-select" aria-label="Contrato">
+                    <option selected>Todos</option>
+                    <option value="TOTAL">TOTAL</option>
+                    <option value="FIRME">FIRME</option>
+                    <option value="INTERRUMPIBLE">INTERRUMPIBLE</option>
+                </select>
+            </div>
         </div>
         <div>
             <table id="data-table" class="table table-striped hover compact">
