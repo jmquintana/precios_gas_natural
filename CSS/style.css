@@ -27,6 +27,18 @@ body {
     padding: 0.2rem 0.2rem;
 }
 
+.header {
+    border-bottom: 1px solid #80868C;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+/* .header-title {} */
+
+.header-subtitle {
+    color: #80868C
+}
+
 th,
 td {
     white-space: nowrap;
@@ -35,7 +47,7 @@ td {
 .form {
     display: flex;
     justify-content: space-between;
-    /* margin: 0.5rem; */
+    margin-bottom: 1.5rem;
 }
 
 .form .selector {
@@ -51,4 +63,9 @@ td {
 
 table.dataTable td {
     font-size: 0.9em;
+}
+
+.dt-buttons,
+.dataTables_filter {
+    margin-bottom: 1rem;
 }

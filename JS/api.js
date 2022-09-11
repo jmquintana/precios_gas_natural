@@ -1,3 +1,5 @@
+// const fs = require("fs");
+
 const FIRST =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
 let next;
@@ -42,6 +44,34 @@ async function getData(endpoint, filters = {}) {
 	}
 }
 
+function saveFile(json) {
+	fs.writeFile("./data/data.json", JSON.stringify(json), (err) => {
+		if (err) {
+			throw new Error("Something went wrong.");
+		}
+		console.log("JSON written to file. Contents:");
+		console.log(fs.readFileSync("data.json", "utf-8"));
+	});
+}
+
+async function gData(endpoint, _data = [], page = 1) {
+	try {
+		let newData = await getData(endpoint);
+		if ((page - 1) * 100 > newData.total) {
+			console.log(_data);
+			// saveFile(_data);
+			return _data;
+		} else {
+			_data = _data.concat(newData.records);
+			let newEndpoint = newData._links.next;
+			page++;
+			gData(newEndpoint, _data, page);
+		}
+	} catch (e) {
+		console.error(e);
+	}
+}
+
 // async function gData(endpoint, _data = [], page = 1) {
 // 	try {
 // 		let newData = await getData(endpoint);
@@ -63,20 +93,3 @@ async function getData(endpoint, filters = {}) {
 // 		console.error(e);
 // 	}
 // }
-
-async function gData(endpoint, _data = [], page = 1) {
-	try {
-		let newData = await getData(endpoint);
-		if ((page - 1) * 100 > newData.total) {
-			console.log(_data);
-			return _data;
-		} else {
-			_data = _data.concat(newData.records);
-			let newEndpoint = newData._links.next;
-			page++;
-			gData(newEndpoint, _data, page);
-		}
-	} catch (e) {
-		console.error(e);
-	}
-}

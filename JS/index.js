@@ -43,15 +43,15 @@ async function showTable() {
 	let endpoint = `${url1}`;
 	let filterString = urlFilters(filters);
 	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
-	// let data = await getData(endpoint);
+	let data = await getData(endpoint);
 	// console.log(data);
 	table.DataTable({
-		ajax: {
-			url: fullUrl,
-			dataSrc: "result.records",
-			cache: true,
-		},
-		// data: data.records,
+		// ajax: {
+		// 	url: fullUrl,
+		// 	dataSrc: "result.records",
+		// 	cache: true,
+		// },
+		data: data.records,
 		dom: "Bfrtip",
 		// dom: "Rlfrtip",
 		// dom: "lBfrtip",
@@ -66,10 +66,6 @@ async function showTable() {
 
 function destroyTable() {
 	table.DataTable().destroy();
-}
-
-function recalcTable() {
-	table.responsive.recalc();
 }
 
 const anioSelector = document.getElementById("anio");
