@@ -1,5 +1,3 @@
-console.log("hola mundo");
-
 let table = $("#data-table");
 
 const url1 =
@@ -8,54 +6,18 @@ const url2 =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
 
 const columns = [
-	{
-		title: "ID",
-	},
-	{
-		title: "Otros",
-	},
-	{
-		title: "Distribuidora",
-	},
-	{
-		title: "Año",
-	},
-	{
-		title: "Usina",
-	},
-	{
-		title: "Exportación",
-	},
-	{
-		title: "GNC",
-	},
-	{
-		title: "Industria",
-	},
-	{
-		title: "PPP",
-	},
-	{
-		title: "Año-Mes",
-	},
-	{
-		title: "Contrato",
-	},
-	{
-		title: "Mes",
-	},
-	{
-		title: "Cuenca",
-	},
-];
-
-const columns2 = [
-	{ data: "id_pub" },
-	{ data: "anio" },
-	{ data: "mes" },
-	{ data: "contrato" },
-	{ data: "cuenca" },
-	{ data: "precio_ppp" },
+	// { title: "ID", data: "id_pub" },
+	{ title: "Año", data: "anio", orderData: [1, 2, 3, 4] },
+	{ title: "Mes", data: "mes", orderData: [3, 0] },
+	{ title: "Contrato", data: "contrato" },
+	{ title: "Cuenca", data: "cuenca" },
+	{ title: "Distribuidoras", data: "precio_distribuidora" },
+	{ title: "GNC", data: "precio_gnc" },
+	{ title: "Usinas", data: "precio_usina" },
+	{ title: "Industrias", data: "precio_industria" },
+	{ title: "Otros", data: "precio_otros" },
+	{ title: "PPP", data: "precio_ppp" },
+	{ title: "Expo", data: "precio_expo" },
 ];
 
 async function loadData() {
@@ -80,15 +42,22 @@ async function loadData() {
 async function showTable() {
 	let filterString = urlFilters(filters);
 	let fullUrl = `http://datos.energia.gob.ar${url1}${filterString}`;
+	console.log(columns);
 	table.DataTable({
 		ajax: {
 			url: fullUrl,
 			dataSrc: "result.records",
 			cache: true,
 		},
-		// data: data,
 		dom: "Bfrtip",
-		columns: columns2,
+		// dom: "Rlfrtip",
+		// dom: "lBfrtip",
+		columns: columns,
+		colReorder: { order: [5, 3, 2, 1, 0] },
+		buttons: [
+			{ extend: "copy", className: "copyButton" },
+			{ extend: "excel", className: "excelButton" },
+		],
 	});
 }
 

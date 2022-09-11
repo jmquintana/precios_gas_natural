@@ -31,7 +31,6 @@ function urlFilters(filters) {
 async function getData(endpoint, filters = {}) {
 	let filterString = urlFilters(filters);
 	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
-	console.log(fullUrl);
 	try {
 		const api = await fetch(fullUrl);
 		const apiJson = await api.json();
