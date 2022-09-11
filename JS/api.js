@@ -30,7 +30,8 @@ function urlFilters(filters) {
 
 async function getData(endpoint, filters = {}) {
 	let filterString = urlFilters(filters);
-	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
+	// let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
+	let fullUrl = `http://datos.energia.gob.ar${endpoint}`;
 	try {
 		const api = await fetch(fullUrl);
 		const apiJson = await api.json();
@@ -41,20 +42,39 @@ async function getData(endpoint, filters = {}) {
 	}
 }
 
-async function gData(url, _data = [], page = 0) {
+// async function gData(endpoint, _data = [], page = 1) {
+// 	try {
+// 		let newData = await getData(endpoint);
+// 		let data;
+// 		if ((page - 1) * 100 >= newData.total) {
+// 			console.log(_data);
+// 			// return _data;
+// 		}
+// 		while ((page - 1) * 100 < newData.total) {
+// 			data = _data.concat(newData.records);
+// 			// console.log(data);
+// 			page += 1;
+// 			let endpoint = newData._links.next;
+// 			// console.log("http://datos.energia.gob.ar" + endpoint);
+// 			gData(endpoint, data, page);
+// 			return data;
+// 		}
+// 	} catch (e) {
+// 		console.error(e);
+// 	}
+// }
+
+async function gData(endpoint, _data = [], page = 1) {
 	try {
-		let newData = await getData(url);
-		let data;
-		if (page * 100 >= newData.total) {
+		let newData = await getData(endpoint);
+		if ((page - 1) * 100 > newData.total) {
 			console.log(_data);
 			return _data;
-		}
-		while (page * 100 < newData.total) {
-			data = _data.concat(newData.records);
-			// console.log(data);
-			page = page + 1;
-			gData(newData._links.next, data, page);
-			return data;
+		} else {
+			_data = _data.concat(newData.records);
+			let newEndpoint = newData._links.next;
+			page++;
+			gData(newEndpoint, _data, page);
 		}
 	} catch (e) {
 		console.error(e);
