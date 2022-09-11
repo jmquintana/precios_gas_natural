@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web App</title>
     <link rel="stylesheet" href="./CSS/style.css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <title>Web App</title>
     <!-- Include the Bootstrap Table CSS for the table -->
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css"> -->
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
 
@@ -52,123 +52,18 @@
         </div>
         <div>
             <table id="data-table" class="table table-striped hover compact">
-                <!-- <thead>
-                    <tr>
-                        <th>Año</th>
-                        <th>Contrato</th>
-                        <th>Mes</th>
-                        <th>Cuenca</th>
-                        <th>Año-Mes</th>
-                        <th>Distribuidora</th>
-                        <th>Expo</th>
-                        <th>GNC</th>
-                        <th>Industria</th>
-                        <th>Otros</th>
-                        <th>Usina</th>
-                        <th>Año</th>
-                        <th>Año</th>
-                    </tr>
-                </thead> -->
-                <tfoot>
-                    <!-- <tr>
-                        <th>Año</th>
-                        <th>Contrato</th>
-                        <th>Mes</th>
-                        <th>Cuenca</th>
-                        <th>Año-Mes</th>
-                        <th>Distribuidora</th>
-                        <th>Expo</th>
-                        <th>GNC</th>
-                        <th>Industria</th>
-                        <th>Otros</th>
-                        <th>Usina</th>
-                        <th>Año</th>
-                        <th>Año</th>
-                    </tr> -->
-                </tfoot>
-            </table>
-            <table class="table table-striped border-success" table-hover id="data-table1" style="display:none">
-                <thead>
-                    <tr>
-                        <th data-field="anio" data-sortable="true">
-                            <span class="text-success">
-                                Año
-                            </span>
-                        </th>
-                        <th data-field="contrato" data-sortable="true">
-                            <span class="text-success">
-                                Contrato
-                            </span>
-                        </th>
-                        <th data-field="cuenca" data-sortable="true">
-                            <span class="text-success">
-                                Cuenca
-                            </span>
-                        </th>
-                        <!-- <th data-field="id_pub" data-sortable="true">
-                        <span class="text-success">
-                            ID
-                        </span>
-                    </th> -->
-                        <th data-field="indice_tiempo" data-sortable="true">
-                            <span class="text-success">
-                                Año-Mes
-                            </span>
-                        </th>
-                        <!-- <th data-field="mes">
-                        <span class="text-success" data-sortable="true">
-                            Mes
-                        </span>
-                    </th> -->
-                        <th data-field="precio_distribuidora" data-sortable="true">
-                            <span class="text-success">
-                                Distribuidora
-                            </span>
-                        </th>
-                        <th data-field="precio_expo" data-sortable="true">
-                            <span class="text-success">
-                                Expo
-                            </span>
-                        </th>
-                        <th data-field="precio_gnc" data-sortable="true">
-                            <span class="text-success">
-                                GNC
-                            </span>
-                        </th>
-                        <th data-field="precio_industria" data-sortable="true">
-                            <span class="text-success">
-                                Industria
-                            </span>
-                        </th>
-                        <th data-field="precio_otros" data-sortable="true">
-                            <span class="text-success">
-                                Otros
-                            </span>
-                        </th>
-                        <th data-field="precio_usina" data-sortable="true">
-                            <span class="text-success">
-                                Usina
-                            </span>
-                        </th>
-                        <th data-field="precio_ppp" data-sortable="true">
-                            <span class="text-success">
-                                PPP
-                            </span>
-                        </th>
-
-                    </tr>
-                </thead>
             </table>
         </div>
     </div>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<!-- <script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script> -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js" defer></script>
 <script type="text/javascript" src="./JS/index.js"></script>
 <script type="text/javascript" src="./JS/api.js"></script>
 <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script> -->
 
 </html>

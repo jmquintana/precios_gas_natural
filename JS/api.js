@@ -21,18 +21,11 @@ let filters = {
 };
 
 function urlFilters(filters) {
-	let string = "";
-	if (isEmpty(filters)) {
-		return string;
-	} else {
-		string += `&filters={`;
-		Object.keys(filters).forEach((key) => {
-			string += `%22${key}%22:[%22${filters[key]}%22],`;
-		});
-		string = string.slice(0, -1) + `}#`;
-	}
-	console.log(string);
-	return string;
+	// if (isEmpty(filters)) {
+	// 	return "";
+	// } else {
+	return `&filters=${JSON.stringify(filters)}#`;
+	// }
 }
 
 async function getData(endpoint, filters = {}) {
@@ -48,17 +41,6 @@ async function getData(endpoint, filters = {}) {
 		console.error(e);
 	}
 }
-
-// async function getData(endpoint) {
-// 	const fullUrl = `http://datos.energia.gob.ar${endpoint}`;
-// 	fetch(fullUrl)
-// 		.then((api) => api.json())
-// 		.then((apiJson) => {
-// 			console.log(apiJson.result);
-// 			return apiJson.result;
-// 		})
-// 		.catch((e) => console.log(e));
-// }
 
 async function gData(url, _data = [], page = 0) {
 	try {
@@ -79,9 +61,3 @@ async function gData(url, _data = [], page = 0) {
 		console.error(e);
 	}
 }
-
-// Promise.all([gData(current)]).then((res) => {
-// 	console.log(res);
-// });
-
-// gData([], current);

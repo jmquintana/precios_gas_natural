@@ -49,13 +49,28 @@ const columns = [
 	},
 ];
 
+const columns2 = [
+	{ data: "id_pub" },
+	{ data: "anio" },
+	{ data: "mes" },
+	{ data: "contrato" },
+	{ data: "cuenca" },
+	{ data: "precio_ppp" },
+];
+
 async function loadData() {
 	let myData = [];
 	let data = [];
 	try {
 		myData = await getData(url1, filters);
+		console.log(myData);
+		console.log(myData.records);
+		console.log(columns2);
 		data = await myData.records.map((el) => Object.values(el));
-		return data;
+		let d = { data: myData.records };
+		console.log(d);
+		return d;
+		// return data;
 	} catch (e) {
 		console.error(e);
 		return;
@@ -63,10 +78,17 @@ async function loadData() {
 }
 
 async function showTable() {
+	let filterString = urlFilters(filters);
+	let fullUrl = `http://datos.energia.gob.ar${url1}${filterString}`;
 	table.DataTable({
-		data: await loadData(),
+		ajax: {
+			url: fullUrl,
+			dataSrc: "result.records",
+			cache: true,
+		},
+		// data: data,
 		dom: "Bfrtip",
-		columns: columns,
+		columns: columns2,
 	});
 }
 
@@ -96,7 +118,7 @@ filterSeletors.forEach((filterSelector) => {
 		console.log(filters);
 		table.hide();
 		destroyTable();
-		await showTable();
+		showTable();
 		table.show();
 		// recalcTable();
 	});
