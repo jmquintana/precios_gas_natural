@@ -12,7 +12,6 @@ function isEmpty(obj) {
 			return false;
 		}
 	}
-
 	return JSON.stringify(obj) === JSON.stringify({});
 }
 
@@ -23,17 +22,17 @@ let filters = {
 };
 
 function urlFilters(filters) {
-	// if (isEmpty(filters)) {
-	// 	return "";
-	// } else {
-	return `&filters=${JSON.stringify(filters)}#`;
-	// }
+	if (isEmpty(filters)) {
+		return "";
+	} else {
+		let string = JSON.stringify(filters);
+		return `&filters=${string}#`;
+	}
 }
 
-async function getData(endpoint, filters = {}) {
+async function getData(endpoint) {
 	let filterString = urlFilters(filters);
-	// let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
-	let fullUrl = `http://datos.energia.gob.ar${endpoint}`;
+	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
 	try {
 		const api = await fetch(fullUrl);
 		const apiJson = await api.json();

@@ -11,11 +11,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
     <!-- 2. Use Bootstrap if you like -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" /> -->
 
     <!-- 3. Add datatables with buttons support -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.21/b-1.6.2/b-html5-1.6.2/datatables.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.21/b-1.6.2/b-html5-1.6.2/datatables.min.css" /> -->
 
 
 
@@ -24,57 +23,63 @@
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <!-- Include the Bootstrap Table CSS for the table -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
 
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
+    <!-- <div class="container"> -->
+    <div class="nav">
+        <div class="header container">
             <h2 class="header-title">Precios de Gas Natural - Res 1/2018</h2>
             <h5 class="header-subtitle">Valores en expresados en U$S/MMBtu desde enero 2019</h5>
         </div>
-        <div class="form">
-            <div class="selector">
-                <h5>Año</h5>
-                <select id="anio" class="form-select" aria-label="Anio">
-                    <option selected>Todos</option>
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                    <option value="2020">2020</option>
-                    <option value="2019">2019</option>
-                </select>
-            </div>
-            <div class="selector">
-                <h5>Cuenca</h6>
-                    <select id="cuenca" class="form-select" aria-label="Cuenca">
-                        <option selected>Todas</option>
-                        <option value="Noroeste">Noroeste</option>
-                        <option value="Neuquina">Neuquina</option>
-                        <option value="Golfo de San Jorge">Golfo de San Jorge</option>
-                        <option value="Austral Santa Cruz">Austral Santa Cruz</option>
-                        <option value="Austral Tierra del Fuego">Austral Tierra del Fuego</option>
-                    </select>
-            </div>
-            <div class="selector">
-                <h5>Contrato</h5>
-                <select id="contrato" class="form-select" aria-label="Contrato">
-                    <option selected>Todos</option>
-                    <option value="TOTAL">TOTAL</option>
-                    <option value="FIRME">FIRME</option>
-                    <option value="INTERRUMPIBLE">INTERRUMPIBLE</option>
-                </select>
-            </div>
+    </div>
+
+    <div class="form container">
+        <div class="selector">
+            <h5>Año</h5>
+            <select id="anio" class="form-select" aria-label="Anio">
+                <option selected>Todos</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+            </select>
         </div>
-        <div>
-            <table id="data-table" class="table table-striped hover compact">
-            </table>
+        <div class="selector">
+            <h5>Cuenca</h6>
+                <select id="cuenca" class="form-select" aria-label="Cuenca">
+                    <option selected>Todas</option>
+                    <option value="Total Cuenca">Total Cuenca</option>
+                    <option value="Noroeste">Noroeste</option>
+                    <option value="Neuquina">Neuquina</option>
+                    <option value="Golfo de San Jorge">Golfo de San Jorge</option>
+                    <option value="Austral Santa Cruz">Austral Santa Cruz</option>
+                    <option value="Austral Tierra del Fuego">Austral Tierra del Fuego</option>
+                </select>
+        </div>
+        <div class="selector">
+            <h5>Contrato</h5>
+            <select id="contrato" class="form-select" aria-label="Contrato">
+                <option selected>Todos</option>
+                <option value="TOTAL">TOTAL</option>
+                <option value="FIRME">FIRME</option>
+                <option value="INTERRUMPIBLE">INTERRUMPIBLE</option>
+            </select>
         </div>
     </div>
+    <div class="container">
+        <table id="data-table" class="table hover compact">
+            <thead class="table-group-divider table-light"></thead>
+        </table>
+    </div>
+    <!-- </div> -->
 </body>
 
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
@@ -85,10 +90,16 @@
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js" defer></script>
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js" defer></script>
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.21/b-1.6.2/b-html5-1.6.2/datatables.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 
 <!-- 4. Add this plugin's scripts -->
-<!-- <script defer type="text/javascript" src="../js/buttons.html5.styles.js?version=1.2.0"></script>
-<script defer type="text/javascript" src="../js/buttons.html5.styles.templates.js?version=1.2.0"></script> -->
+<!-- <script defer type="text/javascript" src="../js/buttons.html5.styles.js?version=1.2.0"></script> -->
+<!-- <script defer type="text/javascript" src="../js/buttons.html5.styles.templates.js?version=1.2.0"></script> -->
+
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.templates.min.js"></script>
 
 <script type="text/javascript" src="./JS/index.js"></script>
 <script type="text/javascript" src="./JS/api.js"></script>

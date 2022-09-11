@@ -16,27 +16,47 @@ body,
 html {
     padding: 0%;
     margin: 0%;
+    font-family: 'Inter', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
     height: 100%;
-    background-color: var(--color-darkgrey2);
+    /* background-color: var(--color-darkgrey2); */
+}
+
+.nav {
+    padding-top: 3rem;
+    width: 100%;
+    border-bottom: 5px solid #E8EDF5;
+    background: linear-gradient(0deg, rgba(232, 237, 245, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    box-shadow: 0px 2px 5px #B8BCC2;
 }
 
 .container {
-    padding: 0.2rem 0.2rem;
+    /* padding: 0.2rem 0.2rem; */
+    max-width: 1000px;
 }
 
 .header {
-    border-bottom: 1px solid #80868C;
-    margin-top: 3rem;
-    margin-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+
 }
 
 /* .header-title {} */
 
+.header-title {
+    color: #333333;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
 .header-subtitle {
-    color: #80868C
+    color: #80868C;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 th,
@@ -47,7 +67,7 @@ td {
 .form {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    /* margin-bottom: 1.5rem; */
 }
 
 .form .selector {
@@ -57,12 +77,17 @@ td {
 }
 
 .form .selector h5 {
-    margin: 0.4rem 0.8rem 0.4rem 0.8rem;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
 
 }
 
+table {
+    width: 100% !important;
+}
+
 table.dataTable td {
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 .dt-buttons,

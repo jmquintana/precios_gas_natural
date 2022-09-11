@@ -7,11 +7,11 @@ const url2 =
 
 const columns = [
 	// { title: "ID", data: "id_pub" },
-	{ title: "Año", data: "anio", orderData: [1, 2, 3, 4] },
-	{ title: "Mes", data: "mes", orderData: [3, 0] },
+	{ title: "Año", data: "anio" },
+	{ title: "Mes", data: "mes" },
 	{ title: "Contrato", data: "contrato" },
 	{ title: "Cuenca", data: "cuenca" },
-	{ title: "Distribuidoras", data: "precio_distribuidora" },
+	{ title: "Distcos", data: "precio_distribuidora" },
 	{ title: "GNC", data: "precio_gnc" },
 	{ title: "Usinas", data: "precio_usina" },
 	{ title: "Industrias", data: "precio_industria" },
@@ -41,8 +41,8 @@ async function loadData() {
 
 async function showTable() {
 	let endpoint = `${url1}`;
-	let filterString = urlFilters(filters);
-	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
+	// let filterString = urlFilters(filters);
+	// let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
 	let data = await getData(endpoint);
 	// console.log(data);
 	table.DataTable({
@@ -59,9 +59,45 @@ async function showTable() {
 		colReorder: { order: [5, 3, 2, 1, 0] },
 		buttons: [
 			{ extend: "copy", className: "copyButton" },
-			{ extend: "excel", className: "excelButton" },
+			{
+				extend: "excel",
+				className: "excelButton",
+				excelStyles: [
+					{
+						cells: "F",
+						style: {
+							numFmt: "#,##0.0000;(#,##0.0000)",
+						},
+					},
+				],
+			},
+		],
+		columnDefs: [
+			{
+				width: "10%",
+				className: "dt-center",
+				render: $.fn.dataTable.render.number(",", ".", 2, ""),
+				targets: [4, 5, 6, 7, 8, 9, 10],
+			},
+			{
+				width: "3%",
+				className: "dt-body-center",
+				orderData: [0, 1, 2],
+				targets: [0, 1],
+			},
 		],
 	});
+
+	modifyButtons();
+}
+
+function modifyButtons() {
+	let excelButton = document.querySelector(".excelButton");
+	let copyButton = document.querySelector(".copyButton");
+	excelButton.classList.replace("dt-button", "btn-success");
+	excelButton.classList.add("btn");
+	copyButton.classList.replace("dt-button", "btn-primary");
+	copyButton.classList.add("btn");
 }
 
 function destroyTable() {
@@ -86,7 +122,7 @@ filterSeletors.forEach((filterSelector) => {
 		console.log(filters);
 		table.hide();
 		destroyTable();
-		showTable();
+		await showTable();
 		table.show();
 		// recalcTable();
 	});
