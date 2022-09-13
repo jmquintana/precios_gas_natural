@@ -1,5 +1,3 @@
-// const fs = require("fs");
-
 const FIRST =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
 let next;
@@ -56,39 +54,38 @@ function saveFile(json) {
 async function gData(endpoint, _data = [], page = 1) {
 	try {
 		let newData = await getData(endpoint);
-		if ((page - 1) * 100 > newData.total) {
-			console.log(_data);
-			// saveFile(_data);
-			return _data;
-		} else {
+		if ((page - 1) * 100 <= newData.total) {
 			_data = _data.concat(newData.records);
 			let newEndpoint = newData._links.next;
 			page++;
 			gData(newEndpoint, _data, page);
+			// saveFile(_data);
+		} else {
+			// console.log(_data);
+			return _data;
 		}
 	} catch (e) {
 		console.error(e);
 	}
 }
 
-// async function gData(endpoint, _data = [], page = 1) {
-// 	try {
-// 		let newData = await getData(endpoint);
-// 		let data;
-// 		if ((page - 1) * 100 >= newData.total) {
-// 			console.log(_data);
-// 			// return _data;
-// 		}
-// 		while ((page - 1) * 100 < newData.total) {
-// 			data = _data.concat(newData.records);
-// 			// console.log(data);
-// 			page += 1;
-// 			let endpoint = newData._links.next;
-// 			// console.log("http://datos.energia.gob.ar" + endpoint);
-// 			gData(endpoint, data, page);
-// 			return data;
-// 		}
-// 	} catch (e) {
-// 		console.error(e);
-// 	}
-// }
+async function fetchMetaData() {
+	let allData = [];
+	let morePagesAvailable = true;
+	let currentPage = 0;
+	let filterString = urlFilters(filters);
+	let endpoint = `${current}${filterString}`;
+
+	while (morePagesAvailable) {
+		currentPage++;
+		const response = await fetch(`http://datos.energia.gob.ar${endpoint}`);
+		const results = await response.json();
+		let { records, total, _links } = results.result;
+		records.forEach((e) => allData.unshift(e));
+		endpoint = _links.next;
+		morePagesAvailable = currentPage * 100 < total;
+	}
+	return allData;
+}
+
+getData(current).then((res) => console.log(res));

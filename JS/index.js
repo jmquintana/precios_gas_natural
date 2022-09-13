@@ -1,4 +1,6 @@
-let table = $("#data-table");
+const table = $("#data-table");
+const anioSelector = document.getElementById("anio");
+const filterSeletors = document.querySelectorAll(".form-select");
 
 const url1 =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
@@ -20,38 +22,18 @@ const columns = [
 	{ title: "Expo", data: "precio_expo" },
 ];
 
-async function loadData() {
-	let myData = [];
-	let data = [];
-	try {
-		myData = await getData(url1, filters);
-		console.log(myData);
-		console.log(myData.records);
-		console.log(columns2);
-		data = await myData.records.map((el) => Object.values(el));
-		let d = { data: myData.records };
-		console.log(d);
-		return d;
-		// return data;
-	} catch (e) {
-		console.error(e);
-		return;
-	}
-}
+$(document).ready(() => {
+	fetchMetaData()
+		.then((data) => {
+			console.log(data);
+			showTable(data);
+		})
+		.catch((e) => console.error(e));
+});
 
-async function showTable() {
-	let endpoint = `${url1}`;
-	// let filterString = urlFilters(filters);
-	// let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
-	let data = await getData(endpoint);
-	// console.log(data);
+function showTable(data) {
 	table.DataTable({
-		// ajax: {
-		// 	url: fullUrl,
-		// 	dataSrc: "result.records",
-		// 	cache: true,
-		// },
-		data: data.records,
+		data: data,
 		dom: "Bfrtip",
 		// dom: "Rlfrtip",
 		// dom: "lBfrtip",
@@ -64,9 +46,9 @@ async function showTable() {
 				className: "excelButton",
 				excelStyles: [
 					{
-						cells: "F",
+						cells: ["E", "F", "G", "H", "I", "J", "K"],
 						style: {
-							numFmt: "#,##0.0000;(#,##0.0000)",
+							numFmt: "#,##0.00;-#,##0.00;-",
 						},
 					},
 				],
@@ -76,7 +58,7 @@ async function showTable() {
 			{
 				width: "10%",
 				className: "dt-center",
-				render: $.fn.dataTable.render.number(",", ".", 2, ""),
+				render: $.fn.dataTable.render.number(",", ".", 2, "").display,
 				targets: [4, 5, 6, 7, 8, 9, 10],
 			},
 			{
@@ -87,7 +69,6 @@ async function showTable() {
 			},
 		],
 	});
-
 	modifyButtons();
 }
 
@@ -100,13 +81,7 @@ function modifyButtons() {
 	copyButton.classList.add("btn");
 }
 
-function destroyTable() {
-	table.DataTable().destroy();
-}
-
-const anioSelector = document.getElementById("anio");
-
-const filterSeletors = document.querySelectorAll(".form-select");
+function destroyTable() {}
 
 filterSeletors.forEach((filterSelector) => {
 	filterSelector.addEventListener("change", async () => {
@@ -121,11 +96,14 @@ filterSeletors.forEach((filterSelector) => {
 		}
 		console.log(filters);
 		table.hide();
-		destroyTable();
-		await showTable();
+
+		fetchMetaData()
+			.then((data) => {
+				console.log(data);
+				table.DataTable().destroy();
+				showTable(data);
+			})
+			.catch((e) => console.error(e));
 		table.show();
-		// recalcTable();
 	});
 });
-
-$(document).ready(showTable);
