@@ -87,5 +87,3 @@ async function fetchMetaData() {
 	}
 	return allData;
 }
-
-getData(current).then((res) => console.log(res));
