@@ -78,7 +78,7 @@ async function fetchMetaData() {
 
 	while (morePagesAvailable) {
 		currentPage++;
-		const response = await fetch(`http://datos.energia.gob.ar${endpoint}`);
+		const response = await fetch(`https://datos.energia.gob.ar${endpoint}`);
 		const results = await response.json();
 		let { records, total, _links } = results.result;
 		records.forEach((e) => allData.unshift(e));
