@@ -1,8 +1,4 @@
-const FIRST =
-	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
-let next;
-let previous;
-let current = FIRST;
+console.log("script api.js");
 
 function isEmpty(obj) {
 	for (var prop in obj) {
@@ -12,12 +8,6 @@ function isEmpty(obj) {
 	}
 	return JSON.stringify(obj) === JSON.stringify({});
 }
-
-let filters = {
-	// anio: 2022,
-	// cuenca: "Noroeste",
-	// contrato: "TOTAL",
-};
 
 function urlFilters(filters) {
 	if (isEmpty(filters)) {
@@ -34,10 +24,36 @@ async function getData(endpoint) {
 	try {
 		const api = await fetch(fullUrl);
 		const apiJson = await api.json();
-		// console.log(apiJson.result);
+		console.log(apiJson.result);
 		return apiJson.result;
 	} catch (e) {
 		console.error(e);
+	}
+}
+
+async function fetchAllData() {
+	try {
+		let allData = [];
+		let morePagesAvailable = true;
+		let currentPage = 0;
+		let filterString = urlFilters(filters);
+		let fullUrl = `${endpoint}${filterString}`;
+
+		while (morePagesAvailable) {
+			currentPage++;
+			const response = await fetch(`http://datos.energia.gob.ar${fullUrl}`);
+			const results = await response.json();
+			let { records, total, _links } = results.result;
+			console.log(
+				parseFloat((100 * (currentPage * 100)) / total).toFixed(0) + "%"
+			);
+			records.forEach((e) => allData.unshift(e));
+			fullUrl = _links.next;
+			morePagesAvailable = currentPage * 100 < total;
+		}
+		return allData;
+	} catch (e) {
+		console.log(e);
 	}
 }
 
@@ -51,39 +67,36 @@ function saveFile(json) {
 	});
 }
 
-async function gData(endpoint, _data = [], page = 1) {
-	try {
-		let newData = await getData(endpoint);
-		if ((page - 1) * 100 <= newData.total) {
-			_data = _data.concat(newData.records);
-			let newEndpoint = newData._links.next;
-			page++;
-			gData(newEndpoint, _data, page);
-			// saveFile(_data);
+function modifyButtons() {
+	let excelButton = document.querySelector(".excelButton");
+	let copyButton = document.querySelector(".copyButton");
+	excelButton.classList.replace("dt-button", "btn-success");
+	excelButton.classList.add("btn");
+	copyButton.classList.replace("dt-button", "btn-primary");
+	copyButton.classList.add("btn");
+}
+
+filterSeletors.forEach((filterSelector) => {
+	filterSelector.addEventListener("change", async () => {
+		if (
+			!(filterSelector.value === "Todos") &&
+			!(filterSelector.value === "Todas")
+		) {
+			filters[filterSelector.id] =
+				parseInt(filterSelector.value) || filterSelector.value;
 		} else {
-			// console.log(_data);
-			return _data;
+			delete filters[filterSelector.id];
 		}
-	} catch (e) {
-		console.error(e);
-	}
-}
+		console.log(filters);
+		table.hide();
 
-async function fetchMetaData() {
-	let allData = [];
-	let morePagesAvailable = true;
-	let currentPage = 0;
-	let filterString = urlFilters(filters);
-	let endpoint = `${current}${filterString}`;
-
-	while (morePagesAvailable) {
-		currentPage++;
-		const response = await fetch(`https://datos.energia.gob.ar${endpoint}`);
-		const results = await response.json();
-		let { records, total, _links } = results.result;
-		records.forEach((e) => allData.unshift(e));
-		endpoint = _links.next;
-		morePagesAvailable = currentPage * 100 < total;
-	}
-	return allData;
-}
+		fetchAllData()
+			.then((data) => {
+				console.log(data);
+				table ? table.DataTable().destroy() : false;
+				showTable(data);
+			})
+			.catch((e) => console.error(e));
+		table.show();
+	});
+});
