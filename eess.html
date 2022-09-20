@@ -19,11 +19,11 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
 </head>
 
 <body>
-    <!-- <div class="container"> -->
     <div class="nav">
         <div class="header container">
             <h2 class="header-title">Precios en Surtidor - Res 314/2016</h2>
@@ -34,7 +34,7 @@
         <div class="selector">
             <h5>Producto</h5>
             <select id="producto" class="form-select" aria-label="Producto">
-                <!-- <option selected>Todos</option> -->
+                <option value="all" selected>Todos</option>
                 <option value="Gas Oil Grado 2">Gas Oil Grado 2</option>
                 <option value="Gas Oil Grado 3">Gas Oil Grado 3</option>
                 <option value="GNC">GNC</option>
@@ -45,7 +45,7 @@
         <div class="selector">
             <h5>Provincia</h6>
                 <select id="provincia" class="form-select" aria-label="Provincia">
-                    <option value="Todas">Todas</option>
+                    <option value="all">Todas</option>
                     <option selected value="BUENOS AIRES">BUENOS AIRES</option>
                     <option value="CAPITAL FEDERAL">CAPITAL FEDERAL</option>
                     <option value="CATAMARCA">CATAMARCA</option>
@@ -75,7 +75,7 @@
         <div class="selector">
             <h5>Empresa Bandera</h5>
             <select id="empresabandera" class="form-select" aria-label="Empresa">
-                <option selected>Todas</option>
+                <option value="all" selected>Todas</option>
                 <option value="YPF">YPF</option>
                 <option value="BLANCA">BLANCA</option>
                 <option value="PUMA">PUMA</option>
@@ -93,6 +93,9 @@
                 <option value="PETROBRAS">PETROBRAS</option>
             </select>
         </div>
+        <div class="icons">
+            <i id="reset" class="bi bi-arrow-repeat" style="font-size: 2rem;"></i>
+        </div>
     </div>
     <div class="container">
         <div id="spinner-div" class="d-flex justify-content-center">
@@ -106,7 +109,6 @@
             </table>
         </div>
     </div>
-    <!-- </div> -->
 </body>
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
