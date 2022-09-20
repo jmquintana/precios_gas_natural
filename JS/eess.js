@@ -36,7 +36,7 @@ const columns = [
 ];
 
 $(document).ready(() => {
-	fetchAllData(SUPER, filters)
+	fetchAllData()
 		.then((data) => {
 			getData(SUPER);
 			console.log(data);

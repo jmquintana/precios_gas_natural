@@ -31,8 +31,17 @@ async function getData(endpoint) {
 	}
 }
 
+function toggleSpinner() {
+	let spinner = document.getElementById("spinner");
+	let table = document.getElementById("table-div");
+	console.log("toggle spinner");
+	spinner.classList.toggle("hide");
+	table.classList.toggle("hide");
+}
+
 async function fetchAllData() {
 	try {
+		toggleSpinner();
 		let allData = [];
 		let morePagesAvailable = true;
 		let currentPage = 0;
@@ -51,6 +60,7 @@ async function fetchAllData() {
 			fullUrl = _links.next;
 			morePagesAvailable = currentPage * 100 < total;
 		}
+		toggleSpinner();
 		return allData;
 	} catch (e) {
 		console.log(e);

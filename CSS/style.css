@@ -83,6 +83,18 @@ td {
 
 }
 
+#spinner {
+    margin: 10rem;
+}
+
+#spinner.hide {
+    display: none;
+}
+
+#table-div.hide {
+    display: none;
+}
+
 table {
     width: 100% !important;
 }

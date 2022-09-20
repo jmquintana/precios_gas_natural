@@ -29,7 +29,7 @@ const columns = [
 ];
 
 $(document).ready(() => {
-	fetchAllData(GAS, filters)
+	fetchAllData()
 		.then((data) => {
 			getData(GAS);
 			console.log(data);

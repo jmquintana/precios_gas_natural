@@ -95,9 +95,16 @@
         </div>
     </div>
     <div class="container">
-        <table id="data-table" class="table hover compact">
-            <thead class="table-group-divider table-light"></thead>
-        </table>
+        <div id="spinner-div" class="d-flex justify-content-center">
+            <div id="spinner" class="spinner-border text-secondary hide" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div id="table-div" class="show">
+            <table id="data-table" class="table hover compact">
+                <thead class="table-group-divider table-light"></thead>
+            </table>
+        </div>
     </div>
     <!-- </div> -->
 </body>

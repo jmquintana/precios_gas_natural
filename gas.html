@@ -19,7 +19,7 @@
 
 
 
-    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/style.css" defer>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <!-- Include the Bootstrap Table CSS for the table -->
@@ -75,9 +75,16 @@
         </div>
     </div>
     <div class="container">
-        <table id="data-table" class="table hover compact">
-            <thead class="table-group-divider table-light"></thead>
-        </table>
+        <div id="spinner-div" class="d-flex justify-content-center">
+            <div id="spinner" class="spinner-border text-secondary hide" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div id="table-div" class="show">
+            <table id="data-table" class="table hover compact">
+                <thead class="table-group-divider table-light"></thead>
+            </table>
+        </div>
     </div>
     <!-- </div> -->
 </body>
