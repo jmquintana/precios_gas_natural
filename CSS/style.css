@@ -114,5 +114,8 @@ table.dataTable td {
     justify-content: space-between;
     margin-top: 1rem;
     margin-bottom: .75rem;
+}
+
+.icons i {
     cursor: pointer;
 }
