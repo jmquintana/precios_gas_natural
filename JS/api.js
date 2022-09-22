@@ -1,4 +1,6 @@
 console.log("script api.js");
+const $table = $("#data-table");
+const filterSeletors = document.querySelectorAll(".form-select");
 
 function isEmpty(obj) {
 	for (var prop in obj) {
@@ -18,18 +20,18 @@ function urlFilters(filters) {
 	}
 }
 
-async function getData(endpoint) {
-	let filterString = urlFilters(filters);
-	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
-	try {
-		const api = await fetch(fullUrl);
-		const apiJson = await api.json();
-		console.log(apiJson.result);
-		return apiJson.result;
-	} catch (e) {
-		console.error(e);
-	}
-}
+// async function getData(endpoint) {
+// 	let filterString = urlFilters(filters);
+// 	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
+// 	try {
+// 		const api = await fetch(fullUrl);
+// 		const apiJson = await api.json();
+// 		console.log(apiJson.result);
+// 		return apiJson.result;
+// 	} catch (e) {
+// 		console.error(e);
+// 	}
+// }
 
 function toggleSpinner() {
 	let spinner = document.getElementById("spinner");
@@ -51,7 +53,9 @@ async function fetchAllData() {
 			currentPage++;
 			const response = await fetch(`http://datos.energia.gob.ar${fullUrl}`);
 			const results = await response.json();
-			let { records, total, _links } = results.result;
+			const result = results.result;
+			let { records, total, _links } = result;
+			console.log({ currentPage, result });
 			records.forEach((e) => allData.unshift(e));
 			fullUrl = _links.next;
 			morePagesAvailable = currentPage * 100 < total;
@@ -80,12 +84,20 @@ filterSeletors.forEach((filterSelector) => {
 	});
 });
 
+function optionExist(option, filterSelector) {
+	const options = [...filterSelector.options].map((el) => el.value);
+	return options.includes(option);
+}
+
 document.getElementById("reset").addEventListener("click", (e) => {
 	if (!isEmpty(filters)) {
 		e.preventDefault();
 		console.log("reset all filters");
 		filterSeletors.forEach((filterSelector) => {
-			filterSelector.value = "all";
+			const OPTION_ALL = "all";
+			if (optionExist(OPTION_ALL, filterSelector)) {
+				filterSelector.value = OPTION_ALL;
+			}
 			updateFilters(filterSelector);
 		});
 		console.log(filters);
@@ -127,7 +139,7 @@ function showTable(data) {
 function updateFilters(filterSelector) {
 	if (!(filterSelector.value === "all")) {
 		filters[filterSelector.id] =
-			parseInt(filterSelector.value) || filterSelector.value;
+			Number(filterSelector.value) || filterSelector.value;
 	} else {
 		delete filters[filterSelector.id];
 	}
@@ -136,7 +148,7 @@ function updateFilters(filterSelector) {
 $(document).ready(() => {
 	fetchAllData()
 		.then((data) => {
-			getData(endpoint);
+			// getData(endpoint);
 			console.log(data);
 			showTable(data);
 		})

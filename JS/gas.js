@@ -1,5 +1,3 @@
-const $table = $("#data-table");
-const filterSeletors = document.querySelectorAll(".form-select");
 const PRECIOS_GAS_RES_1 =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
 const filters = {
@@ -21,14 +19,6 @@ const columns = [
 	{ title: "PPP", data: "precio_ppp" },
 	{ title: "Expo", data: "precio_expo" },
 ];
-const excelStyles = [
-	{
-		cells: ["E", "F", "G", "H", "I", "J", "K"],
-		style: {
-			numFmt: "#,##0.00;-#,##0.00;-",
-		},
-	},
-];
 const columnDefs = [
 	{
 		width: "10%",
@@ -41,6 +31,14 @@ const columnDefs = [
 		className: "dt-body-center",
 		orderData: [0, 1, 2],
 		targets: [0, 1],
+	},
+];
+const excelStyles = [
+	{
+		cells: ["E", "F", "G", "H", "I", "J", "K"],
+		style: {
+			numFmt: "#,##0.00;-#,##0.00;-",
+		},
 	},
 ];
 const colReorder = { order: [5, 3, 2, 1, 0] };
