@@ -23,7 +23,12 @@ body {
     height: 100%;
 } */
 
+.navbar-brand {
+    margin-left: 1rem;
+}
+
 .nav {
+    margin-top: 3rem;
     padding-top: 3rem;
     width: 100%;
     border-bottom: 5px solid #E8EDF5;
@@ -88,6 +93,10 @@ td {
 
 #spinner.hide {
     display: none;
+}
+
+#table-div {
+    margin-left: 1rem;
 }
 
 #table-div.hide {
