@@ -1,18 +1,13 @@
-const table = $("#data-table");
-const anioSelector = document.getElementById("anio");
+const $table = $("#data-table");
 const filterSeletors = document.querySelectorAll(".form-select");
-
-const GAS =
+const PRECIOS_GAS_RES_1 =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
-
-let endpoint = GAS;
-
-let filters = {
+let endpoint = PRECIOS_GAS_RES_1;
+const filters = {
 	// anio: 2022,
 	// cuenca: "Noroeste",
 	// contrato: "TOTAL",
 };
-
 const columns = [
 	// { title: "ID", data: "id_pub" },
 	{ title: "Año", data: "anio" },
@@ -31,7 +26,7 @@ const columns = [
 $(document).ready(() => {
 	fetchAllData()
 		.then((data) => {
-			getData(GAS);
+			getData(endpoint);
 			console.log(data);
 			showTable(data);
 		})
@@ -39,7 +34,7 @@ $(document).ready(() => {
 });
 
 function showTable(data) {
-	table.DataTable({
+	$table.DataTable({
 		data: data,
 		dom: "Bfrtip",
 		// dom: "Rlfrtip",

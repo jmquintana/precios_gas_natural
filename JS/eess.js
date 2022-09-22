@@ -1,18 +1,13 @@
-const table = $("#data-table");
-const anioSelector = document.getElementById("anio");
+const $table = $("#data-table");
 const filterSeletors = document.querySelectorAll(".form-select");
-
-const SUPER =
+const PRECIOS_EN_SURTIDOR =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
-
-let endpoint = SUPER;
-
-let filters = {
+let endpoint = PRECIOS_EN_SURTIDOR;
+const filters = {
 	provincia: "BUENOS AIRES",
 	producto: "Nafta (súper) entre 92 y 95 Ron",
 	idtipohorario: 2,
 };
-
 const columns = [
 	{ title: "Año-Mes", data: "indice_tiempo" },
 	// { title: "idempresa", data: "idempresa" },
@@ -38,7 +33,7 @@ const columns = [
 $(document).ready(() => {
 	fetchAllData()
 		.then((data) => {
-			getData(SUPER);
+			getData(endpoint);
 			console.log(data);
 			showTable(data);
 		})
@@ -46,7 +41,7 @@ $(document).ready(() => {
 });
 
 function showTable(data) {
-	table.DataTable({
+	$table.DataTable({
 		data: data,
 		dom: "Bfrtip",
 		// dom: "Rlfrtip",

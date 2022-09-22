@@ -63,16 +63,6 @@ async function fetchAllData() {
 	}
 }
 
-function saveFile(json) {
-	fs.writeFile("./data/data.json", JSON.stringify(json), (err) => {
-		if (err) {
-			throw new Error("Something went wrong.");
-		}
-		console.log("JSON written to file. Contents:");
-		console.log(fs.readFileSync("data.json", "utf-8"));
-	});
-}
-
 function modifyButtons() {
 	let excelButton = document.querySelector(".excelButton");
 	let copyButton = document.querySelector(".copyButton");
@@ -107,7 +97,7 @@ function loadTable() {
 	fetchAllData()
 		.then((data) => {
 			console.log(data);
-			table ? table.DataTable().destroy() : false;
+			$table ? $table.DataTable().destroy() : false;
 			showTable(data);
 		})
 		.catch((e) => console.error(e));
@@ -121,10 +111,9 @@ function updateFilters(filterSelector) {
 		delete filters[filterSelector.id];
 	}
 }
-
-var tooltipTriggerList = [].slice.call(
+let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
 );
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 	return new bootstrap.Tooltip(tooltipTriggerEl);
 });
