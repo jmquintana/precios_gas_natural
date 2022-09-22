@@ -1,6 +1,7 @@
 console.log("script api.js");
 const $table = $("#data-table");
 const filterSeletors = document.querySelectorAll(".form-select");
+const OPTION_ALL = "all";
 
 function isEmpty(obj) {
 	for (var prop in obj) {
@@ -93,15 +94,19 @@ document.getElementById("reset").addEventListener("click", (e) => {
 	if (!isEmpty(filters)) {
 		e.preventDefault();
 		console.log("reset all filters");
+		let selectionHasChanged = false;
 		filterSeletors.forEach((filterSelector) => {
-			const OPTION_ALL = "all";
-			if (optionExist(OPTION_ALL, filterSelector)) {
+			if (
+				filterSelector.value != OPTION_ALL &&
+				optionExist(OPTION_ALL, filterSelector)
+			) {
 				filterSelector.value = OPTION_ALL;
+				selectionHasChanged = true;
 			}
 			updateFilters(filterSelector);
 		});
 		console.log(filters);
-		loadTable();
+		if (selectionHasChanged) loadTable();
 	}
 });
 
