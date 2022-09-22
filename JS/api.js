@@ -56,7 +56,10 @@ async function fetchAllData() {
 			const results = await response.json();
 			const result = results.result;
 			let { records, total, _links } = result;
-			console.log({ currentPage, result });
+			let progress =
+				parseInt((100 * ((currentPage - 1) * 100 + records.length)) / total) +
+				"%";
+			console.log({ progress, currentPage, result });
 			records.forEach((e) => allData.unshift(e));
 			fullUrl = _links.next;
 			morePagesAvailable = currentPage * 100 < total;
