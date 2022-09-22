@@ -2,7 +2,6 @@ const $table = $("#data-table");
 const filterSeletors = document.querySelectorAll(".form-select");
 const PRECIOS_EN_SURTIDOR =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
-let endpoint = PRECIOS_EN_SURTIDOR;
 const filters = {
 	provincia: "BUENOS AIRES",
 	producto: "Nafta (súper) entre 92 y 95 Ron",
@@ -29,54 +28,27 @@ const columns = [
 	// { title: "longitud", data: "longitud" },
 	// { title: "geojson", data: "geojson" },
 ];
-
-$(document).ready(() => {
-	fetchAllData()
-		.then((data) => {
-			getData(endpoint);
-			console.log(data);
-			showTable(data);
-		})
-		.catch((e) => console.error(e));
-});
-
-function showTable(data) {
-	$table.DataTable({
-		data: data,
-		dom: "Bfrtip",
-		// dom: "Rlfrtip",
-		// dom: "lBfrtip",
-		columns: columns,
-		colReorder: { order: [5, 3, 2, 1, 0] },
-		buttons: [
-			{ extend: "copy", className: "copyButton" },
-			{
-				extend: "excel",
-				className: "excelButton",
-				excelStyles: [
-					{
-						cells: ["E", "F", "G", "H", "I", "J", "K"],
-						style: {
-							numFmt: "#,##0.00;-#,##0.00;-",
-						},
-					},
-				],
-			},
-		],
-		columnDefs: [
-			{
-				width: "10%",
-				className: "dt-center",
-				render: $.fn.dataTable.render.number(",", ".", 2, "").display,
-				targets: [6],
-			},
-			{
-				width: "3%",
-				className: "dt-body-center",
-				orderData: [0, 1, 2],
-				targets: [0, 1],
-			},
-		],
-	});
-	modifyButtons();
-}
+const columnDefs = [
+	{
+		width: "10%",
+		className: "dt-center",
+		render: $.fn.dataTable.render.number(",", ".", 2, "").display,
+		targets: [6],
+	},
+	{
+		width: "3%",
+		className: "dt-body-center",
+		orderData: [0, 1, 2],
+		targets: [0, 1],
+	},
+];
+const excelStyles = [
+	{
+		cells: ["E", "F", "G", "H", "I", "J", "K"],
+		style: {
+			numFmt: "#,##0.00;-#,##0.00;-",
+		},
+	},
+];
+const colReorder = { order: [5, 3, 2, 1, 0] };
+let endpoint = PRECIOS_EN_SURTIDOR;

@@ -2,7 +2,6 @@ const $table = $("#data-table");
 const filterSeletors = document.querySelectorAll(".form-select");
 const PRECIOS_GAS_RES_1 =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
-let endpoint = PRECIOS_GAS_RES_1;
 const filters = {
 	// anio: 2022,
 	// cuenca: "Noroeste",
@@ -22,54 +21,27 @@ const columns = [
 	{ title: "PPP", data: "precio_ppp" },
 	{ title: "Expo", data: "precio_expo" },
 ];
-
-$(document).ready(() => {
-	fetchAllData()
-		.then((data) => {
-			getData(endpoint);
-			console.log(data);
-			showTable(data);
-		})
-		.catch((e) => console.error(e));
-});
-
-function showTable(data) {
-	$table.DataTable({
-		data: data,
-		dom: "Bfrtip",
-		// dom: "Rlfrtip",
-		// dom: "lBfrtip",
-		columns: columns,
-		colReorder: { order: [5, 3, 2, 1, 0] },
-		buttons: [
-			{ extend: "copy", className: "copyButton" },
-			{
-				extend: "excel",
-				className: "excelButton",
-				excelStyles: [
-					{
-						cells: ["E", "F", "G", "H", "I", "J", "K"],
-						style: {
-							numFmt: "#,##0.00;-#,##0.00;-",
-						},
-					},
-				],
-			},
-		],
-		columnDefs: [
-			{
-				width: "10%",
-				className: "dt-center",
-				render: $.fn.dataTable.render.number(",", ".", 2, "").display,
-				targets: [4, 5, 6, 7, 8, 9, 10],
-			},
-			{
-				width: "3%",
-				className: "dt-body-center",
-				orderData: [0, 1, 2],
-				targets: [0, 1],
-			},
-		],
-	});
-	modifyButtons();
-}
+const excelStyles = [
+	{
+		cells: ["E", "F", "G", "H", "I", "J", "K"],
+		style: {
+			numFmt: "#,##0.00;-#,##0.00;-",
+		},
+	},
+];
+const columnDefs = [
+	{
+		width: "10%",
+		className: "dt-center",
+		render: $.fn.dataTable.render.number(",", ".", 2, "").display,
+		targets: [4, 5, 6, 7, 8, 9, 10],
+	},
+	{
+		width: "3%",
+		className: "dt-body-center",
+		orderData: [0, 1, 2],
+		targets: [0, 1],
+	},
+];
+const colReorder = { order: [5, 3, 2, 1, 0] };
+let endpoint = PRECIOS_GAS_RES_1;

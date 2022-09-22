@@ -103,6 +103,27 @@ function loadTable() {
 		.catch((e) => console.error(e));
 }
 
+function showTable(data) {
+	$table.DataTable({
+		data: data,
+		dom: "Bfrtip",
+		// dom: "Rlfrtip",
+		// dom: "lBfrtip",
+		columns: columns,
+		colReorder: colReorder,
+		buttons: [
+			{ extend: "copy", className: "copyButton" },
+			{
+				extend: "excel",
+				className: "excelButton",
+				excelStyles: excelStyles,
+			},
+		],
+		columnDefs: columnDefs,
+	});
+	modifyButtons();
+}
+
 function updateFilters(filterSelector) {
 	if (!(filterSelector.value === "all")) {
 		filters[filterSelector.id] =
@@ -111,6 +132,17 @@ function updateFilters(filterSelector) {
 		delete filters[filterSelector.id];
 	}
 }
+
+$(document).ready(() => {
+	fetchAllData()
+		.then((data) => {
+			getData(endpoint);
+			console.log(data);
+			showTable(data);
+		})
+		.catch((e) => console.error(e));
+});
+
 let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
 );
