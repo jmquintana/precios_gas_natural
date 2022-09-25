@@ -3,6 +3,7 @@ const $table = $("#data-table");
 const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
+let globalData = [];
 
 function isEmpty(obj) {
 	for (var prop in obj) {
@@ -55,6 +56,7 @@ async function fetchAllData() {
 			morePagesAvailable = currentPage * 100 < total;
 		}
 		toggleSpinner();
+		globalData = allData;
 		return allData;
 	} catch (e) {
 		console.log(e);
@@ -155,10 +157,8 @@ function filtersToSelectors() {
 		if (filters[filterSelector.id]) {
 			filterSelector.value = filters[filterSelector.id];
 		}
-		// filterSelector.value=
 	});
 }
-
 $(document).ready(() => {
 	filtersToSelectors();
 	fetchAllData()
