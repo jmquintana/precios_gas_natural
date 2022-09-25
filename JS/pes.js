@@ -4,7 +4,7 @@ const PRECIOS_EN_SURTIDOR =
 const filters = {
 	provincia: "CAPITAL FEDERAL",
 	producto: "Nafta (súper) entre 92 y 95 Ron",
-	empresabandera: "YPF",
+	// empresabandera: "YPF",
 	idtipohorario: 2,
 };
 const columns = [

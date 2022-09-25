@@ -1,6 +1,6 @@
 console.log("script api.js");
 const $table = $("#data-table");
-const filterSeletors = document.querySelectorAll(".form-select");
+const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
 
@@ -82,7 +82,7 @@ function modifyButtons() {
 	}
 }
 
-filterSeletors.forEach((filterSelector) => {
+filterSelectors.forEach((filterSelector) => {
 	filterSelector.addEventListener("change", () => {
 		updateFilters(filterSelector);
 		console.log(filters);
@@ -100,7 +100,7 @@ document.getElementById("reset").addEventListener("click", (e) => {
 		e.preventDefault();
 		console.log("reset all filters");
 		let selectionHasChanged = false;
-		filterSeletors.forEach((filterSelector) => {
+		filterSelectors.forEach((filterSelector) => {
 			if (
 				filterSelector.value != OPTION_ALL &&
 				optionExist(OPTION_ALL, filterSelector)
@@ -149,7 +149,18 @@ function updateFilters(filterSelector) {
 	}
 }
 
+function filtersToSelectors() {
+	filterSelectors.forEach((filterSelector) => {
+		console.log(filterSelector.id, filters[filterSelector.id]);
+		if (filters[filterSelector.id]) {
+			filterSelector.value = filters[filterSelector.id];
+		}
+		// filterSelector.value=
+	});
+}
+
 $(document).ready(() => {
+	filtersToSelectors();
 	fetchAllData()
 		.then((data) => {
 			// getData(endpoint);
