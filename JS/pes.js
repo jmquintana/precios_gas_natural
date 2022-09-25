@@ -1,3 +1,4 @@
+console.log("script pes.js");
 const PRECIOS_EN_SURTIDOR =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
 const filters = {
@@ -32,6 +33,15 @@ const columnDefs = [
 		className: "dt-center",
 		render: $.fn.dataTable.render.number(",", ".", 2, "").display,
 		targets: [5],
+	},
+	{
+		width: "10%",
+		className: "dt-center",
+		render: $.fn.dataTable.render.moment(
+			"YYYY-MM-DDTHH:mm:ss",
+			"DD/MM/YYYY HH:mm"
+		),
+		targets: [6],
 	},
 	{
 		width: "3%",

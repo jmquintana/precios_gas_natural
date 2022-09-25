@@ -1,3 +1,4 @@
+console.log("script gas.js");
 const PRECIOS_GAS_RES_1 =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
 const filters = {
