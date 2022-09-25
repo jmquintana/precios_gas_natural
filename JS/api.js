@@ -2,6 +2,7 @@ console.log("script api.js");
 const $table = $("#data-table");
 const filterSeletors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
+const progressBar = document.querySelector(".progress-bar");
 
 function isEmpty(obj) {
 	for (var prop in obj) {
@@ -20,19 +21,6 @@ function urlFilters(filters) {
 		return `&filters=${string}#`;
 	}
 }
-
-// async function getData(endpoint) {
-// 	let filterString = urlFilters(filters);
-// 	let fullUrl = `http://datos.energia.gob.ar${endpoint}${filterString}`;
-// 	try {
-// 		const api = await fetch(fullUrl);
-// 		const apiJson = await api.json();
-// 		console.log(apiJson.result);
-// 		return apiJson.result;
-// 	} catch (e) {
-// 		console.error(e);
-// 	}
-// }
 
 function toggleSpinner() {
 	let spinner = document.getElementById("spinner");
@@ -59,6 +47,8 @@ async function fetchAllData() {
 			let progress =
 				parseInt((100 * ((currentPage - 1) * 100 + records.length)) / total) +
 				"%";
+			progressBar.style.display = "block";
+			progressBar.style.width = progress;
 			console.log({ progress, currentPage, result });
 			records.forEach((e) => allData.unshift(e));
 			fullUrl = _links.next;
@@ -141,6 +131,7 @@ function showTable(data) {
 		],
 		columnDefs: columnDefs,
 	});
+	progressBar.style.display = "none";
 	modifyButtons();
 }
 

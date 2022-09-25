@@ -33,12 +33,21 @@ body {
     width: 100%;
     border-bottom: 5px solid #E8EDF5;
     background: linear-gradient(0deg, rgba(232, 237, 245, 1) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.main-header {
     box-shadow: 0px 2px 5px #B8BCC2;
+
+}
+
+.progress-bar,
+.progress {
+    border-radius: 0px !important;
 }
 
 .container {
     /* padding: 0.2rem 0.2rem; */
-    width: 100%;
+    width: auto;
     /* max-width: 1000px; */
 }
 
