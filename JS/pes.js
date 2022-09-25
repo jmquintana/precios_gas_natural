@@ -2,8 +2,9 @@ console.log("script pes.js");
 const PRECIOS_EN_SURTIDOR =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
 const filters = {
-	provincia: "BUENOS AIRES",
+	provincia: "CAPITAL FEDERAL",
 	producto: "Nafta (súper) entre 92 y 95 Ron",
+	empresabandera: "YPF",
 	idtipohorario: 2,
 };
 const columns = [
@@ -71,6 +72,8 @@ const buttons = [
 	{ text: "Map", className: "mapButton" },
 ];
 
-myModal.addEventListener("shown.bs.modal", () => {
-	myInput.focus();
-});
+// const myModal = document.getElementById("mapModal");
+// const myInput = document.getElementById("myInput");
+// myModal.addEventListener("shown.bs.modal", () => {
+// 	myInput.focus();
+// });

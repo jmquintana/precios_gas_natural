@@ -1,0 +1,9 @@
+#myMap {
+    position: relative;
+    height: 80vh;
+    width: 100%;
+}
+
+.modal-body {
+    padding: 0 !important;
+}

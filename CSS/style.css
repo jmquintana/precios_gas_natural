@@ -12,14 +12,17 @@
     --color-cream: #F2EAE4;
 }
 
-/* body,
+body,
 html {
     padding: 0%;
     margin: 0%;
     font-family: 'Inter', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
-body {
+/* body {
     height: 100%;
 } */
 
@@ -123,6 +126,10 @@ table.dataTable td {
 .dt-buttons,
 .dataTables_filter {
     margin-bottom: 1rem;
+}
+
+.dt-buttons button {
+    width: 4rem;
 }
 
 .icons {

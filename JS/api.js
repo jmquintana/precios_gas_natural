@@ -78,7 +78,7 @@ function modifyButtons() {
 		mapButton.classList.replace("dt-button", "btn-secondary");
 		mapButton.classList.add("btn");
 		mapButton.setAttribute("data-bs-toggle", "modal");
-		mapButton.setAttribute("data-bs-target", "#exampleModal");
+		mapButton.setAttribute("data-bs-target", "#mapModal");
 	}
 }
 
@@ -165,6 +165,3 @@ let tooltipTriggerList = [].slice.call(
 let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 	return new bootstrap.Tooltip(tooltipTriggerEl);
 });
-
-const myModal = document.getElementById("myModal");
-const myInput = document.getElementById("myInput");
