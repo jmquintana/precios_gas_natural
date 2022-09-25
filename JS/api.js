@@ -62,12 +62,24 @@ async function fetchAllData() {
 }
 
 function modifyButtons() {
-	let excelButton = document.querySelector(".excelButton");
-	let copyButton = document.querySelector(".copyButton");
-	excelButton.classList.replace("dt-button", "btn-success");
-	excelButton.classList.add("btn");
-	copyButton.classList.replace("dt-button", "btn-primary");
-	copyButton.classList.add("btn");
+	const excelButton = document.querySelector(".excelButton");
+	const copyButton = document.querySelector(".copyButton");
+	const mapButton = document.querySelector(".mapButton");
+
+	if (excelButton) {
+		excelButton.classList.replace("dt-button", "btn-success");
+		excelButton.classList.add("btn");
+	}
+	if (copyButton) {
+		copyButton.classList.replace("dt-button", "btn-primary");
+		copyButton.classList.add("btn");
+	}
+	if (mapButton) {
+		mapButton.classList.replace("dt-button", "btn-secondary");
+		mapButton.classList.add("btn");
+		mapButton.setAttribute("data-bs-toggle", "modal");
+		mapButton.setAttribute("data-bs-target", "#exampleModal");
+	}
 }
 
 filterSeletors.forEach((filterSelector) => {
@@ -121,14 +133,7 @@ function showTable(data) {
 		// dom: "lBfrtip",
 		columns: columns,
 		colReorder: colReorder,
-		buttons: [
-			{ extend: "copy", className: "copyButton" },
-			{
-				extend: "excel",
-				className: "excelButton",
-				excelStyles: excelStyles,
-			},
-		],
+		buttons: buttons,
 		columnDefs: columnDefs,
 	});
 	setTimeout(() => (progressBar.style.display = "none"), 600);
@@ -161,26 +166,5 @@ let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 	return new bootstrap.Tooltip(tooltipTriggerEl);
 });
 
-// Date renderer for DataTables from cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js
-$.fn.dataTable.render.moment = function (from, to, locale) {
-	// Argument shifting
-	if (arguments.length === 1) {
-		locale = "en";
-		to = from;
-		from = "YYYY-MM-DD ";
-	} else if (arguments.length === 2) {
-		locale = "en";
-	}
-
-	return function (d, type, row) {
-		if (!d) {
-			return type === "sort" || type === "type" ? 0 : new Date(d);
-		}
-
-		var m = window.moment(d, from, locale, true);
-
-		// Order and type get a number value from Moment, everything else
-		// sees the rendered value
-		return m.format(type === "sort" || type === "type" ? "x" : to);
-	};
-};
+const myModal = document.getElementById("myModal");
+const myInput = document.getElementById("myInput");

@@ -60,3 +60,17 @@ const excelStyles = [
 ];
 const colReorder = { order: [5, 3, 2, 1, 0] };
 let endpoint = PRECIOS_EN_SURTIDOR;
+
+const buttons = [
+	{ extend: "copy", className: "copyButton" },
+	{
+		extend: "excel",
+		className: "excelButton",
+		excelStyles: excelStyles,
+	},
+	{ text: "Map", className: "mapButton" },
+];
+
+myModal.addEventListener("shown.bs.modal", () => {
+	myInput.focus();
+});
