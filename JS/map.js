@@ -18,7 +18,10 @@ L.tileLayer(tile, {
 $("#mapModal").on("show.bs.modal", function () {
 	setTimeout(function () {
 		myMap.invalidateSize();
-		plotMap(globalData);
+		var table = $("#data-table").DataTable();
+		const data = Array.from(table.rows({ search: "applied" }).data());
+		console.log(data);
+		plotMap(data);
 	}, 300);
 });
 
@@ -27,8 +30,9 @@ $("#mapModal").on("hidden.bs.modal", function () {
 });
 
 function plotMap(data) {
+	let arr = [...data];
 	let bounds = L.latLngBounds();
-	for (let d of data) {
+	for (let d of arr) {
 		let lat_lng = [d.latitud, d.longitud];
 		let marker = L.marker(lat_lng).addTo(myMap);
 		markers.push(marker);

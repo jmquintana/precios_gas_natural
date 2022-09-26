@@ -153,7 +153,6 @@ function updateFilters(filterSelector) {
 
 function filtersToSelectors() {
 	filterSelectors.forEach((filterSelector) => {
-		console.log(filterSelector.id, filters[filterSelector.id]);
 		if (filters[filterSelector.id]) {
 			filterSelector.value = filters[filterSelector.id];
 		}
