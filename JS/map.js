@@ -6,7 +6,13 @@ const markers = [];
 // const myCoord = [-38.011083, -57.541015];
 const myCoord = [-34.56595456587895, -58.451184908837234];
 
-const myMap = L.map("myMap").setView(myCoord, 13);
+const myMap = new L.Map("myMap", {
+	fullscreenControl: {
+		pseudoFullscreen: false, // if true, fullscreen to page width and height
+	},
+});
+
+// myMap.setView(myCoord, 13);
 
 L.tileLayer(tile, {
 	maxZoom: 18,
@@ -26,7 +32,8 @@ $("#mapModal").on("show.bs.modal", function () {
 });
 
 $("#mapModal").on("hidden.bs.modal", function () {
-	markers.forEach((marker) => marker.remove());
+	markers.forEach((marker) => myMap.removeLayer(marker));
+	// markers.forEach((marker) => marker.remove());
 });
 
 function plotMap(data) {
