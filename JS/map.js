@@ -36,12 +36,14 @@ $("#mapModal").on("hidden.bs.modal", function () {
 	// markers.forEach((marker) => marker.remove());
 });
 
+let markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
+
 function plotMap(data) {
 	let arr = [...data];
 	let bounds = L.latLngBounds();
 	for (let d of arr) {
 		let lat_lng = [d.latitud, d.longitud];
-		let marker = L.marker(lat_lng).addTo(myMap);
+		let marker = L.marker(lat_lng, { icon: markerIcon }).addTo(myMap);
 		markers.push(marker);
 		marker.bindPopup(
 			`<b>${d.empresabandera}</b><br>Precio:${d.precio}<br />Fecha: ${d.indice_tiempo}`
