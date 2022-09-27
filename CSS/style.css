@@ -132,6 +132,10 @@ table.dataTable td {
     width: 4rem;
 }
 
+#reset.disabled {
+    pointer-events: none
+}
+
 .icons {
     display: flex;
     align-items: end;

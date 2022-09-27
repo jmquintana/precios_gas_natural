@@ -28,6 +28,10 @@ function toggleSpinner() {
 	let table = document.getElementById("table-div");
 	spinner.classList.toggle("hide");
 	table.classList.toggle("hide");
+	filterSelectors.forEach((filterSelector) =>
+		filterSelector.toggleAttribute("disabled")
+	);
+	document.getElementById("reset").classList.toggle("disabled");
 }
 
 async function fetchAllData() {
@@ -168,6 +172,10 @@ $(document).ready(() => {
 		})
 		.catch((e) => console.error(e));
 });
+
+function getUniques(key, arr) {
+	return [...new Set(arr.map((x) => x[key]))].sort();
+}
 
 let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
