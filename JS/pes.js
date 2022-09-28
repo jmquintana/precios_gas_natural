@@ -9,7 +9,6 @@ const filters = {
 };
 const columns = [
 	{ title: "Año-Mes", data: "indice_tiempo" },
-	// { title: "idempresa", data: "idempresa" },
 	{ title: "Cuit", data: "cuit" },
 	// { title: "Empresa", data: "empresa" },
 	{ title: "Dirección", data: "direccion" },
@@ -27,6 +26,7 @@ const columns = [
 	// { title: "latitud", data: "latitud" },
 	// { title: "longitud", data: "longitud" },
 	// { title: "geojson", data: "geojson" },
+	{ title: "idempresa", data: "idempresa" },
 ];
 const columnDefs = [
 	{
