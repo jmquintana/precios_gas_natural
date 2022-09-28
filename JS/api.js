@@ -3,7 +3,6 @@ const $table = $("#data-table");
 const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
-let globalData = [];
 
 function isEmpty(obj) {
 	for (var prop in obj) {
@@ -28,10 +27,6 @@ function toggleSpinner() {
 	let table = document.getElementById("table-div");
 	spinner.classList.toggle("hide");
 	table.classList.toggle("hide");
-	filterSelectors.forEach((filterSelector) =>
-		filterSelector.toggleAttribute("disabled")
-	);
-	document.getElementById("reset").classList.toggle("disabled");
 }
 
 async function fetchAllData() {
@@ -45,7 +40,7 @@ async function fetchAllData() {
 
 		while (morePagesAvailable) {
 			currentPage++;
-			const response = await fetch(`https://datos.energia.gob.ar${fullUrl}`);
+			const response = await fetch(`http://datos.energia.gob.ar${fullUrl}`);
 			const results = await response.json();
 			const result = results.result;
 			let { records, total, _links } = result;
@@ -60,7 +55,6 @@ async function fetchAllData() {
 			morePagesAvailable = currentPage * 100 < total;
 		}
 		toggleSpinner();
-		globalData = allData;
 		return allData;
 	} catch (e) {
 		console.log(e);
@@ -157,11 +151,14 @@ function updateFilters(filterSelector) {
 
 function filtersToSelectors() {
 	filterSelectors.forEach((filterSelector) => {
+		console.log(filterSelector.id, filters[filterSelector.id]);
 		if (filters[filterSelector.id]) {
 			filterSelector.value = filters[filterSelector.id];
 		}
+		// filterSelector.value=
 	});
 }
+
 $(document).ready(() => {
 	filtersToSelectors();
 	fetchAllData()
@@ -172,10 +169,6 @@ $(document).ready(() => {
 		})
 		.catch((e) => console.error(e));
 });
-
-function getUniques(key, arr) {
-	return [...new Set(arr.map((x) => x[key]))].sort();
-}
 
 let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
