@@ -2,19 +2,19 @@ console.log("script pes.js");
 const PRECIOS_EN_SURTIDOR =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
 const filters = {
-	provincia: "BUENOS AIRES",
+	provincia: "CHUBUT",
 	producto: "Nafta (súper) entre 92 y 95 Ron",
 	// empresabandera: "YPF",
 	idtipohorario: 2,
 };
 const columns = [
 	{ title: "Año-Mes", data: "indice_tiempo" },
-	{ title: "Cuit", data: "cuit" },
+	// { title: "Cuit", data: "cuit" },
 	// { title: "Empresa", data: "empresa" },
 	{ title: "Dirección", data: "direccion" },
 	{ title: "Localidad", data: "localidad" },
 	{ title: "Provincia", data: "provincia" },
-	// { title: "region", data: "region" },
+	{ title: "region", data: "region" },
 	// { title: "idproducto", data: "idproducto" },
 	// { title: "Producto", data: "producto" },
 	// { title: "idtipohorario", data: "idtipohorario" },
