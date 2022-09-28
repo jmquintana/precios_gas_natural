@@ -18,8 +18,10 @@ const myMap = new L.Map("myMap", {
 let myRenderer = L.canvas({ padding: 0.5 });
 const markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
 
+const colors = ["#008800", "#0000FF", "#BB0000"];
+
 const myTriangleMarker = (lat_lng, weight) => {
-	const color = gradient(weight, "#004000", "#008000", "#FF0000");
+	const color = gradient(weight, ...colors);
 	return L.triangleMarker(lat_lng, {
 		renderer: myRenderer, // your canvas renderer (default: L.canvas())
 		rotation: 180, // triangle rotation in degrees (default: 0)
@@ -34,7 +36,7 @@ const myTriangleMarker = (lat_lng, weight) => {
 };
 
 const myCircleMarker = (lat_lng, weight) => {
-	const color = gradient(weight, "#004000", "#008000", "#FF0000");
+	const color = gradient(weight, ...colors);
 	return L.circleMarker(lat_lng, {
 		renderer: myRenderer,
 		color: color,
