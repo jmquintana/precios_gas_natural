@@ -42,10 +42,11 @@ async function fetchAllData() {
 		let currentPage = 0;
 		let filterString = urlFilters(filters);
 		let fullUrl = `${endpoint}${filterString}`;
+		const s = location.protocol === "https:" ? "s" : "";
 
 		while (morePagesAvailable) {
 			currentPage++;
-			const response = await fetch(`http://datos.energia.gob.ar${fullUrl}`);
+			const response = await fetch(`http${s}://datos.energia.gob.ar${fullUrl}`);
 			const results = await response.json();
 			const result = results.result;
 			let { records, total, _links } = result;
