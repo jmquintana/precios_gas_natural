@@ -8,6 +8,8 @@ let markers = [];
 const myCoord = [-34.56595456587895, -58.451184908837234];
 
 const myMap = new L.Map("myMap", {
+	zoomDelta: 0.25,
+	// zoomSnap: 0,
 	fullscreenControl: {
 		pseudoFullscreen: false, // if true, fullscreen to page width and height
 	},
@@ -48,7 +50,18 @@ const myCircleMarker = (lat_lng, weight) => {
 function plotMap(data) {
 	let bounds = L.latLngBounds();
 	L.tileLayer(tile2, {
-		maxZoom: 18,
+		markerZoomAnimation: false,
+		maxZoom: 24,
+		markerZoomAnimation: false,
+		dragging: true,
+		touchZoom: false,
+		scrollWheelZoom: false,
+		boxZoom: false,
+		keyboard: false,
+		zoomControl: false,
+		attributionControl: false,
+		closePopupOnClick: false,
+		trackResize: true,
 		attribution:
 			'&copy; <a href="http://openstreetmap' +
 			'.org">OpenStreetMap</a> contributors',
@@ -61,6 +74,9 @@ function plotMap(data) {
 		let weight = (d.precio - minPrice) / (maxPrice - minPrice);
 		let marker = myCircleMarker(lat_lng, weight);
 
+		marker.on("dblclick", function (e) {
+			myMap.setView(e.latlng, myMap.getZoom());
+		});
 		marker.addTo(myMap);
 		markers.push(marker);
 		marker.bindPopup(
@@ -178,3 +194,17 @@ const removeOutliers = function (arr, prop, percentageDecimal, min, max) {
 			.slice(0, Math.ceil(temp.length * percentageDecimal))
 	);
 };
+
+myMap.on("zoomend", function () {
+	var currentZoom = myMap.getZoom();
+	console.log(currentZoom);
+	if (currentZoom > 12) {
+		markers.forEach(function (marker) {
+			marker.setRadius(32);
+		});
+	} else {
+		markers.forEach(function (marker) {
+			marker.setRadius(16);
+		});
+	}
+});
