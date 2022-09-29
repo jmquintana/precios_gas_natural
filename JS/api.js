@@ -48,7 +48,7 @@ async function fetchAllData() {
 		while (morePagesAvailable) {
 			currentPage++;
 			const response = await fetch(
-				`https://cors-anywhere.herokuapp.com/http${s}://datos.energia.gob.ar${fullUrl}`
+				`https://cors-anywhere.herokuapp.com/http://datos.energia.gob.ar${fullUrl}`
 			);
 			const results = await response.json();
 			const result = results.result;
