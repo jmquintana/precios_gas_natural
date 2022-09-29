@@ -90,19 +90,20 @@ function modifyButtons() {
 
 filterSelectors.forEach((filterSelector) => {
 	filterSelector.addEventListener("change", () => {
-		if (
-			filterSelector.id === "provincia" ||
-			filterSelector.id !== "localidad"
-		) {
+		if (filterSelector.id === "provincia") {
 			resetSelector("localidad");
 		}
 		updateFilters();
-		loadTable();
+		loadTable().then(() => {
+			if (filterSelector.id !== "localidad")
+				populateSelector("localidad", globalData);
+		});
 	});
 });
 
 function resetSelector(selectorId) {
-	$(`#${selectorId}`).value = OPTION_ALL;
+	document.getElementById(`${selectorId}`).value = OPTION_ALL;
+	console.log(document.getElementById(`${selectorId}`).value);
 }
 
 function optionExist(option, filterSelector) {
@@ -129,10 +130,9 @@ document.getElementById("reset").addEventListener("click", (e) => {
 	}
 });
 
-function loadTable() {
-	fetchAllData()
+async function loadTable() {
+	await fetchAllData()
 		.then((data) => {
-			populateSelector("localidad", data);
 			console.log(data);
 			$table ? $table.DataTable().destroy() : false;
 			showTable(data);
