@@ -42,7 +42,8 @@ async function fetchAllData() {
 		let currentPage = 0;
 		let filterString = urlFilters(filters);
 		let fullUrl = `${endpoint}${filterString}`;
-		const s = location.protocol === "https:" ? "s" : "";
+		// const s = location.protocol === "https:" ? "s" : "";
+		const s = "";
 
 		while (morePagesAvailable) {
 			currentPage++;
