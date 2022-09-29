@@ -95,7 +95,7 @@ filterSelectors.forEach((filterSelector) => {
 		}
 		updateFilters();
 		loadTable().then(() => {
-			if (filterSelector.id !== "localidad")
+			if (filterSelector.id === "provincia")
 				populateSelector("localidad", globalData);
 		});
 	});

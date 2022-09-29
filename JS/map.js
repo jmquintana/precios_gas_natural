@@ -18,7 +18,7 @@ const myMap = new L.Map("myMap", {
 let myRenderer = L.canvas({ padding: 0.5 });
 const markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
 
-const colors = ["#008800", "#0000FF", "#BB0000"];
+const colors = ["#008800", "#FFFF00", "#BB0000"];
 
 const myTriangleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
@@ -59,7 +59,7 @@ function plotMap(data) {
 		let lat_lng = [d.latitud, d.longitud];
 		// let marker = L.marker(lat_lng, { icon: markerIcon })
 		let weight = (d.precio - minPrice) / (maxPrice - minPrice);
-		let marker = myTriangleMarker(lat_lng, weight);
+		let marker = myCircleMarker(lat_lng, weight);
 
 		marker.addTo(myMap);
 		markers.push(marker);
