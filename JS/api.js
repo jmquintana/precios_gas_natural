@@ -3,6 +3,7 @@ const $table = $("#data-table");
 const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
+let globalData = [];
 
 function isEmpty(obj) {
 	for (var prop in obj) {
@@ -27,6 +28,10 @@ function toggleSpinner() {
 	let table = document.getElementById("table-div");
 	spinner.classList.toggle("hide");
 	table.classList.toggle("hide");
+	filterSelectors.forEach((filterSelector) =>
+		filterSelector.toggleAttribute("disabled")
+	);
+	document.getElementById("reset").classList.toggle("disabled");
 }
 
 async function fetchAllData() {
@@ -55,6 +60,7 @@ async function fetchAllData() {
 			morePagesAvailable = currentPage * 100 < total;
 		}
 		toggleSpinner();
+		globalData = allData;
 		return allData;
 	} catch (e) {
 		console.log(e);
@@ -84,11 +90,20 @@ function modifyButtons() {
 
 filterSelectors.forEach((filterSelector) => {
 	filterSelector.addEventListener("change", () => {
-		updateFilters(filterSelector);
-		console.log(filters);
+		if (
+			filterSelector.id === "provincia" ||
+			filterSelector.id !== "localidad"
+		) {
+			resetSelector("localidad");
+		}
+		updateFilters();
 		loadTable();
 	});
 });
+
+function resetSelector(selectorId) {
+	$(`#${selectorId}`).value = OPTION_ALL;
+}
 
 function optionExist(option, filterSelector) {
 	const options = [...filterSelector.options].map((el) => el.value);
@@ -108,9 +123,8 @@ document.getElementById("reset").addEventListener("click", (e) => {
 				filterSelector.value = OPTION_ALL;
 				selectionHasChanged = true;
 			}
-			updateFilters(filterSelector);
+			updateFilters();
 		});
-		console.log(filters);
 		if (selectionHasChanged) loadTable();
 	}
 });
@@ -118,6 +132,7 @@ document.getElementById("reset").addEventListener("click", (e) => {
 function loadTable() {
 	fetchAllData()
 		.then((data) => {
+			populateSelector("localidad", data);
 			console.log(data);
 			$table ? $table.DataTable().destroy() : false;
 			showTable(data);
@@ -140,35 +155,40 @@ function showTable(data) {
 	modifyButtons();
 }
 
-function updateFilters(filterSelector) {
-	if (!(filterSelector.value === "all")) {
-		filters[filterSelector.id] =
-			Number(filterSelector.value) || filterSelector.value;
-	} else {
-		delete filters[filterSelector.id];
-	}
+function updateFilters() {
+	filterSelectors.forEach((filterSelector) => {
+		if (!(filterSelector.value === "all")) {
+			filters[filterSelector.id] =
+				Number(filterSelector.value) || filterSelector.value;
+		} else {
+			delete filters[filterSelector.id];
+		}
+	});
+	console.log(filters);
 }
 
 function filtersToSelectors() {
 	filterSelectors.forEach((filterSelector) => {
-		console.log(filterSelector.id, filters[filterSelector.id]);
 		if (filters[filterSelector.id]) {
 			filterSelector.value = filters[filterSelector.id];
 		}
-		// filterSelector.value=
 	});
 }
-
 $(document).ready(() => {
 	filtersToSelectors();
 	fetchAllData()
 		.then((data) => {
 			// getData(endpoint);
 			console.log(data);
+			populateSelector("localidad", data);
 			showTable(data);
 		})
 		.catch((e) => console.error(e));
 });
+
+function getUniques(key, arr) {
+	return [...new Set(arr.map((x) => x[key]))].sort();
+}
 
 let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -176,3 +196,11 @@ let tooltipTriggerList = [].slice.call(
 let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 	return new bootstrap.Tooltip(tooltipTriggerEl);
 });
+
+function populateSelector(columnName, data) {
+	$(`#${columnName}`).empty().append(`<option value="all">Todas</option>`);
+	const values = [...new Set(data.map((el) => el[columnName]))].sort();
+	values.forEach((value) =>
+		$(`#${columnName}`).append(`<option value="${value}">${value}</option>`)
+	);
+}
