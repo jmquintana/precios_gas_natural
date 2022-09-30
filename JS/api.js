@@ -62,6 +62,7 @@ async function fetchAllData() {
 			morePagesAvailable = currentPage * 100 < total;
 		}
 		toggleSpinner();
+		addOptionsCount();
 		globalData = allData;
 		return allData;
 	} catch (e) {
@@ -200,11 +201,23 @@ let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 });
 
 function populateSelector(columnName, data) {
-	$(`#${columnName}`).empty().append(`<option value="all">Todas</option>`);
 	const values = [...new Set(data.map((el) => el[columnName]))].sort();
+	$(`#${columnName}`)
+		.empty()
+		.append(`<option value="all">Todas (${values.length})</option>`);
 	values.forEach((value) =>
 		$(`#${columnName}`).append(`<option value="${value}">${value}</option>`)
 	);
+}
+
+function addOptionsCount() {
+	filterSelectors.forEach((filterSelector) => {
+		if (filterSelector[0].value === OPTION_ALL) {
+			filterSelector[0].innerText = `Todas (${
+				parseInt(filterSelector.options.length) - 1
+			})`;
+		}
+	});
 }
 
 (function () {

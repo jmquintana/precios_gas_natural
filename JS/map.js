@@ -202,9 +202,17 @@ myMap.on("zoomend", function () {
 		markers.forEach(function (marker) {
 			marker.setRadius(32);
 		});
-	} else {
+	} else if (currentZoom > 10) {
 		markers.forEach(function (marker) {
 			marker.setRadius(16);
+		});
+	} else if (currentZoom > 8) {
+		markers.forEach(function (marker) {
+			marker.setRadius(12);
+		});
+	} else {
+		markers.forEach(function (marker) {
+			marker.setRadius(8);
 		});
 	}
 });
