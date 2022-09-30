@@ -98,6 +98,7 @@ filterSelectors.forEach((filterSelector) => {
 		}
 		updateFilters();
 		loadTable().then(() => {
+			filterSelector.focus();
 			if (filterSelector.id === "provincia")
 				populateSelector("localidad", globalData);
 		});
