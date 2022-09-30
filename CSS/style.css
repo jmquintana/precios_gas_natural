@@ -81,6 +81,11 @@ td {
     white-space: nowrap;
 }
 
+.main-form {
+    display: grid;
+    grid-template-columns: 15fr 1fr;
+}
+
 .form {
     display: flex;
     justify-content: space-between;
@@ -97,6 +102,10 @@ td {
     margin-top: 0.8rem;
     margin-bottom: 0.8rem;
 
+}
+
+.form-select {
+    max-width: 95%;
 }
 
 #spinner {
@@ -140,8 +149,9 @@ table.dataTable td {
     display: flex;
     align-items: end;
     justify-content: space-between;
-    margin-top: 1rem;
-    margin-bottom: .75rem;
+    margin: 1rem 1rem .75rem 1rem
+        /* margin-top: 1rem; */
+        /* margin-bottom: .75rem; */
 }
 
 .icons i {
@@ -154,4 +164,25 @@ table.dataTable td {
 
 .cen {
     text-align: center
+}
+
+@media (max-width: 1000px) {
+    .form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr)
+    }
+
+    .form .selector h5 {
+        text-align: center;
+        margin-top: 0rem;
+        margin-bottom: 0.2rem;
+
+    }
+
+    .icons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        /* margin: 1rem 1rem .75rem 1rem */
+    }
 }
