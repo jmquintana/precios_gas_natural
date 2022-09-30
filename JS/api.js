@@ -43,13 +43,11 @@ async function fetchAllData() {
 		let filterString = urlFilters(filters);
 		let fullUrl = `${endpoint}${filterString}`;
 		// const s = location.protocol === "https:" ? "s" : "";
-		const s = "";
+		const s = ""; //proxy: https://cors-anywhere.herokuapp.com/
 
 		while (morePagesAvailable) {
 			currentPage++;
-			const response = await fetch(
-				`https://cors-anywhere.herokuapp.com/http://datos.energia.gob.ar${fullUrl}`
-			);
+			const response = await fetch(`http://datos.energia.gob.ar${fullUrl}`);
 			const results = await response.json();
 			const result = results.result;
 			let { records, total, _links } = result;
