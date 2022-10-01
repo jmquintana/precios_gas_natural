@@ -47,15 +47,14 @@ function plotMap(data) {
 	}).addTo(myMap);
 
 	const filteredData = removeOutliers(data, "precio", 0.9, 100);
-	const minPrice = Math.min(...filteredData.map((num) => num.precio));
-	const maxPrice = Math.max(...filteredData.map((num) => num.precio));
+	const { minValue, maxValue } = getMinMax(filteredData, "precio");
 
 	for (let d of data) {
 		let lat_lng = [d.latitud, d.longitud];
 		// let marker = L.marker(lat_lng, { icon: markerIcon })
 		let weight =
-			maxPrice != minPrice
-				? (d.precio - minPrice) / (maxPrice - minPrice)
+			maxValue != minValue
+				? (d.precio - minValue) / (maxValue - minValue)
 				: 0.5;
 		let marker = myCircleMarker(lat_lng, weight);
 
@@ -102,17 +101,13 @@ function plotMap(data) {
 	myMap.fitBounds(bounds);
 }
 
-//definition of events
+//events definition
 $("#mapModal").on("show.bs.modal", function () {
 	setTimeout(function () {
 		myMap.invalidateSize();
-		const filteredData = getFilteredDataInDataTable();
-		const data = removeOutliers(
-			filterDataWithGeoJSON(filteredData),
-			"precio",
-			1,
-			0
-		);
+		const filteredData = getFilteredDataFromTable();
+		const dataWithValidLocations = filterDataWithLocations(filteredData);
+		const data = removeOutliers(dataWithValidLocations, "precio", 1, 0);
 		console.log(data);
 		plotMap(data);
 	}, 300);
@@ -148,13 +143,13 @@ myMap.on("zoomend", function () {
 });
 
 //data manipulation
-function getFilteredDataInDataTable() {
+function getFilteredDataFromTable() {
 	var table = $("#data-table").DataTable();
 	const data = Array.from(table.rows({ search: "applied" }).data());
 	return data;
 }
 
-function filterDataWithGeoJSON(data) {
+function filterDataWithLocations(data) {
 	return data.filter((element) => element.latitud && element.longitud);
 }
 
@@ -179,6 +174,44 @@ const removeOutliers = function (arr, prop, percentageDecimal, min, max) {
 			.slice(0, Math.ceil(temp.length * percentageDecimal))
 	);
 };
+
+function getGeoJsonObject(data) {
+	const filteredData = removeOutliers(data, "precio", 0.9, 100);
+	const { minValue, maxValue } = getMinMax(filteredData, "precio");
+	const features = data.map((station) => {
+		const weight =
+			maxValue != minValue
+				? (station.precio - minValue) / (maxValue - minValue)
+				: 0.5;
+		const backgroundColor = gradient(weight, ...colors);
+		return {
+			type: "Feature",
+			geometry: {
+				type: "Point",
+				coordinates: [station.latitud, station.longitud],
+			},
+			properties: {
+				empresa: station.empresa,
+				empresabandera: station.empresabandera.split(" ")[0],
+				precio: station.precio,
+				backgroundColor: backgroundColor,
+				textColor: getTextColor(backgroundColor),
+			},
+		};
+	});
+
+	const result = {
+		type: "FeatureCollection",
+		features: features,
+	};
+	return result;
+}
+
+function getMinMax(data, property) {
+	const minValue = Math.min(...data.map((num) => num[property]));
+	const maxValue = Math.max(...data.map((num) => num[property]));
+	return { minValue, maxValue };
+}
 
 //other auxikliary calculations
 //how to get a color from a gradient based on a value?
@@ -211,6 +244,37 @@ function linear(s, e, x) {
 function byteLinear(a, b, x) {
 	let y = (("0x" + a) * (1 - x) + ("0x" + b) * x) | 0;
 	return y.toString(16).padStart(2, "0"); // hex output
+}
+
+function getRGB(c) {
+	return parseInt(c, 16) || c;
+}
+
+function getsRGB(c) {
+	return getRGB(c) / 255 <= 0.03928
+		? getRGB(c) / 255 / 12.92
+		: Math.pow((getRGB(c) / 255 + 0.055) / 1.055, 2.4);
+}
+
+function getLuminance(hexColor) {
+	return (
+		0.2126 * getsRGB(hexColor.substr(1, 2)) +
+		0.7152 * getsRGB(hexColor.substr(3, 2)) +
+		0.0722 * getsRGB(hexColor.substr(-2))
+	);
+}
+
+function getContrast(f, b) {
+	const L1 = getLuminance(f);
+	const L2 = getLuminance(b);
+	return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+}
+
+function getTextColor(bgColor) {
+	const whiteContrast = getContrast(bgColor, "#ffffff");
+	const blackContrast = getContrast(bgColor, "#000000");
+
+	return whiteContrast > blackContrast ? "#ffffff" : "#000000";
 }
 
 //things that aren't in use
