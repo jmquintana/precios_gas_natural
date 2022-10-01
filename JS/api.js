@@ -47,7 +47,7 @@ async function fetchAllData() {
 
 		while (morePagesAvailable) {
 			currentPage++;
-			const response = await fetch(`http://datos.energia.gob.ar${fullUrl}`);
+			const response = await fetch(`http${s}://datos.energia.gob.ar${fullUrl}`);
 			const results = await response.json();
 			const result = results.result;
 			let { records, total, _links } = result;

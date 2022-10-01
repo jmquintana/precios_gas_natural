@@ -44,6 +44,7 @@ const myCircleMarker = (lat_lng, weight) => {
 		color: color,
 		fillOpacity: 0.75,
 		stroke: false,
+		bubblingMouseEvents: true,
 	});
 };
 
@@ -51,7 +52,7 @@ function plotMap(data) {
 	let bounds = L.latLngBounds();
 	L.tileLayer(tile2, {
 		markerZoomAnimation: false,
-		maxZoom: 24,
+		maxZoom: 19,
 		markerZoomAnimation: false,
 		dragging: true,
 		touchZoom: false,
@@ -66,16 +67,25 @@ function plotMap(data) {
 			'&copy; <a href="http://openstreetmap' +
 			'.org">OpenStreetMap</a> contributors',
 	}).addTo(myMap);
-	const minPrice = Math.min(...data.map((num) => num.precio));
-	const maxPrice = Math.max(...data.map((num) => num.precio));
+
+	const filteredData = removeOutliers(data, "precio", 0.9, 100);
+	const minPrice = Math.min(...filteredData.map((num) => num.precio));
+	const maxPrice = Math.max(...filteredData.map((num) => num.precio));
+
 	for (let d of data) {
 		let lat_lng = [d.latitud, d.longitud];
 		// let marker = L.marker(lat_lng, { icon: markerIcon })
-		let weight = (d.precio - minPrice) / (maxPrice - minPrice);
+		let weight =
+			maxPrice != minPrice
+				? (d.precio - minPrice) / (maxPrice - minPrice)
+				: 0.5;
 		let marker = myCircleMarker(lat_lng, weight);
 
-		marker.on("dblclick", function (e) {
-			myMap.setView(e.latlng, myMap.getZoom());
+		// marker.on("dblclick", function (e) {
+		// 	myMap.setView(e.latlng, myMap.getZoom());
+		// });
+		marker.on("mouseover", function (e) {
+			e.target.bringToFront();
 		});
 		marker.addTo(myMap);
 		markers.push(marker);
@@ -102,6 +112,11 @@ function plotMap(data) {
                 </table>
 			`
 		);
+		marker.bindTooltip(d.empresabandera.split(" ")[0], {
+			permanent: false,
+			direction: "center",
+			className: "my-labels",
+		});
 		bounds.extend(lat_lng);
 	}
 	let markersLength = markers.length;
@@ -116,8 +131,8 @@ $("#mapModal").on("show.bs.modal", function () {
 		const data = removeOutliers(
 			filterDataWithGeoJSON(filteredData),
 			"precio",
-			0.9,
-			100
+			1,
+			0
 		);
 		console.log(data);
 		plotMap(data);
@@ -131,7 +146,7 @@ function getFilteredDataInDataTable() {
 }
 
 function filterDataWithGeoJSON(data) {
-	return data.filter((element) => !!element.latitud);
+	return data.filter((element) => element.latitud && element.longitud);
 }
 
 $("#mapModal").on("hidden.bs.modal", function () {
