@@ -2,40 +2,10 @@ console.log("script map.js");
 
 const tile = `https://tile.openstreetmap.org/{z}/{x}/{y}.png`;
 const tile2 = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
-
 let markers = [];
-// const myCoord = [-38.011083, -57.541015];
-const myCoord = [-34.56595456587895, -58.451184908837234];
-
-const myMap = new L.Map("myMap", {
-	zoomDelta: 0.25,
-	// zoomSnap: 0,
-	fullscreenControl: {
-		pseudoFullscreen: false, // if true, fullscreen to page width and height
-	},
-});
-
-// myMap.setView(myCoord, 13);
-
-let myRenderer = L.canvas({ padding: 0.5 });
-const markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
-
 const colors = ["#008800", "#FFFF00", "#BB0000"];
 
-const myTriangleMarker = (lat_lng, weight) => {
-	const color = gradient(weight, ...colors);
-	return L.triangleMarker(lat_lng, {
-		renderer: myRenderer, // your canvas renderer (default: L.canvas())
-		rotation: 180, // triangle rotation in degrees (default: 0)
-		width: 16, // width of the base of triangle (default: 24)
-		height: 12, // height of triangle (default: 24)
-		color: color,
-		fillOpacity: 0.45,
-		weight: 2,
-		opacity: 0.6,
-		// stroke: false,
-	});
-};
+let myRenderer = L.canvas({ padding: 0.5 });
 
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
@@ -47,6 +17,14 @@ const myCircleMarker = (lat_lng, weight) => {
 		bubblingMouseEvents: true,
 	});
 };
+
+const myMap = new L.Map("myMap", {
+	zoomDelta: 0.25,
+	// zoomSnap: 0,
+	fullscreenControl: {
+		pseudoFullscreen: false, // if true, fullscreen to page width and height
+	},
+});
 
 function plotMap(data) {
 	let bounds = L.latLngBounds();
@@ -124,6 +102,7 @@ function plotMap(data) {
 	myMap.fitBounds(bounds);
 }
 
+//definition of events
 $("#mapModal").on("show.bs.modal", function () {
 	setTimeout(function () {
 		myMap.invalidateSize();
@@ -139,6 +118,36 @@ $("#mapModal").on("show.bs.modal", function () {
 	}, 300);
 });
 
+$("#mapModal").on("hidden.bs.modal", function () {
+	markers = [];
+	myMap.eachLayer((layer) => {
+		myMap.removeLayer(layer);
+	});
+});
+
+myMap.on("zoomend", function () {
+	var currentZoom = myMap.getZoom();
+	console.log(currentZoom);
+	if (currentZoom > 12) {
+		markers.forEach(function (marker) {
+			marker.setRadius(32);
+		});
+	} else if (currentZoom > 10) {
+		markers.forEach(function (marker) {
+			marker.setRadius(16);
+		});
+	} else if (currentZoom > 8) {
+		markers.forEach(function (marker) {
+			marker.setRadius(12);
+		});
+	} else {
+		markers.forEach(function (marker) {
+			marker.setRadius(8);
+		});
+	}
+});
+
+//data manipulation
 function getFilteredDataInDataTable() {
 	var table = $("#data-table").DataTable();
 	const data = Array.from(table.rows({ search: "applied" }).data());
@@ -149,13 +158,29 @@ function filterDataWithGeoJSON(data) {
 	return data.filter((element) => element.latitud && element.longitud);
 }
 
-$("#mapModal").on("hidden.bs.modal", function () {
-	markers = [];
-	myMap.eachLayer((layer) => {
-		myMap.removeLayer(layer);
-	});
-});
+const removeOutliers = function (arr, prop, percentageDecimal, min, max) {
+	let temp;
+	return _.flatten(
+		_.values(
+			_.chain(arr)
+				.groupBy(prop)
+				.filter(function (value, key) {
+					key = parseInt(key) || key;
+					return (min ? key >= min : true) && (max ? key <= max : true);
+				})
+				.tap(function (items) {
+					temp = items;
+				})
+				.value()
+		)
+			.sort(function (a, b) {
+				return a.length < b.length;
+			})
+			.slice(0, Math.ceil(temp.length * percentageDecimal))
+	);
+};
 
+//other auxikliary calculations
 //how to get a color from a gradient based on a value?
 function pickHex(color1, color2, weight) {
 	var w1 = weight;
@@ -188,46 +213,20 @@ function byteLinear(a, b, x) {
 	return y.toString(16).padStart(2, "0"); // hex output
 }
 
-const removeOutliers = function (arr, prop, percentageDecimal, min, max) {
-	let temp;
-	return _.flatten(
-		_.values(
-			_.chain(arr)
-				.groupBy(prop)
-				.filter(function (value, key) {
-					key = parseInt(key) || key;
-					return (min ? key >= min : true) && (max ? key <= max : true);
-				})
-				.tap(function (items) {
-					temp = items;
-				})
-				.value()
-		)
-			.sort(function (a, b) {
-				return a.length < b.length;
-			})
-			.slice(0, Math.ceil(temp.length * percentageDecimal))
-	);
+//things that aren't in use
+const myTriangleMarker = (lat_lng, weight) => {
+	const color = gradient(weight, ...colors);
+	return L.triangleMarker(lat_lng, {
+		renderer: myRenderer, // your canvas renderer (default: L.canvas())
+		rotation: 180, // triangle rotation in degrees (default: 0)
+		width: 16, // width of the base of triangle (default: 24)
+		height: 12, // height of triangle (default: 24)
+		color: color,
+		fillOpacity: 0.45,
+		weight: 2,
+		opacity: 0.6,
+		// stroke: false,
+	});
 };
 
-myMap.on("zoomend", function () {
-	var currentZoom = myMap.getZoom();
-	console.log(currentZoom);
-	if (currentZoom > 12) {
-		markers.forEach(function (marker) {
-			marker.setRadius(32);
-		});
-	} else if (currentZoom > 10) {
-		markers.forEach(function (marker) {
-			marker.setRadius(16);
-		});
-	} else if (currentZoom > 8) {
-		markers.forEach(function (marker) {
-			marker.setRadius(12);
-		});
-	} else {
-		markers.forEach(function (marker) {
-			marker.setRadius(8);
-		});
-	}
-});
+const markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
