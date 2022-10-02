@@ -50,6 +50,7 @@ function plotMap(data) {
 	// let bounds = L.latLngBounds();
 	tileLayerGroup.addTo(myMap);
 	const featureLayerGroup = L.geoJSON(dataset, {
+		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Portal de Datos Abiertos del Gobierno de la República Argentina`,
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, {
 				renderer: myRenderer,
