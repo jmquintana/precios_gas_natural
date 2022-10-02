@@ -2,10 +2,10 @@ console.log("script map.js");
 
 const tile = `https://tile.openstreetmap.org/{z}/{x}/{y}.png`;
 const tile2 = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
-let markers = [];
 const colors = ["#008800", "#FFFF00", "#BB0000"];
-
 let myRenderer = L.canvas({ padding: 0.5 });
+let globalData2 = [];
+let quadtree = L.quadtree();
 
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
@@ -44,13 +44,21 @@ const tileLayerGroup = L.tileLayer(tile, {
 		'.org">OpenStreetMap</a> contributors',
 });
 
+let featureLayerGroup = [];
+
 function plotMap(data) {
 	const dataset = getGeoJsonObject(data);
 	console.log(dataset);
 	// let bounds = L.latLngBounds();
 	tileLayerGroup.addTo(myMap);
-	const featureLayerGroup = L.geoJSON(dataset, {
-		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Portal de Datos Abiertos del Gobierno de la República Argentina`,
+	featureLayerGroup = L.geoJSON(dataset, {
+		onEachFeature: function (feature, layer) {
+			quadtree.add(layer);
+			layer.on("mouseover", function (e) {
+				e.target.bringToFront();
+			});
+		},
+		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Datos Abiertos del Gobierno de la República Argentina`,
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, {
 				renderer: myRenderer,
@@ -88,15 +96,10 @@ function plotMap(data) {
 			</table>
 		`
 		)
-		// .on("mouseover", function (e) {
-		// 	e.target.bringToFront();
-		// })
 		.addTo(myMap);
 	myMap.fitBounds(featureLayerGroup.getBounds());
+	getVisibleMarkers();
 	updateScale(data);
-
-	// const filteredData = removeOutliers(data, "precio", 0.9, 100);
-	// const { minValue, maxValue } = getMinMax(filteredData, "precio");
 
 	// for (let d of data) {
 	// 	let lat_lng = [d.latitud, d.longitud];
@@ -115,70 +118,33 @@ function plotMap(data) {
 	// 	// });
 	// 	// marker.addTo(myMap);
 	// 	// markers.push(marker);
-	// 	// marker.bindPopup(
-	// 	// 	`
-	// 	// 	<div class="popupHeader" style="text-align:center"><b>${d.empresabandera}</b></div>
-	// 	//         <table>
-	// 	//             <tr>
-	// 	//                 <td style="text-align:left">Precio (ars/ltr):</td>
-	// 	//                 <td style="text-align:right"><b>${d.precio}</b></td>
-	// 	//             </tr>
-	// 	//             <tr>
-	// 	//                 <td style="text-align:left">Vigencia:</td>
-	// 	//                 <td style="text-align:right"><b>${d.indice_tiempo}</b></td>
-	// 	//             </tr>
-	// 	// 			<tr>
-	// 	// 				<td style="text-align:left">Localidad:</td>
-	// 	// 				<td style="text-align:right"><b>${d.localidad}</b></td>
-	// 	// 			</tr>
-	// 	//             <tr>
-	// 	//                 <td style="text-align:left">Región:</td>
-	// 	//                 <td style="text-align:right"><b>${d.region}</b></td>
-	// 	//             </tr>
-	// 	//         </table>
-	// 	// 	`
-	// 	// );
 	// 	// marker.bindTooltip(d.empresabandera.split(" ")[0], {
 	// 	// 	permanent: false,
 	// 	// 	direction: "center",
 	// 	// 	className: "my-labels",
 	// 	// });
-	// 	bounds.extend(lat_lng);
 	// }
-	// // let markersLength = markers.length;
-	// // console.log({ markers, markersLength });
-	// myMap.fitBounds(bounds);
 }
-
-const visibleMarkers = () => {
-	let contained = []; //makers in map boundingbox
-	let notContained = []; //makers in map boundingbox
-	myMap.eachLayer((layer) => {
-		// console.log(layer);
-		if (
-			layer.feature &&
-			layer.feature.type == "Feature" &&
-			myMap
-				.getBounds()
-				.contains(L.latLng(layer.feature.geometry.coordinates.reverse()))
-		) {
-			contained.push(layer);
-		} else {
-			notContained.push(layer);
-		}
-	});
-	return { contained, notContained };
-};
+function getVisibleMarkers() {
+	var bounds = myMap.getBounds();
+	var colliders = quadtree.getColliders(bounds);
+	var data = [];
+	for (var i = 0, len = colliders.length; i < len; ++i) {
+		data.push(colliders[i]);
+	}
+	let result = data.map((el) => el.feature.properties);
+	return result;
+}
 
 //events definition
 $("#mapModal").on("show.bs.modal", function () {
 	setTimeout(function () {
 		myMap.invalidateSize();
 		const filteredData = getFilteredDataFromTable();
-		const dataWithValidLocations = filterDataWithLocations(filteredData);
-		plotMap(dataWithValidLocations);
+		globalData2 = filterDataWithLocations(filteredData);
+		plotMap(globalData2);
 		// const data = removeOutliers(dataWithValidLocations, "precio", 1, 0);
-		console.log(dataWithValidLocations);
+		// console.log(globalData2);
 	}, 300);
 });
 
@@ -192,40 +158,33 @@ $("#mapModal").on("hidden.bs.modal", function () {
 
 const visible = () => {};
 
-myMap.on("moveend", function () {
-	let count = 0;
-	let visible = visibleMarkers();
-	console.log(visible);
-	myMap.eachLayer(() => {
-		count++;
-	});
-	console.log(count);
-	// console.log(!isEmpty(visibleMarkers()) ? visibleMarkers() : false);
-});
+myMap.on("move", updateScale);
+myMap.on("zoomend", updateScale);
+myMap.on("resize", updateScale);
 
-myMap.on("zoomend", function () {
-	// console.log(visibleMarkers());
-	// console.log(visibleMarkers());
-	var currentZoom = myMap.getZoom();
-	console.log(currentZoom);
-	if (currentZoom > 12) {
-		markers.forEach(function (marker) {
-			marker.setRadius(32);
-		});
-	} else if (currentZoom > 10) {
-		markers.forEach(function (marker) {
-			marker.setRadius(16);
-		});
-	} else if (currentZoom > 8) {
-		markers.forEach(function (marker) {
-			marker.setRadius(12);
-		});
-	} else {
-		markers.forEach(function (marker) {
-			marker.setRadius(8);
-		});
-	}
-});
+// myMap.on("zoomend", function () {
+// 	// console.log(visibleMarkers());
+// 	// console.log(visibleMarkers());
+// 	var currentZoom = myMap.getZoom();
+// 	console.log(currentZoom);
+// 	if (currentZoom > 12) {
+// 		markers.forEach(function (marker) {
+// 			marker.setRadius(32);
+// 		});
+// 	} else if (currentZoom > 10) {
+// 		markers.forEach(function (marker) {
+// 			marker.setRadius(16);
+// 		});
+// 	} else if (currentZoom > 8) {
+// 		markers.forEach(function (marker) {
+// 			marker.setRadius(12);
+// 		});
+// 	} else {
+// 		markers.forEach(function (marker) {
+// 			marker.setRadius(8);
+// 		});
+// 	}
+// });
 
 //data manipulation
 function getFilteredDataFromTable() {
@@ -239,8 +198,14 @@ function filterDataWithLocations(data) {
 }
 
 const removeOutliers = (arr) => {
-	const maxMonth = moment.max(arr.map((el) => moment(el.indice_tiempo)));
-	const previusMonth = maxMonth.subtract(1, "month");
+	const arrMonth = arr.map((el) => moment(el.indice_tiempo));
+	// console.log(arrMonth);
+	const maxMonth = moment.max(arrMonth);
+	// console.log(maxMonth);
+	const previusMonth = moment(maxMonth).add(-1, "month");
+	// const max = moment(maxMonth).format("MM-YYYY");
+	// const prev = moment(previusMonth).format("MM-YYYY");
+	// console.log({ prev, max });
 	return arr.filter(
 		(el) =>
 			el.indice_tiempo == maxMonth.format("YYYY-MM") ||
@@ -248,31 +213,9 @@ const removeOutliers = (arr) => {
 	);
 };
 
-// const removeOutliers = function (arr, prop, percentageDecimal, min, max) {
-// 	let temp;
-// 	return _.flatten(
-// 		_.values(
-// 			_.chain(arr)
-// 				.groupBy(prop)
-// 				.filter(function (value, key) {
-// 					key = parseInt(key) || key;
-// 					return (min ? key >= min : true) && (max ? key <= max : true);
-// 				})
-// 				.tap(function (items) {
-// 					temp = items;
-// 				})
-// 				.value()
-// 		)
-// 			.sort(function (a, b) {
-// 				return a.length < b.length;
-// 			})
-// 			.slice(0, Math.ceil(temp.length * percentageDecimal))
-// 	);
-// };
-
 function getGeoJsonObject(data) {
 	const dataWithoutOuliers = removeOutliers(data); //, "precio", 0.9, 100);
-	let { minValue, maxValue } = getMinMax(dataWithoutOuliers, "precio");
+	let [minValue, maxValue] = getMinMax(dataWithoutOuliers, "precio");
 	console.log(minValue, maxValue);
 	const features = data.map((station) => {
 		const weight = getWeight(station.precio, minValue, maxValue);
@@ -305,9 +248,10 @@ function getGeoJsonObject(data) {
 }
 
 function getMinMax(data, property) {
-	const minValue = Math.min(...data.map((num) => num[property]));
-	const maxValue = Math.max(...data.map((num) => num[property]));
-	return { minValue, maxValue };
+	const values = data.map((num) => num[property]);
+	const minValue = Math.min(...values);
+	const maxValue = Math.max(...values);
+	return [minValue, maxValue];
 }
 
 //other auxikliary calculations
@@ -381,14 +325,14 @@ const getWeight = (actualValue, minValue, maxValue) => {
 };
 
 //dom manipulation
-function updateScale(data) {
-	let { contained, notContained } = visibleMarkers();
-	if (!isEmpty(contained)) {
-		let { minValue, maxValue } = getMinMax(removeOutliers(data), "precio");
-		console.log(minValue, maxValue);
-		let visibleMin = Math.min(...contained.map((el) => el.features.precio));
-		let visibleMax = Math.max(...contained.map((el) => el.features.precio));
-
+function updateScale() {
+	let visibleDataProperties = getVisibleMarkers();
+	let cleanVisibleData = removeOutliers(visibleDataProperties);
+	let cleanData = removeOutliers(globalData2);
+	if (!isEmpty(cleanVisibleData)) {
+		let [visibleMin, visibleMax] = getMinMax(cleanVisibleData, "precio");
+		let [minValue, maxValue] = getMinMax(cleanData, "precio");
+		console.log({ minValue, visibleMin, visibleMax, maxValue });
 		setColorScale(minValue, maxValue);
 	}
 }
@@ -401,7 +345,6 @@ function setColorScale(minValue, maxValue) {
 	const maxColor = gradient(maxValue, ...colors);
 	const minValueText = document.querySelector(".min-scale-text");
 	const maxValueText = document.querySelector(".max-scale-text");
-	// console.log({ visibleMin, visibleMax });
 	minValueText.textContent = Math.round(minValue);
 	maxValueText.textContent = Math.round(maxValue);
 	colorScale.style.background = `linear-gradient(${maxColor}, ${colors[1]}, ${minColor})`;

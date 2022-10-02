@@ -49,7 +49,6 @@ async function fetchAllData() {
 			currentPage++;
 			const response = await fetch(`http${s}://datos.energia.gob.ar${fullUrl}`);
 			const results = await response.json();
-			console.log(results);
 			const result = results.result;
 			let { records, total, _links } = result;
 			let progress =
@@ -64,7 +63,7 @@ async function fetchAllData() {
 		}
 		toggleSpinner();
 		addOptionsCount();
-		globalData = allData;
+		globalData2 = allData;
 		return allData;
 	} catch (e) {
 		console.log(e);
@@ -101,7 +100,7 @@ filterSelectors.forEach((filterSelector) => {
 		loadTable().then(() => {
 			filterSelector.focus();
 			if (filterSelector.id === "provincia")
-				populateSelector("localidad", globalData);
+				populateSelector("localidad", globalData2);
 		});
 	});
 });
