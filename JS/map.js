@@ -22,84 +22,152 @@ const myMap = new L.Map("myMap", {
 	zoomDelta: 0.25,
 	// zoomSnap: 0,
 	fullscreenControl: {
-		pseudoFullscreen: false, // if true, fullscreen to page width and height
+		pseudoFullscreen: true, // if true, fullscreen to page width and height
 	},
 });
 
+const tileLayerGroup = L.tileLayer(tile, {
+	markerZoomAnimation: false,
+	maxZoom: 19,
+	markerZoomAnimation: false,
+	dragging: true,
+	touchZoom: false,
+	scrollWheelZoom: false,
+	boxZoom: false,
+	keyboard: false,
+	zoomControl: false,
+	attributionControl: false,
+	closePopupOnClick: false,
+	trackResize: true,
+	attribution:
+		'&copy; <a href="http://openstreetmap' +
+		'.org">OpenStreetMap</a> contributors',
+});
+
 function plotMap(data) {
-	let bounds = L.latLngBounds();
-	L.tileLayer(tile2, {
-		markerZoomAnimation: false,
-		maxZoom: 19,
-		markerZoomAnimation: false,
-		dragging: true,
-		touchZoom: false,
-		scrollWheelZoom: false,
-		boxZoom: false,
-		keyboard: false,
-		zoomControl: false,
-		attributionControl: false,
-		closePopupOnClick: false,
-		trackResize: true,
-		attribution:
-			'&copy; <a href="http://openstreetmap' +
-			'.org">OpenStreetMap</a> contributors',
-	}).addTo(myMap);
+	const dataset = getGeoJsonObject(data);
+	console.log(dataset);
+	// let bounds = L.latLngBounds();
+	tileLayerGroup.addTo(myMap);
+	const featureLayerGroup = L.geoJSON(dataset, {
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				renderer: myRenderer,
+				color: feature.properties.backgroundColor,
+				fillOpacity: 0.75,
+				stroke: false,
+				bubblingMouseEvents: true,
+			}).addTo(myMap);
+		},
+		style: function (feature) {
+			return { color: feature.properties.backgroundColor };
+		},
+	})
+		.bindPopup(
+			(layer) =>
+				`
+		<div class="popupHeader" style="text-align:center"><b>${layer.feature.properties.empresabandera}</b></div>
+			<table>
+				<tr>
+					<td style="text-align:left">Precio (ars/ltr):</td>
+					<td style="text-align:right"><b>${layer.feature.properties.precio}</b></td>
+				</tr>
+				<tr>
+					<td style="text-align:left">Vigencia:</td>
+					<td style="text-align:right"><b>${layer.feature.properties.indice_tiempo}</b></td>
+				</tr>
+				<tr>
+					<td style="text-align:left">Localidad:</td>
+					<td style="text-align:right"><b>${layer.feature.properties.localidad}</b></td>
+				</tr>
+				<tr>
+					<td style="text-align:left">Región:</td>
+					<td style="text-align:right"><b>${layer.feature.properties.region}</b></td>
+				</tr>
+			</table>
+		`
+		)
+		// .on("mouseover", function (e) {
+		// 	e.target.bringToFront();
+		// })
+		.addTo(myMap);
+	myMap.fitBounds(featureLayerGroup.getBounds());
+	updateScale(data);
 
-	const filteredData = removeOutliers(data, "precio", 0.9, 100);
-	const { minValue, maxValue } = getMinMax(filteredData, "precio");
+	// const filteredData = removeOutliers(data, "precio", 0.9, 100);
+	// const { minValue, maxValue } = getMinMax(filteredData, "precio");
 
-	for (let d of data) {
-		let lat_lng = [d.latitud, d.longitud];
-		// let marker = L.marker(lat_lng, { icon: markerIcon })
-		let weight =
-			maxValue != minValue
-				? (d.precio - minValue) / (maxValue - minValue)
-				: 0.5;
-		let marker = myCircleMarker(lat_lng, weight);
+	// for (let d of data) {
+	// 	let lat_lng = [d.latitud, d.longitud];
+	// 	// let marker = L.marker(lat_lng, { icon: markerIcon })
+	// 	// let weight =
+	// 	// 	maxValue != minValue
+	// 	// 		? (d.precio - minValue) / (maxValue - minValue)
+	// 	// 		: 0.5;
+	// 	// let marker = myCircleMarker(lat_lng, weight);
 
-		// marker.on("dblclick", function (e) {
-		// 	myMap.setView(e.latlng, myMap.getZoom());
-		// });
-		marker.on("mouseover", function (e) {
-			e.target.bringToFront();
-		});
-		marker.addTo(myMap);
-		markers.push(marker);
-		marker.bindPopup(
-			`
-			<div class="popupHeader" style="text-align:center"><b>${d.empresabandera}</b></div>
-                <table>
-                    <tr>
-                        <td style="text-align:left">Precio (ars/ltr):</td>
-                        <td style="text-align:right"><b>${d.precio}</b></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left">Vigencia:</td>
-                        <td style="text-align:right"><b>${d.indice_tiempo}</b></td>
-                    </tr>
-					<tr>
-						<td style="text-align:left">Localidad:</td>
-						<td style="text-align:right"><b>${d.localidad}</b></td>
-					</tr>
-                    <tr>
-                        <td style="text-align:left">Región:</td>
-                        <td style="text-align:right"><b>${d.region}</b></td>
-                    </tr>
-                </table>
-			`
-		);
-		marker.bindTooltip(d.empresabandera.split(" ")[0], {
-			permanent: false,
-			direction: "center",
-			className: "my-labels",
-		});
-		bounds.extend(lat_lng);
-	}
-	let markersLength = markers.length;
-	console.log({ markers, markersLength });
-	myMap.fitBounds(bounds);
+	// 	// marker.on("dblclick", function (e) {
+	// 	// 	myMap.setView(e.latlng, myMap.getZoom());
+	// 	// });
+	// 	// marker.on("mouseover", function (e) {
+	// 	// 	e.target.bringToFront();
+	// 	// });
+	// 	// marker.addTo(myMap);
+	// 	// markers.push(marker);
+	// 	// marker.bindPopup(
+	// 	// 	`
+	// 	// 	<div class="popupHeader" style="text-align:center"><b>${d.empresabandera}</b></div>
+	// 	//         <table>
+	// 	//             <tr>
+	// 	//                 <td style="text-align:left">Precio (ars/ltr):</td>
+	// 	//                 <td style="text-align:right"><b>${d.precio}</b></td>
+	// 	//             </tr>
+	// 	//             <tr>
+	// 	//                 <td style="text-align:left">Vigencia:</td>
+	// 	//                 <td style="text-align:right"><b>${d.indice_tiempo}</b></td>
+	// 	//             </tr>
+	// 	// 			<tr>
+	// 	// 				<td style="text-align:left">Localidad:</td>
+	// 	// 				<td style="text-align:right"><b>${d.localidad}</b></td>
+	// 	// 			</tr>
+	// 	//             <tr>
+	// 	//                 <td style="text-align:left">Región:</td>
+	// 	//                 <td style="text-align:right"><b>${d.region}</b></td>
+	// 	//             </tr>
+	// 	//         </table>
+	// 	// 	`
+	// 	// );
+	// 	// marker.bindTooltip(d.empresabandera.split(" ")[0], {
+	// 	// 	permanent: false,
+	// 	// 	direction: "center",
+	// 	// 	className: "my-labels",
+	// 	// });
+	// 	bounds.extend(lat_lng);
+	// }
+	// // let markersLength = markers.length;
+	// // console.log({ markers, markersLength });
+	// myMap.fitBounds(bounds);
 }
+
+const visibleMarkers = () => {
+	let contained = []; //makers in map boundingbox
+	let notContained = []; //makers in map boundingbox
+	myMap.eachLayer((layer) => {
+		// console.log(layer);
+		if (
+			layer.feature &&
+			layer.feature.type == "Feature" &&
+			myMap
+				.getBounds()
+				.contains(L.latLng(layer.feature.geometry.coordinates.reverse()))
+		) {
+			contained.push(layer);
+		} else {
+			notContained.push(layer);
+		}
+	});
+	return { contained, notContained };
+};
 
 //events definition
 $("#mapModal").on("show.bs.modal", function () {
@@ -107,20 +175,36 @@ $("#mapModal").on("show.bs.modal", function () {
 		myMap.invalidateSize();
 		const filteredData = getFilteredDataFromTable();
 		const dataWithValidLocations = filterDataWithLocations(filteredData);
-		const data = removeOutliers(dataWithValidLocations, "precio", 1, 0);
-		console.log(data);
-		plotMap(data);
+		plotMap(dataWithValidLocations);
+		// const data = removeOutliers(dataWithValidLocations, "precio", 1, 0);
+		console.log(dataWithValidLocations);
 	}, 300);
 });
 
 $("#mapModal").on("hidden.bs.modal", function () {
 	markers = [];
+	// featureLayerGroup.clearLayers()
 	myMap.eachLayer((layer) => {
 		myMap.removeLayer(layer);
 	});
 });
 
+const visible = () => {};
+
+myMap.on("moveend", function () {
+	let count = 0;
+	let visible = visibleMarkers();
+	console.log(visible);
+	myMap.eachLayer(() => {
+		count++;
+	});
+	console.log(count);
+	// console.log(!isEmpty(visibleMarkers()) ? visibleMarkers() : false);
+});
+
 myMap.on("zoomend", function () {
+	// console.log(visibleMarkers());
+	// console.log(visibleMarkers());
 	var currentZoom = myMap.getZoom();
 	console.log(currentZoom);
 	if (currentZoom > 12) {
@@ -153,46 +237,58 @@ function filterDataWithLocations(data) {
 	return data.filter((element) => element.latitud && element.longitud);
 }
 
-const removeOutliers = function (arr, prop, percentageDecimal, min, max) {
-	let temp;
-	return _.flatten(
-		_.values(
-			_.chain(arr)
-				.groupBy(prop)
-				.filter(function (value, key) {
-					key = parseInt(key) || key;
-					return (min ? key >= min : true) && (max ? key <= max : true);
-				})
-				.tap(function (items) {
-					temp = items;
-				})
-				.value()
-		)
-			.sort(function (a, b) {
-				return a.length < b.length;
-			})
-			.slice(0, Math.ceil(temp.length * percentageDecimal))
+const removeOutliers = (arr) => {
+	const maxMonth = moment.max(arr.map((el) => moment(el.indice_tiempo)));
+	const previusMonth = maxMonth.subtract(1, "month");
+	return arr.filter(
+		(el) =>
+			el.indice_tiempo == maxMonth.format("YYYY-MM") ||
+			el.indice_tiempo == previusMonth.format("YYYY-MM")
 	);
 };
 
+// const removeOutliers = function (arr, prop, percentageDecimal, min, max) {
+// 	let temp;
+// 	return _.flatten(
+// 		_.values(
+// 			_.chain(arr)
+// 				.groupBy(prop)
+// 				.filter(function (value, key) {
+// 					key = parseInt(key) || key;
+// 					return (min ? key >= min : true) && (max ? key <= max : true);
+// 				})
+// 				.tap(function (items) {
+// 					temp = items;
+// 				})
+// 				.value()
+// 		)
+// 			.sort(function (a, b) {
+// 				return a.length < b.length;
+// 			})
+// 			.slice(0, Math.ceil(temp.length * percentageDecimal))
+// 	);
+// };
+
 function getGeoJsonObject(data) {
-	const filteredData = removeOutliers(data, "precio", 0.9, 100);
-	const { minValue, maxValue } = getMinMax(filteredData, "precio");
+	const dataWithoutOuliers = removeOutliers(data); //, "precio", 0.9, 100);
+	let { minValue, maxValue } = getMinMax(dataWithoutOuliers, "precio");
+	console.log(minValue, maxValue);
 	const features = data.map((station) => {
-		const weight =
-			maxValue != minValue
-				? (station.precio - minValue) / (maxValue - minValue)
-				: 0.5;
+		const weight = getWeight(station.precio, minValue, maxValue);
 		const backgroundColor = gradient(weight, ...colors);
 		return {
 			type: "Feature",
 			geometry: {
 				type: "Point",
-				coordinates: [station.latitud, station.longitud],
+				coordinates: [station.longitud, station.latitud],
 			},
 			properties: {
 				empresa: station.empresa,
 				empresabandera: station.empresabandera.split(" ")[0],
+				precio: station.precio,
+				indice_tiempo: station.indice_tiempo,
+				localidad: station.localidad,
+				region: station.region,
 				precio: station.precio,
 				backgroundColor: backgroundColor,
 				textColor: getTextColor(backgroundColor),
@@ -275,6 +371,39 @@ function getTextColor(bgColor) {
 	const blackContrast = getContrast(bgColor, "#000000");
 
 	return whiteContrast > blackContrast ? "#ffffff" : "#000000";
+}
+
+const getWeight = (actualValue, minValue, maxValue) => {
+	return maxValue != minValue
+		? (actualValue - minValue) / (maxValue - minValue)
+		: 0.5;
+};
+
+//dom manipulation
+function updateScale(data) {
+	let { contained, notContained } = visibleMarkers();
+	if (!isEmpty(contained)) {
+		let { minValue, maxValue } = getMinMax(removeOutliers(data), "precio");
+		console.log(minValue, maxValue);
+		let visibleMin = Math.min(...contained.map((el) => el.features.precio));
+		let visibleMax = Math.max(...contained.map((el) => el.features.precio));
+
+		setColorScale(minValue, maxValue);
+	}
+}
+
+function setColorScale(minValue, maxValue) {
+	const colorScale = document.querySelector(".color-scale");
+	// let min = getWeight(visibleMin, minValue, maxValue);
+	// let max = getWeight(visibleMax, minValue, maxValue);
+	const minColor = gradient(minValue, ...colors);
+	const maxColor = gradient(maxValue, ...colors);
+	const minValueText = document.querySelector(".min-scale-text");
+	const maxValueText = document.querySelector(".max-scale-text");
+	// console.log({ visibleMin, visibleMax });
+	minValueText.textContent = Math.round(minValue);
+	maxValueText.textContent = Math.round(maxValue);
+	colorScale.style.background = `linear-gradient(${maxColor}, ${colors[1]}, ${minColor})`;
 }
 
 //things that aren't in use
