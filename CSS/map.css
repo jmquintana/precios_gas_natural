@@ -107,6 +107,7 @@
 .max-inidicator,
 .min-inidicator {
     font-size: smaller;
+    padding: 0 0.2rem 0 0.2rem;
 }
 
 .max-inidicator::after,

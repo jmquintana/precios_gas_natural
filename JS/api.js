@@ -42,8 +42,8 @@ async function fetchAllData() {
 		let currentPage = 0;
 		let filterString = urlFilters(filters);
 		let fullUrl = `${endpoint}${filterString}`;
-		// const s = location.protocol === "https:" ? "s" : "";
-		const s = ""; //proxy: https://cors-anywhere.herokuapp.com/
+		const s = location.protocol === "https:" ? "s" : "";
+		// const s = ""; //proxy: https://cors-anywhere.herokuapp.com/
 
 		while (morePagesAvailable) {
 			currentPage++;

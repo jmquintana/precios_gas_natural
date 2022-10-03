@@ -6,7 +6,6 @@ const colors = ["#008800", "#FFFF00", "#BB0000"];
 let myRenderer = L.canvas({ padding: 0.5 });
 let globalData2 = [];
 let quadtree = L.quadtree();
-
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
 	return L.circleMarker(lat_lng, {
@@ -44,7 +43,7 @@ const tileLayerGroup = L.tileLayer(tile, {
 		'.org">OpenStreetMap</a> contributors',
 });
 
-let featureLayerGroup = [];
+let featureLayerGroup;
 
 function plotMap(data) {
 	const dataset = getGeoJsonObject(data);
@@ -98,8 +97,9 @@ function plotMap(data) {
 		)
 		.addTo(myMap);
 	myMap.fitBounds(featureLayerGroup.getBounds());
-	getVisibleMarkers();
-	updateScale(data);
+	console.warn(countLayers());
+	// getVisibleMarkers();
+	updateScale();
 
 	// for (let d of data) {
 	// 	let lat_lng = [d.latitud, d.longitud];
@@ -143,17 +143,25 @@ $("#mapModal").on("show.bs.modal", function () {
 		globalData2 = filterDataWithLocations(filteredData);
 		plotMap(globalData2);
 		// const data = removeOutliers(dataWithValidLocations, "precio", 1, 0);
-		// console.log(globalData2);
+		console.log(globalData2);
 	}, 300);
 });
 
 $("#mapModal").on("hidden.bs.modal", function () {
-	markers = [];
-	// featureLayerGroup.clearLayers()
-	myMap.eachLayer((layer) => {
-		myMap.removeLayer(layer);
-	});
+	// featureLayerGroup.clearLayers();
+	myMap.removeLayer(featureLayerGroup);
+	globalData2 = [];
+	console.log(globalData2);
+	// myMap.eachLayer((layer) => {
+	// 	layer.remove();
+	// });
 });
+
+function countLayers() {
+	let counter = 0;
+	myMap.eachLayer((layer) => counter++);
+	return counter;
+}
 
 myMap.on("move", updateScale);
 myMap.on("zoomend", updateScale);
@@ -318,6 +326,7 @@ function updateScale() {
 	let visibleDataProperties = visibleData.map((el) => el.feature.properties);
 	let cleanVisibleData = removeOutliers(visibleDataProperties);
 	let cleanData = removeOutliers(globalData2);
+	console.log(cleanData);
 	if (cleanVisibleData.length) {
 		let [visibleMin, visibleMax] = getMinMax(cleanVisibleData, "precio");
 		let [minValue, maxValue] = getMinMax(cleanData, "precio");
@@ -336,13 +345,13 @@ function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 	if (maxWeight - minWeight < 0.12) {
 		spanMax.style.opacity = 0;
 	} else {
-		spanMax.style.opacity = 0.8;
+		spanMax.style.opacity = 1;
 	}
 	if (minWeight >= 0 && maxWeight <= 1) {
 		spanMin.textContent = `$${Math.round(visibleMin)}`;
 		spanMax.textContent = `$${Math.round(visibleMax)}`;
-		spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
 		spanMin.style.transform = `translate(-45px, ${-7.3 * minWeight - 2.3}rem)`;
+		spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
 	}
 	// let min = getWeight(visibleMin, minValue, maxValue);
 	// let max = getWeight(visibleMax, minValue, maxValue);
