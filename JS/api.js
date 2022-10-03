@@ -5,7 +5,7 @@ const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
 let globalData = [];
 
-function isEmpty(obj) {
+function isEmptyObj(obj) {
 	for (var prop in obj) {
 		if (Object.prototype.hasOwnProperty.call(obj, prop)) {
 			return false;
@@ -15,7 +15,7 @@ function isEmpty(obj) {
 }
 
 function urlFilters(filters) {
-	if (isEmpty(filters)) {
+	if (isEmptyObj(filters)) {
 		return "";
 	} else {
 		let string = JSON.stringify(filters);
@@ -116,7 +116,7 @@ function optionExist(option, filterSelector) {
 }
 
 document.getElementById("reset").addEventListener("click", (e) => {
-	if (!isEmpty(filters)) {
+	if (!isEmptyObj(filters)) {
 		e.preventDefault();
 		console.log("reset all filters");
 		let selectionHasChanged = false;

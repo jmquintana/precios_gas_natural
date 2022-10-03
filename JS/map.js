@@ -160,7 +160,7 @@ const visible = () => {};
 
 myMap.on("move", updateScale);
 myMap.on("zoomend", updateScale);
-myMap.on("resize", updateScale);
+// myMap.on("resize", updateScale);
 
 // myMap.on("zoomend", function () {
 // 	// console.log(visibleMarkers());
@@ -329,16 +329,29 @@ function updateScale() {
 	let visibleDataProperties = getVisibleMarkers();
 	let cleanVisibleData = removeOutliers(visibleDataProperties);
 	let cleanData = removeOutliers(globalData2);
-	if (!isEmpty(cleanVisibleData)) {
+	if (cleanVisibleData.length) {
 		let [visibleMin, visibleMax] = getMinMax(cleanVisibleData, "precio");
 		let [minValue, maxValue] = getMinMax(cleanData, "precio");
 		console.log({ minValue, visibleMin, visibleMax, maxValue });
-		setColorScale(minValue, maxValue);
+		setColorScale(minValue, visibleMin, visibleMax, maxValue);
 	}
 }
 
-function setColorScale(minValue, maxValue) {
+function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 	const colorScale = document.querySelector(".color-scale");
+	const spanMin = document.querySelector(".min-inidicator");
+	const spanMax = document.querySelector(".max-inidicator");
+	spanMin.textContent = Math.round(visibleMin);
+	spanMax.textContent = Math.round(visibleMax);
+	let minWeight = getWeight(visibleMin, minValue, maxValue);
+	let maxWeight = getWeight(visibleMax, minValue, maxValue);
+	if (maxWeight - minWeight < 0.15) {
+		spanMax.style.opacity = 0;
+	} else {
+		spanMax.style.opacity = 0.8;
+	}
+	spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
+	spanMin.style.transform = `translate(-45px, ${-7.3 * minWeight - 2.3}rem)`;
 	// let min = getWeight(visibleMin, minValue, maxValue);
 	// let max = getWeight(visibleMax, minValue, maxValue);
 	const minColor = gradient(minValue, ...colors);
