@@ -63,7 +63,7 @@ function plotMap(data) {
 			return L.circleMarker(latlng, {
 				renderer: myRenderer,
 				color: feature.properties.backgroundColor,
-				fillOpacity: 0.75,
+				fillOpacity: 0.8,
 				stroke: false,
 				bubblingMouseEvents: true,
 			}).addTo(myMap);
@@ -132,8 +132,7 @@ function getVisibleMarkers() {
 	for (var i = 0, len = colliders.length; i < len; ++i) {
 		data.push(colliders[i]);
 	}
-	let result = data.map((el) => el.feature.properties);
-	return result;
+	return data;
 }
 
 //events definition
@@ -156,33 +155,22 @@ $("#mapModal").on("hidden.bs.modal", function () {
 	});
 });
 
-const visible = () => {};
-
 myMap.on("move", updateScale);
 myMap.on("zoomend", updateScale);
 // myMap.on("resize", updateScale);
 
-// myMap.on("zoomend", function () {
-// 	// console.log(visibleMarkers());
-// 	// console.log(visibleMarkers());
-// 	var currentZoom = myMap.getZoom();
+// myMap.on("zoomend", () => {
+// 	let visible = getVisibleMarkers();
+// 	let currentZoom = myMap.getZoom();
 // 	console.log(currentZoom);
 // 	if (currentZoom > 12) {
-// 		markers.forEach(function (marker) {
-// 			marker.setRadius(32);
-// 		});
+// 		visible.forEach(function (marker) {});
 // 	} else if (currentZoom > 10) {
-// 		markers.forEach(function (marker) {
-// 			marker.setRadius(16);
-// 		});
+// 		visible.forEach(function (marker) {});
 // 	} else if (currentZoom > 8) {
-// 		markers.forEach(function (marker) {
-// 			marker.setRadius(12);
-// 		});
+// 		visible.forEach(function (marker) {});
 // 	} else {
-// 		markers.forEach(function (marker) {
-// 			marker.setRadius(8);
-// 		});
+// 		visible.forEach(function (marker) {});
 // 	}
 // });
 
@@ -217,7 +205,7 @@ function getGeoJsonObject(data) {
 	const dataWithoutOuliers = removeOutliers(data); //, "precio", 0.9, 100);
 	let [minValue, maxValue] = getMinMax(dataWithoutOuliers, "precio");
 	console.log(minValue, maxValue);
-	const features = data.map((station) => {
+	const features = dataWithoutOuliers.map((station) => {
 		const weight = getWeight(station.precio, minValue, maxValue);
 		const backgroundColor = gradient(weight, ...colors);
 		return {
@@ -326,7 +314,8 @@ const getWeight = (actualValue, minValue, maxValue) => {
 
 //dom manipulation
 function updateScale() {
-	let visibleDataProperties = getVisibleMarkers();
+	let visibleData = getVisibleMarkers();
+	let visibleDataProperties = visibleData.map((el) => el.feature.properties);
 	let cleanVisibleData = removeOutliers(visibleDataProperties);
 	let cleanData = removeOutliers(globalData2);
 	if (cleanVisibleData.length) {
@@ -341,25 +330,28 @@ function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 	const colorScale = document.querySelector(".color-scale");
 	const spanMin = document.querySelector(".min-inidicator");
 	const spanMax = document.querySelector(".max-inidicator");
-	spanMin.textContent = Math.round(visibleMin);
-	spanMax.textContent = Math.round(visibleMax);
 	let minWeight = getWeight(visibleMin, minValue, maxValue);
 	let maxWeight = getWeight(visibleMax, minValue, maxValue);
-	if (maxWeight - minWeight < 0.15) {
+
+	if (maxWeight - minWeight < 0.12) {
 		spanMax.style.opacity = 0;
 	} else {
 		spanMax.style.opacity = 0.8;
 	}
-	spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
-	spanMin.style.transform = `translate(-45px, ${-7.3 * minWeight - 2.3}rem)`;
+	if (minWeight >= 0 && maxWeight <= 1) {
+		spanMin.textContent = `$${Math.round(visibleMin)}`;
+		spanMax.textContent = `$${Math.round(visibleMax)}`;
+		spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
+		spanMin.style.transform = `translate(-45px, ${-7.3 * minWeight - 2.3}rem)`;
+	}
 	// let min = getWeight(visibleMin, minValue, maxValue);
 	// let max = getWeight(visibleMax, minValue, maxValue);
 	const minColor = gradient(minValue, ...colors);
 	const maxColor = gradient(maxValue, ...colors);
 	const minValueText = document.querySelector(".min-scale-text");
 	const maxValueText = document.querySelector(".max-scale-text");
-	minValueText.textContent = Math.round(minValue);
-	maxValueText.textContent = Math.round(maxValue);
+	minValueText.textContent = `$${Math.round(minValue)}`;
+	maxValueText.textContent = `$${Math.round(maxValue)}`;
 	colorScale.style.background = `linear-gradient(${maxColor}, ${colors[1]}, ${minColor})`;
 }
 
