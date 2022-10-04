@@ -142,6 +142,15 @@
     /* background-color: #222222; */
 }
 
+.color-scale-text {
+    white-space: nowrap;
+    display: inline-block;
+    font-weight: bold;
+    transform: translate(2rem, 6.7rem) rotate(-90deg);
+    transform-origin: 0 0;
+
+}
+
 /* span.min-scale-text,
 span.max-scale-text {
     display: flex;

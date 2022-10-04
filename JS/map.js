@@ -3,9 +3,6 @@ console.log("script map.js");
 const tile = `https://tile.openstreetmap.org/{z}/{x}/{y}.png`;
 const tile2 = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
 const colors = ["#008800", "#FFFF00", "#BB0000"];
-let myRenderer = L.canvas({ padding: 0.5 });
-let globalData2 = [];
-let quadtree = L.quadtree();
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
 	return L.circleMarker(lat_lng, {
@@ -16,15 +13,12 @@ const myCircleMarker = (lat_lng, weight) => {
 		bubblingMouseEvents: true,
 	});
 };
-
 const myMap = new L.Map("myMap", {
 	zoomDelta: 0.25,
-	// zoomSnap: 0,
 	fullscreenControl: {
 		pseudoFullscreen: true, // if true, fullscreen to page width and height
 	},
 });
-
 const tileLayerGroup = L.tileLayer(tile, {
 	markerZoomAnimation: false,
 	maxZoom: 19,
@@ -43,25 +37,27 @@ const tileLayerGroup = L.tileLayer(tile, {
 		'.org">OpenStreetMap</a> contributors',
 });
 
+let myRenderer = L.canvas({ padding: 0.5 });
+let globalData2 = [];
 let featureLayerGroup;
+let quadtree = L.quadtree();
 
 function plotMap(data) {
 	const dataset = getGeoJsonObject(data);
-	console.log(dataset);
-	// let bounds = L.latLngBounds();
 	tileLayerGroup.addTo(myMap);
 	featureLayerGroup = L.geoJSON(dataset, {
 		onEachFeature: function (feature, layer) {
 			quadtree.add(layer);
-			layer.on("mouseover", function (e) {
-				e.target.bringToFront();
-			});
+			// layer.on("mouseover", function (e) {
+			// 	e.target.bringToFront();
+			// });
 		},
 		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Datos Abiertos del Gobierno de la República Argentina`,
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, {
 				renderer: myRenderer,
 				color: feature.properties.backgroundColor,
+				radius: 20,
 				fillOpacity: 0.8,
 				stroke: false,
 				bubblingMouseEvents: true,
@@ -95,10 +91,14 @@ function plotMap(data) {
 			</table>
 		`
 		)
+		// .bindTooltip((layer) => layer.feature.properties.empresabandera, {
+		// 	permanent: false,
+		// 	direction: "center",
+		// 	className: "my-labels",
+		// })
 		.addTo(myMap);
 	myMap.fitBounds(featureLayerGroup.getBounds());
-	console.warn(countLayers());
-	// getVisibleMarkers();
+	// console.warn(countLayers());
 	updateScale();
 
 	// for (let d of data) {
@@ -126,9 +126,9 @@ function plotMap(data) {
 	// }
 }
 function getVisibleMarkers() {
-	var bounds = myMap.getBounds();
-	var colliders = quadtree.getColliders(bounds);
-	var data = [];
+	let bounds = myMap.getBounds();
+	let colliders = quadtree.getColliders(bounds);
+	let data = [];
 	for (var i = 0, len = colliders.length; i < len; ++i) {
 		data.push(colliders[i]);
 	}
@@ -139,22 +139,20 @@ function getVisibleMarkers() {
 $("#mapModal").on("show.bs.modal", function () {
 	setTimeout(function () {
 		myMap.invalidateSize();
+		quadtree = L.quadtree();
 		const filteredData = getFilteredDataFromTable();
-		globalData2 = filterDataWithLocations(filteredData);
+		dataWithValidLocations = filterDataWithLocations(filteredData);
+		globalData2 = removeOutliers(dataWithValidLocations);
+		console.log({ globalData2 });
 		plotMap(globalData2);
-		// const data = removeOutliers(dataWithValidLocations, "precio", 1, 0);
-		console.log(globalData2);
 	}, 300);
 });
 
 $("#mapModal").on("hidden.bs.modal", function () {
-	// featureLayerGroup.clearLayers();
 	myMap.removeLayer(featureLayerGroup);
+	quadtree = null;
 	globalData2 = [];
-	console.log(globalData2);
-	// myMap.eachLayer((layer) => {
-	// 	layer.remove();
-	// });
+	console.log({ globalData2 });
 });
 
 function countLayers() {
@@ -162,29 +160,36 @@ function countLayers() {
 	myMap.eachLayer((layer) => counter++);
 	return counter;
 }
-
 myMap.on("move", updateScale);
 myMap.on("zoomend", updateScale);
 // myMap.on("resize", updateScale);
 
+// let visibleGroup;
 // myMap.on("zoomend", () => {
-// 	let visible = getVisibleMarkers();
+// 	let bounds = myMap.getBounds();
+// 	let colliders = [];
+// 	colliders = quadtree.getColliders(bounds);
+// 	visibleGroup = L.featureGroup(colliders);
+// 	console.log(visibleGroup);
+// 	// let visibleGroup = L.featureGroup(colliders);
 // 	let currentZoom = myMap.getZoom();
 // 	console.log(currentZoom);
-// 	if (currentZoom > 12) {
-// 		visible.forEach(function (marker) {});
-// 	} else if (currentZoom > 10) {
-// 		visible.forEach(function (marker) {});
-// 	} else if (currentZoom > 8) {
-// 		visible.forEach(function (marker) {});
+// 	if (currentZoom > 14) {
+// 		visibleGroup.openTooltip();
+// 		// .addTo(myMap);
+// 		// visibleGroup.bindTooltip("YPF", {
+// 		// 	permanent: false,
+// 		// 	direction: "center",
+// 		// 	className: "my-labels",
+// 		// });
 // 	} else {
-// 		visible.forEach(function (marker) {});
+// 		visibleGroup.closeTooltip();
 // 	}
 // });
 
 //data manipulation
 function getFilteredDataFromTable() {
-	var table = $("#data-table").DataTable();
+	let table = $("#data-table").DataTable();
 	const data = Array.from(table.rows({ search: "applied" }).data());
 	return data;
 }
@@ -223,6 +228,7 @@ function getGeoJsonObject(data) {
 				coordinates: [station.longitud, station.latitud],
 			},
 			properties: {
+				producto: station.producto,
 				empresa: station.empresa,
 				empresabandera: station.empresabandera.split(" ")[0],
 				precio: station.precio,
@@ -253,9 +259,9 @@ function getMinMax(data, property) {
 //other auxikliary calculations
 //how to get a color from a gradient based on a value?
 function pickHex(color1, color2, weight) {
-	var w1 = weight;
-	var w2 = 1 - w1;
-	var rgb = [
+	let w1 = weight;
+	let w2 = 1 - w1;
+	let rgb = [
 		Math.round(color1[0] * w1 + color2[0] * w2),
 		Math.round(color1[1] * w1 + color2[1] * w2),
 		Math.round(color1[2] * w1 + color2[2] * w2),
@@ -323,13 +329,15 @@ const getWeight = (actualValue, minValue, maxValue) => {
 //dom manipulation
 function updateScale() {
 	let visibleData = getVisibleMarkers();
+	console.log(visibleData);
 	let visibleDataProperties = visibleData.map((el) => el.feature.properties);
 	let cleanVisibleData = removeOutliers(visibleDataProperties);
-	let cleanData = removeOutliers(globalData2);
+	// let cleanData = removeOutliers(globalData2);
+	let cleanData = globalData2;
 	console.log(cleanData);
+	let [minValue, maxValue] = getMinMax(cleanData, "precio");
 	if (cleanVisibleData.length) {
 		let [visibleMin, visibleMax] = getMinMax(cleanVisibleData, "precio");
-		let [minValue, maxValue] = getMinMax(cleanData, "precio");
 		console.log({ minValue, visibleMin, visibleMax, maxValue });
 		setColorScale(minValue, visibleMin, visibleMax, maxValue);
 	}
@@ -347,12 +355,12 @@ function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 	} else {
 		spanMax.style.opacity = 1;
 	}
-	if (minWeight >= 0 && maxWeight <= 1) {
-		spanMin.textContent = `$${Math.round(visibleMin)}`;
-		spanMax.textContent = `$${Math.round(visibleMax)}`;
-		spanMin.style.transform = `translate(-45px, ${-7.3 * minWeight - 2.3}rem)`;
-		spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
-	}
+	// if (minWeight >= 0 && maxWeight <= 1) {
+	spanMin.textContent = `$${Math.round(visibleMin)}`;
+	spanMax.textContent = `$${Math.round(visibleMax)}`;
+	spanMin.style.transform = `translate(-45px, ${-7.3 * minWeight - 2.3}rem)`;
+	spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
+	// }
 	// let min = getWeight(visibleMin, minValue, maxValue);
 	// let max = getWeight(visibleMax, minValue, maxValue);
 	const minColor = gradient(minValue, ...colors);
@@ -380,4 +388,4 @@ const myTriangleMarker = (lat_lng, weight) => {
 	});
 };
 
-const markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
+// const markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
