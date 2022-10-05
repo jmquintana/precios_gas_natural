@@ -1,9 +1,9 @@
 console.log("script api.js");
+
 const $table = $("#data-table");
 const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
-let globalData = [];
 
 function isEmptyObj(obj) {
 	for (var prop in obj) {
@@ -63,7 +63,7 @@ async function fetchAllData() {
 		}
 		toggleSpinner();
 		addOptionsCount();
-		globalData2 = allData;
+		Storage.save(allData);
 		return allData;
 	} catch (e) {
 		console.log(e);
@@ -100,7 +100,7 @@ filterSelectors.forEach((filterSelector) => {
 		loadTable().then(() => {
 			filterSelector.focus();
 			if (filterSelector.id === "provincia")
-				populateSelector("localidad", globalData2);
+				populateSelector("localidad", Storage.get());
 		});
 	});
 });
@@ -137,6 +137,7 @@ document.getElementById("reset").addEventListener("click", (e) => {
 async function loadTable() {
 	await fetchAllData()
 		.then((data) => {
+			Storage.save(data);
 			console.log(data);
 			$table ? $table.DataTable().destroy() : false;
 			showTable(data);

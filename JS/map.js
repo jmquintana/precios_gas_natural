@@ -142,9 +142,10 @@ $("#mapModal").on("show.bs.modal", function () {
 		quadtree = L.quadtree();
 		const filteredData = getFilteredDataFromTable();
 		dataWithValidLocations = filterDataWithLocations(filteredData);
-		globalData2 = removeOutliers(dataWithValidLocations);
-		console.log({ globalData2 });
-		plotMap(globalData2);
+		let dataWithoutOuliers = removeOutliers(dataWithValidLocations);
+		Storage.save(dataWithoutOuliers, "dataWithoutOuliers");
+		console.log({ dataWithoutOuliers });
+		plotMap(dataWithoutOuliers);
 	}, 300);
 });
 
@@ -332,8 +333,7 @@ function updateScale() {
 	console.log(visibleData);
 	let visibleDataProperties = visibleData.map((el) => el.feature.properties);
 	let cleanVisibleData = removeOutliers(visibleDataProperties);
-	// let cleanData = removeOutliers(globalData2);
-	let cleanData = globalData2;
+	let cleanData = Storage.get("dataWithoutOuliers");
 	console.log(cleanData);
 	let [minValue, maxValue] = getMinMax(cleanData, "precio");
 	if (cleanVisibleData.length) {
