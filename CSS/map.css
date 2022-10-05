@@ -100,18 +100,18 @@
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
-/* .max-inidicator {
+/* .max-indicator {
     transform: translate(-50px, 2.3rem)
 } */
 
-.max-inidicator,
-.min-inidicator {
+.max-indicator,
+.min-indicator {
     font-size: smaller;
     padding: 0 0.2rem 0 0.2rem;
 }
 
-.max-inidicator::after,
-.min-inidicator::after {
+.max-indicator::after,
+.min-indicator::after {
     content: "";
     position: absolute;
     transition: all 0.3s ease-in;

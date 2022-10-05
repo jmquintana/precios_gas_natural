@@ -142,10 +142,10 @@ $("#mapModal").on("show.bs.modal", function () {
 		quadtree = L.quadtree();
 		const filteredData = getFilteredDataFromTable();
 		dataWithValidLocations = filterDataWithLocations(filteredData);
-		let dataWithoutOuliers = removeOutliers(dataWithValidLocations);
-		Storage.save(dataWithoutOuliers, "dataWithoutOuliers");
-		console.log({ dataWithoutOuliers });
-		plotMap(dataWithoutOuliers);
+		let dataWithoutOutliers = removeOutliers(dataWithValidLocations);
+		Storage.save(dataWithoutOutliers, "dataWithoutOutliers");
+		console.log({ dataWithoutOutliers: dataWithoutOutliers });
+		plotMap(dataWithoutOutliers);
 	}, 300);
 });
 
@@ -204,22 +204,22 @@ const removeOutliers = (arr) => {
 	// console.log(arrMonth);
 	const maxMonth = moment.max(arrMonth);
 	// console.log(maxMonth);
-	const previusMonth = moment(maxMonth).add(-1, "month");
+	const perviousMonth = moment(maxMonth).add(-1, "month");
 	// const max = moment(maxMonth).format("MM-YYYY");
-	// const prev = moment(previusMonth).format("MM-YYYY");
+	// const prev = moment(previousMonth).format("MM-YYYY");
 	// console.log({ prev, max });
 	return arr.filter(
 		(el) =>
 			el.indice_tiempo == maxMonth.format("YYYY-MM") ||
-			el.indice_tiempo == previusMonth.format("YYYY-MM")
+			el.indice_tiempo == perviousMonth.format("YYYY-MM")
 	);
 };
 
 function getGeoJsonObject(data) {
-	const dataWithoutOuliers = removeOutliers(data); //, "precio", 0.9, 100);
-	let [minValue, maxValue] = getMinMax(dataWithoutOuliers, "precio");
+	const dataWithoutOutliers = removeOutliers(data); //, "precio", 0.9, 100);
+	let [minValue, maxValue] = getMinMax(dataWithoutOutliers, "precio");
 	console.log(minValue, maxValue);
-	const features = dataWithoutOuliers.map((station) => {
+	const features = dataWithoutOutliers.map((station) => {
 		const weight = getWeight(station.precio, minValue, maxValue);
 		const backgroundColor = gradient(weight, ...colors);
 		return {
@@ -257,7 +257,7 @@ function getMinMax(data, property) {
 	return [minValue, maxValue];
 }
 
-//other auxikliary calculations
+//other auxiliary calculations
 //how to get a color from a gradient based on a value?
 function pickHex(color1, color2, weight) {
 	let w1 = weight;
@@ -270,7 +270,7 @@ function pickHex(color1, color2, weight) {
 	return rgb;
 }
 
-// t in ragne 0..1, start-middle-end are colors in hex e.g. #FF00FF
+// t in range 0..1, start-middle-end are colors in hex e.g. #FF00FF
 function gradient(t, start, middle, end) {
 	return t >= 0.5
 		? linear(middle, end, (t - 0.5) * 2)
@@ -333,7 +333,7 @@ function updateScale() {
 	console.log(visibleData);
 	let visibleDataProperties = visibleData.map((el) => el.feature.properties);
 	let cleanVisibleData = removeOutliers(visibleDataProperties);
-	let cleanData = Storage.get("dataWithoutOuliers");
+	let cleanData = Storage.get("dataWithoutOutliers");
 	console.log(cleanData);
 	let [minValue, maxValue] = getMinMax(cleanData, "precio");
 	if (cleanVisibleData.length) {
@@ -345,8 +345,8 @@ function updateScale() {
 
 function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 	const colorScale = document.querySelector(".color-scale");
-	const spanMin = document.querySelector(".min-inidicator");
-	const spanMax = document.querySelector(".max-inidicator");
+	const spanMin = document.querySelector(".min-indicator");
+	const spanMax = document.querySelector(".max-indicator");
 	let minWeight = getWeight(visibleMin, minValue, maxValue);
 	let maxWeight = getWeight(visibleMax, minValue, maxValue);
 
