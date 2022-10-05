@@ -116,6 +116,7 @@ function optionExist(option, filterSelector) {
 }
 
 document.getElementById("reset").addEventListener("click", (e) => {
+	console.log(filters);
 	if (!isEmptyObj(filters)) {
 		e.preventDefault();
 		console.log("reset all filters");
@@ -127,10 +128,13 @@ document.getElementById("reset").addEventListener("click", (e) => {
 			) {
 				filterSelector.value = OPTION_ALL;
 				selectionHasChanged = true;
+				console.log({ selectionHasChanged });
 			}
 			updateFilters();
 		});
-		if (selectionHasChanged) loadTable();
+
+		if (selectionHasChanged)
+			loadTable().then(() => populateSelector("localidad", Storage.get()));
 	}
 });
 
@@ -191,10 +195,6 @@ $(document).ready(() => {
 		.catch((e) => console.error(e));
 });
 
-function getUniques(key, arr) {
-	return [...new Set(arr.map((x) => x[key]))].sort();
-}
-
 let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
 );
@@ -202,8 +202,12 @@ let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 	return new bootstrap.Tooltip(tooltipTriggerEl);
 });
 
+function getUniques(key, arr) {
+	return [...new Set(arr.map((x) => x[key]))].sort();
+}
+
 function populateSelector(columnName, data) {
-	const values = [...new Set(data.map((el) => el[columnName]))].sort();
+	const values = getUniques(columnName, data);
 	$(`#${columnName}`)
 		.empty()
 		.append(`<option value="all">Todas (${values.length})</option>`);
