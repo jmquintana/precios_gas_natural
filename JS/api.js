@@ -44,6 +44,23 @@ async function fetchLocalData() {
 	}
 }
 
+async function getFilteredData() {
+	const data = await fetchLocalData();
+	return _.where(data, filters);
+}
+
+function filterArray(array, filters) {
+	const filterKeys = Object.keys(filters);
+	return array.filter((item) => {
+		// validates all filter criteria
+		return filterKeys.every((key) => {
+			// ignores non-function predicates
+			if (typeof filters[key] !== "function") return true;
+			return filters[key](item[key]);
+		});
+	});
+}
+
 async function fetchAllData() {
 	try {
 		toggleSpinner();
@@ -149,7 +166,7 @@ document.getElementById("reset").addEventListener("click", (e) => {
 });
 
 async function loadTable() {
-	await fetchAllData()
+	await getFilteredData()
 		.then((data) => {
 			Storage.save(data);
 			console.log(data);
@@ -195,7 +212,7 @@ function filtersToSelectors() {
 }
 $(document).ready(() => {
 	filtersToSelectors();
-	fetchAllData()
+	getFilteredData()
 		.then((data) => {
 			// getData(endpoint);
 			console.log(data);
