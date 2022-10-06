@@ -4,7 +4,6 @@
     --color-lightgrey: #E8EDF5;
     --color-darckblue: #4C5C75;
     --color-lightblue: #A0C1F7;
-
     --color-darkgrey: #474f59;
     --color-midgrey: #80868C;
     --color-darkgrey2: #313A40;
@@ -17,9 +16,15 @@ html {
     padding: 0%;
     margin: 0%;
     font-family: 'Inter', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+    height: 100vh;
+    /* width: 100%; */
+    /* overflow: hidden; */
+    /* position: relative; */
+}
+
+.page-container {
+    position: relative;
+    min-height: 100vh;
 }
 
 /* body {
@@ -31,11 +36,11 @@ html {
 }
 
 .nav {
-    margin-top: 2rem;
-    padding-top: 3rem;
+    /* margin-top: 2rem; */
+    padding-top: 1rem;
     width: 100%;
-    border-bottom: 5px solid #E8EDF5;
-    background: linear-gradient(0deg, rgba(232, 237, 245, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background-color: #E8EDF5;
+    /* background: linear-gradient(0deg, #E8EDF5 0%, rgba(255, 255, 255, 1) 100%); */
 }
 
 .main-header {
@@ -93,7 +98,7 @@ td {
 }
 
 .form .selector {
-    margin: 1rem 1rem;
+    margin: 0 1rem 1rem 1rem;
     width: 100%;
 
 }
@@ -117,6 +122,7 @@ td {
 }
 
 #table-div {
+    overflow: hidden;
     margin-left: 1rem;
 }
 
@@ -172,11 +178,19 @@ table.dataTable td {
         grid-template-columns: repeat(2, 1fr)
     }
 
+    .form .selector {
+        margin: 0rem
+    }
+
     .form .selector h5 {
         text-align: center;
-        margin-top: 0rem;
+        margin-top: 0.2rem;
         margin-bottom: 0.2rem;
 
+    }
+
+    .dt-buttons {
+        margin-top: .5rem;
     }
 
     .icons {
@@ -184,5 +198,179 @@ table.dataTable td {
         align-items: center;
         justify-content: space-between;
         /* margin: 1rem 1rem .75rem 1rem */
+    }
+}
+
+.divider {
+    display: flex;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    bottom: 3rem;
+    max-height: 50px;
+    height: 80%;
+    pointer-events: none;
+}
+
+.divider svg {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 100%
+}
+
+.divider .waves {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    margin-bottom: -7px;
+    min-height: 75px;
+    max-height: 200px;
+    animation: move-forever 35s cubic-bezier(.55, .5, .45, .5) infinite
+}
+
+.divider .waves.w2 {
+    animation-delay: -20s;
+    animation-duration: 40s;
+}
+
+.divider .waves.w3 {
+    fill: url(#my-cool-gradient) #c6cbd3;
+    animation-delay: -15s;
+    animation-duration: 45s;
+}
+
+.divider .waves.w4 {
+    animation-delay: -14s;
+    animation-duration: 25s;
+}
+
+.divider .waves.w5 {
+    animation: move-forever2 35s cubic-bezier(.55, .5, .45, .5) infinite;
+    animation-delay: -8s;
+    animation-duration: 45s;
+    right: 0
+}
+
+.orbita {
+    width: 30%;
+    display: block;
+    border: 1px solid rgba(82, 80, 153, .3);
+    position: absolute;
+    margin: auto;
+    border-radius: 100%;
+    animation: spin 65s cubic-bezier(.55, .5, .45, .5) infinite
+}
+
+.orbita:before {
+    content: '';
+    float: left;
+    padding-bottom: 100%
+}
+
+.orbita:after {
+    content: '';
+    display: table;
+    clear: both
+}
+
+.orbita span {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background-color: #ebc2de;
+    position: absolute;
+    left: -20px;
+    top: 0;
+    bottom: 0;
+    margin: auto
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    height: 3rem;
+    width: 100vw;
+    background-color: transparent;
+    background: #E9ECEF;
+    /* border-bottom: 5px solid #E9ECEF; */
+    /* background: linear-gradient(0deg, #E9ECEF 0%, rgba(232, 237, 245, 1) 100%); */
+}
+
+.footer-text {
+    display: flex;
+    justify-content: center;
+}
+
+.footer span {
+    font-weight: 600;
+}
+
+.footer .icon {
+    color: #333333;
+    padding: 0.2rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0
+    }
+
+    33% {
+        transform: scale(1.2);
+        opacity: 1
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0
+    }
+}
+
+@media screen and (min-width: 640px) {
+    .divider {
+        max-height: 150px
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .divider {
+        max-height: 190px
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .divider {
+        max-height: 260px
+    }
+}
+
+
+@keyframes move-forever {
+    0% {
+        transform: translate(-50%, 0%)
+    }
+
+    100% {
+        transform: translate(0%, 0%)
+    }
+}
+
+@keyframes move-forever2 {
+    0% {
+        transform: translate(50%, 0%)
+    }
+
+    100% {
+        transform: translate(0%, 0%)
     }
 }

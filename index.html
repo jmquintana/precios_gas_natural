@@ -21,38 +21,75 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
+    <!-- Animate CSS -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> -->
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary  ">
-        <div class="container container-fluid">
-            <a class="navbar-brand" href="./index.html">Inicio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="./gas.html">Gas Natural</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./pes.html">Combustibles</a>
-                    </li>
-                </ul>
+    <div class="page-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container container-fluid">
+                <a class="navbar-brand" href="./index.html">Inicio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./gas.html">Gas Natural</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./pes.html">Combustibles</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="main-header">
+            <div class="nav">
+                <div class="header container">
+                    <h2 class="header-title">Información de Precios</h2>
+                    <h5 class="header-subtitle">Estadística de Precios de la Energía en Argentina</h5>
+                </div>
+            </div>
+            <div class="progress" style="height: 4px;">
+                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="orbita" style="display:none"><span></span></div>
+            <div class="divider">
+                <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 264.292" preserveAspectRatio="none" shape-rendering="auto">
+                    <path opacity="1" fill-rule="evenodd" clip-rule="evenodd" fill="#A0C1F7" d="M1129.263,43.549C998.916,54.132,838.062,142.227,800,139.454 C545.701,151.526,485.448,30.836,328.863,43.549C198.516,54.132,38.062,142.227,0,139.454v124.838h800.4h800.4V139.454 C1385.144,135.677,1285.849,30.836,1129.263,43.549z"></path>
+                </svg>
+                <svg class="waves w2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 264.292" preserveAspectRatio="none" shape-rendering="auto">
+                    <path opacity=".8" fill-rule="evenodd" clip-rule="evenodd" fill="#ACF2F2" d="M1518.024 147.062c-224.019 0-323.801-108.959-483.256-96.014-89.51 7.267-174 60.06-234.368 84.32-27.82 7.448-55.764 11.693-82.776 11.693-224.02 0-323.801-108.959-483.256-96.014-89.51 7.267-174 60.06-234.368 84.32V264.29h1600.8V135.369c-27.82 7.449-55.765 11.693-82.776 11.693z"></path>
+                </svg>
+                <svg class="waves w3" fill="url(#my-cool-gradient) #E8EDF5;" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 264.292" preserveAspectRatio="none" shape-rendering="auto">
+                    <path opacity=".9" fill-rule="evenodd" clip-rule="evenodd" d="M1539.579 165.792c-207.72 0-300.242-101-448.095-89-114.831 9.32-212.341 64.442-291.083 81.959-20.552 4.527-41.214 7.041-61.221 7.041-207.72 0-300.242-101-448.095-89C176.253 86.112 78.743 141.234 0 158.751v105.541h1600.8V158.751c-20.552 4.527-41.214 7.041-61.221 7.041z"></path>
+                </svg>
+                <svg class="waves w4" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 1865.201 5669.29 1116.842" enable-background="new 0 1865.201 5669.29 1116.842" xml:space="preserve">
+                    <path fill="none" opacity="0.08" stroke="#213e7d" stroke-width="6" stroke-miterlimit="10" d="M0,2915.056 c484.319,0,916.241-737.418,1397.321-737.418c489.179,0,961.104,737.418,1430.845,737.418 c484.319,0,916.241-737.418,1400.561-737.418s956.244,737.418,1440.563,737.418"></path>
+                </svg>
+                <svg class="waves w5" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 1865.201 5669.29 1116.842" enable-background="new 0 1865.201 5669.29 1116.842" xml:space="preserve">
+                    <path fill="none" opacity="0.1" stroke="#213e7d" stroke-width="6" stroke-miterlimit="10" d="M0,2915.056 c484.319,0,936.243-982.869,1417.323-982.869c489.179,0,941.102,982.869,1410.844,982.869 c484.319,0,936.243-982.869,1420.562-982.869c484.319,0,936.243,982.869,1420.563,982.869"></path>
+                </svg>
             </div>
         </div>
-    </nav>
-    <div class="main-header">
-        <div class="nav">
-            <div class="header container">
-                <h2 class="header-title">Información de Precios</h2>
-                <h5 class="header-subtitle">Estadística de Precios de la Energía en Argentina</h5>
+        <footer class="footer footer-expand-lg">
+            <div class="container footer-text">
+                <span>&copy 2022 josemqu -
+                    <a class="icon" href="https://github.com/jmquintana" target="_blank"><i class="bi bi-github"></i></a>
+                    <a class="icon" href="mailto:mailjmq@gmail.com?Subject=hello!"><i class="bi bi-envelope"></i></a>
+                </span>
             </div>
-        </div>
-        <div class="progress" style="height: 4px;">
-            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
+        </footer>
     </div>
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <linearGradient id="my-cool-gradient" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFFFFF" />
+            <stop offset="50%" stop-color="#E9ECEF" />
+            <stop offset="100%" stop-color="#E9ECEF" />
+        </linearGradient>
+    </svg>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
