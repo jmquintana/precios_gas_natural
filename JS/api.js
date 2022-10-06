@@ -34,6 +34,16 @@ function toggleSpinner() {
 	document.getElementById("reset").classList.toggle("disabled");
 }
 
+async function fetchLocalData() {
+	try {
+		const response = await fetch("./data/data.json");
+		const data = await response.json();
+		return data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
 async function fetchAllData() {
 	try {
 		toggleSpinner();
@@ -63,7 +73,7 @@ async function fetchAllData() {
 		}
 		toggleSpinner();
 		addOptionsCount();
-		Storage.save(allData);
+		// Storage.save(allData);
 		return allData;
 	} catch (e) {
 		console.log(e);
