@@ -57,7 +57,7 @@ function plotMap(data) {
 			return L.circleMarker(latlng, {
 				renderer: myRenderer,
 				color: feature.properties.backgroundColor,
-				radius: 20,
+				radius: 16,
 				fillOpacity: 0.8,
 				stroke: false,
 				bubblingMouseEvents: true,
@@ -97,6 +97,17 @@ function plotMap(data) {
 		// 	className: "my-labels",
 		// })
 		.addTo(myMap);
+
+	// myMap.getZoom() >= tooltipThreshold
+	// 	? featureLayerGroup.bindTooltip(
+	// 			(layer) => layer.feature.properties.empresabandera,
+	// 			{ permanent: true, direction: "center" }
+	// 	  )
+	// 	: featureLayerGroup.bindTooltip(
+	// 			(layer) => layer.feature.properties.empresabandera,
+	// 			{ permanent: true, direction: "center" }
+	// 	  );
+
 	myMap.fitBounds(featureLayerGroup.getBounds());
 	// console.warn(countLayers());
 	updateScale();
@@ -152,8 +163,8 @@ $("#mapModal").on("show.bs.modal", function () {
 $("#mapModal").on("hidden.bs.modal", function () {
 	myMap.removeLayer(featureLayerGroup);
 	quadtree = null;
-	globalData2 = [];
-	console.log({ globalData2 });
+	// globalData2 = [];
+	// console.log({ globalData2 });
 });
 
 function countLayers() {
@@ -162,29 +173,63 @@ function countLayers() {
 	return counter;
 }
 myMap.on("move", updateScale);
-myMap.on("zoomend", updateScale);
+// myMap.on("zoomend", updateScale);
 // myMap.on("resize", updateScale);
+
+// var lastZoom;
+const tooltipThreshold = 14;
+// myMap.on("zoomend", function () {
+// 	var zoom = myMap.getZoom();
+// 	console.log(zoom);
+// 	if (zoom < tooltipThreshold && (!lastZoom || lastZoom >= tooltipThreshold)) {
+// 		myMap.eachLayer(function (l) {
+// 			if (l.getTooltip()) {
+// 				var tooltip = l.getTooltip();
+// 				l.unbindTooltip().bindTooltip(tooltip, {
+// 					permanent: false,
+// 				});
+// 			}
+// 		});
+// 	} else if (
+// 		zoom >= tooltipThreshold &&
+// 		(!lastZoom || lastZoom < tooltipThreshold)
+// 	) {
+// 		myMap.eachLayer(function (l) {
+// 			if (l.getTooltip()) {
+// 				var tooltip = l.getTooltip();
+// 				l.unbindTooltip().bindTooltip(tooltip, {
+// 					permanent: true,
+// 				});
+// 			}
+// 		});
+// 	}
+// 	lastZoom = zoom;
+// });
 
 // let visibleGroup;
 // myMap.on("zoomend", () => {
-// 	let bounds = myMap.getBounds();
-// 	let colliders = [];
-// 	colliders = quadtree.getColliders(bounds);
-// 	visibleGroup = L.featureGroup(colliders);
-// 	console.log(visibleGroup);
+// 	updateScale();
 // 	// let visibleGroup = L.featureGroup(colliders);
 // 	let currentZoom = myMap.getZoom();
 // 	console.log(currentZoom);
 // 	if (currentZoom > 14) {
-// 		visibleGroup.openTooltip();
+// 		console.log("bindTooltip");
+// 		// visibleGroup.openTooltip();
 // 		// .addTo(myMap);
-// 		// visibleGroup.bindTooltip("YPF", {
-// 		// 	permanent: false,
-// 		// 	direction: "center",
-// 		// 	className: "my-labels",
-// 		// });
+// 		let bounds = myMap.getBounds();
+// 		let colliders = [];
+// 		colliders = quadtree.getColliders(bounds);
+// 		visibleGroup = L.featureGroup(colliders);
+// 		console.log(visibleGroup);
+// 		featureLayerGroup
+// 			.bindTooltip("YPF", {
+// 				permanent: true,
+// 				direction: "center",
+// 				className: "my-labels",
+// 			})
+// 			.addTo(myMap);
 // 	} else {
-// 		visibleGroup.closeTooltip();
+// 		// visibleGroup.closeTooltip();
 // 	}
 // });
 

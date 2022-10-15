@@ -4,9 +4,10 @@ const $table = $("#data-table");
 const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
+const switchBtn = document.querySelector("#flexSwitch");
 
 function isEmptyObj(obj) {
-	for (var prop in obj) {
+	for (let prop in obj) {
 		if (Object.prototype.hasOwnProperty.call(obj, prop)) {
 			return false;
 		}
@@ -44,24 +45,12 @@ async function fetchLocalData() {
 	}
 }
 
-async function getFilteredData() {
+async function getLocalData() {
 	const data = await fetchLocalData();
 	return _.where(data, filters);
 }
 
-function filterArray(array, filters) {
-	const filterKeys = Object.keys(filters);
-	return array.filter((item) => {
-		// validates all filter criteria
-		return filterKeys.every((key) => {
-			// ignores non-function predicates
-			if (typeof filters[key] !== "function") return true;
-			return filters[key](item[key]);
-		});
-	});
-}
-
-async function fetchAllData() {
+async function getRemoteData() {
 	try {
 		toggleSpinner();
 		let allData = [];
@@ -70,7 +59,6 @@ async function fetchAllData() {
 		let filterString = urlFilters(filters);
 		let fullUrl = `${endpoint}${filterString}`;
 		const s = location.protocol === "https:" ? "s" : "";
-		// const s = ""; //proxy: https://cors-anywhere.herokuapp.com/
 
 		while (morePagesAvailable) {
 			currentPage++;
@@ -84,7 +72,7 @@ async function fetchAllData() {
 			progressBar.style.display = "block";
 			progressBar.style.width = progress;
 			console.log({ progress, currentPage, result });
-			records.forEach((e) => allData.unshift(e));
+			records.forEach((record) => allData.unshift(record));
 			fullUrl = _links.next;
 			morePagesAvailable = currentPage * 100 < total;
 		}
@@ -166,14 +154,26 @@ document.getElementById("reset").addEventListener("click", (e) => {
 });
 
 async function loadTable() {
-	await getFilteredData()
-		.then((data) => {
-			Storage.save(data);
-			console.log(data);
-			$table ? $table.DataTable().destroy() : false;
-			showTable(data);
-		})
-		.catch((e) => console.error(e));
+	console.log(switchBtn.checked);
+	if (switchBtn.checked) {
+		await getRemoteData()
+			.then((data) => {
+				Storage.save(data);
+				console.log(data);
+				$table ? $table.DataTable().destroy() : false;
+				showTable(data);
+			})
+			.catch((e) => console.error(e));
+	} else {
+		await getLocalData()
+			.then((data) => {
+				Storage.save(data);
+				console.log(data);
+				$table ? $table.DataTable().destroy() : false;
+				showTable(data);
+			})
+			.catch((e) => console.error(e));
+	}
 }
 
 function showTable(data) {
@@ -210,16 +210,26 @@ function filtersToSelectors() {
 		}
 	});
 }
+
 $(document).ready(() => {
 	filtersToSelectors();
-	getFilteredData()
-		.then((data) => {
-			// getData(endpoint);
-			console.log(data);
-			populateSelector("localidad", data);
-			showTable(data);
-		})
-		.catch((e) => console.error(e));
+	if (switchBtn.checked) {
+		getRemoteData()
+			.then((data) => {
+				console.log(data);
+				populateSelector("localidad", data);
+				showTable(data);
+			})
+			.catch((e) => console.error(e));
+	} else {
+		getLocalData()
+			.then((data) => {
+				console.log(data);
+				populateSelector("localidad", data);
+				showTable(data);
+			})
+			.catch((e) => console.error(e));
+	}
 });
 
 let tooltipTriggerList = [].slice.call(
@@ -258,7 +268,7 @@ function addOptionsCount() {
 		if (response.ok) {
 			return response;
 		} else {
-			var error = new Error(response.statusText || response.status);
+			let error = new Error(response.statusText || response.status);
 			error.response = response;
 			throw error;
 		}
@@ -317,7 +327,7 @@ function addOptionsCount() {
 							setTimeout(poll, wait, wait * 1.5);
 							break;
 						default:
-							var error = new Error(response.statusText || response.status);
+							let error = new Error(response.statusText || response.status);
 							error.response = response;
 							reject(error);
 							break;

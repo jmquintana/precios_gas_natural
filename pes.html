@@ -54,8 +54,10 @@
         <div class="main-header">
             <div class="nav">
                 <div class="header container">
-                    <h2 class="header-title">Precios en Surtidor - Actualizado (Oct/22)</h2>
-                    <h5 class="header-subtitle">Precios vigentes de naftas, gasoil y GNC, según declaraciones realizadas por EESS, expresados en AR$/litro (Resolución 314/2016)</h5>
+                    <div class="titles">
+                        <h2 class="header-title">Precios en Surtidor - Actualizado (Oct/22)</h2>
+                        <h5 class="header-subtitle">Precios vigentes de naftas, gasoil y GNC, según declaraciones realizadas por EESS, expresados en AR$/litro (Resolución 314/2016)</h5>
+                    </div>
                 </div>
             </div>
             <div class="progress" style="height: 4px;">
@@ -67,7 +69,7 @@
                 <div class="selector">
                     <h5>Producto</h5>
                     <select id="producto" class="form-select" aria-label="Producto">
-                        <option value="all">Todos</option>
+                        <!-- <option value="all">Todos</option> -->
                         <option value="Gas Oil Grado 2">Gas Oil Grado 2</option>
                         <option value="Gas Oil Grado 3">Gas Oil Grado 3</option>
                         <option value="GNC">GNC</option>
@@ -134,6 +136,9 @@
                 </div>
             </div>
             <div class="icons">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitch" data-bs-toggle="tooltip" data-bs-placement="top" title="Remoto" checked>
+                </div>
                 <i id="reset" class="bi bi-arrow-repeat" style="font-size: 2rem;" data-bs-toggle="tooltip" data-bs-placement="top" title="Limpiar filtros"></i>
             </div>
         </div>
