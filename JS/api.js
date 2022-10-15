@@ -85,6 +85,12 @@ async function getRemoteData() {
 	}
 }
 
+const handleSwitchBtn = (e) => {
+	Storage.save([e.target.checked], "dataSwitch");
+};
+
+switchBtn.addEventListener("click", handleSwitchBtn);
+
 function modifyButtons() {
 	const excelButton = document.querySelector(".excelButton");
 	const copyButton = document.querySelector(".copyButton");
@@ -154,8 +160,9 @@ document.getElementById("reset").addEventListener("click", (e) => {
 });
 
 async function loadTable() {
-	console.log(switchBtn.checked);
-	if (switchBtn.checked) {
+	const fetchRemoteData = switchBtn.checked;
+	console.log({ fetchRemoteData });
+	if (fetchRemoteData) {
 		await getRemoteData()
 			.then((data) => {
 				Storage.save(data);
@@ -211,7 +218,14 @@ function filtersToSelectors() {
 	});
 }
 
+const updateSwitchValue = () => {
+	let switchValue = Storage.get("dataSwitch")[0];
+	!switchValue ? switchBtn.toggleAttribute("checked") : false;
+	console.log({ switchValue });
+};
+
 $(document).ready(() => {
+	updateSwitchValue();
 	filtersToSelectors();
 	if (switchBtn.checked) {
 		getRemoteData()
