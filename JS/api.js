@@ -106,7 +106,11 @@ $("#errorModal").on("hide.bs.modal", function () {
 	switchBtn.toggleAttribute("checked");
 	console.log([switchBtn.checked]);
 	Storage.save([switchBtn.checked], "dataSwitch");
-	loadTable();
+	loadTable().then(() => {
+		filterSelector.focus();
+		if (filterSelector.id === "provincia")
+			populateSelector("localidad", Storage.get());
+	});
 });
 
 const handleSwitchBtn = (e) => {
