@@ -116,6 +116,7 @@ $("#errorModal").on("hidden.bs.modal", function () {
 
 const handleSwitchBtn = (e) => {
 	Storage.save([e.target.checked], "dataSwitch");
+	loadTable().then(() => populateSelector("localidad", Storage.get()));
 };
 
 switchBtn.addEventListener("click", handleSwitchBtn);
