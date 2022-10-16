@@ -107,7 +107,13 @@ function plotMap(data) {
 		// 	className: "my-labels",
 		// })
 		.addTo(myMap);
-	L.control.locate().addTo(myMap);
+	L.control
+		.locate({
+			locateOptions: {
+				enableHighAccuracy: true,
+			},
+		})
+		.addTo(myMap);
 	myMap.fitBounds(featureLayerGroup.getBounds());
 	updateScale();
 }
