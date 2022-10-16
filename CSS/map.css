@@ -150,7 +150,34 @@
 
 }
 
+.popup-table * {
+    /* transition: all 200ms ease-in !important; */
+    -webkit-transition: all 150ms !important;
+    -moz-transition: all 150ms !important;
+    -o-transition: all 150ms !important;
+    transition: all 150ms !important;
+    transition-timing-function: ease-in !important;
+    -moz-transition-timing-function: ease-in !important;
+    -webkit-transition-timing-function: ease-in !important;
+    -o-transition-timing-function: ease-in !important;
+}
 
+.popup-table tr:hover {
+    cursor: pointer;
+    background-color: #EEEEEE;
+}
+
+.popup-table tr :nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+}
+
+.popup-table tr :nth-child(2):hover {
+    overflow: visible;
+    white-space: unset;
+}
 
 @media (max-width: 990px) {
 

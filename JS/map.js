@@ -20,15 +20,14 @@ const myMap = new L.Map("myMap", {
 	},
 });
 const tileLayerGroup = L.tileLayer(tile, {
-	markerZoomAnimation: false,
+	markerZoomAnimation: true,
 	maxZoom: 19,
-	markerZoomAnimation: false,
 	dragging: true,
 	touchZoom: false,
 	scrollWheelZoom: false,
 	boxZoom: false,
 	keyboard: false,
-	zoomControl: false,
+	zoomControl: true,
 	attributionControl: false,
 	closePopupOnClick: false,
 	trackResize: true,
@@ -67,30 +66,42 @@ function plotMap(data) {
 			return { color: feature.properties.backgroundColor };
 		},
 	})
-		.bindPopup(
-			(layer) =>
-				`
-		<div class="popupHeader" style="text-align:center"><b>${layer.feature.properties.empresabandera}</b></div>
-			<table>
+		.bindPopup((layer) => {
+			const company = layer.feature.properties.empresabandera;
+			const product = PRODUCT_DICT[layer.feature.properties.producto];
+			const price = layer.feature.properties.precio;
+			const month = layer.feature.properties.indice_tiempo;
+			const zone = layer.feature.properties.region;
+			const town = layer.feature.properties.localidad;
+			const address = layer.feature.properties.direccion;
+			const unit = product == "GNC" ? `$/m<sup>3</sup>` : `$/litro`;
+
+			return `
+			<div class="popupHeader" style="text-align:center"><b>${company}</b> (${product})</div>
+			<table class="popup-table">
 				<tr>
-					<td style="text-align:left">Precio (ars/ltr):</td>
-					<td style="text-align:right"><b>${layer.feature.properties.precio}</b></td>
+					<td style="text-align:left">Precio (${unit}):</td>
+					<td style="text-align:right"><b>${price}</b></td>
 				</tr>
 				<tr>
 					<td style="text-align:left">Vigencia:</td>
-					<td style="text-align:right"><b>${layer.feature.properties.indice_tiempo}</b></td>
-				</tr>
-				<tr>
-					<td style="text-align:left">Localidad:</td>
-					<td style="text-align:right"><b>${layer.feature.properties.localidad}</b></td>
+					<td style="text-align:right"><b>${month}</b></td>
 				</tr>
 				<tr>
 					<td style="text-align:left">Región:</td>
-					<td style="text-align:right"><b>${layer.feature.properties.region}</b></td>
+					<td style="text-align:right"><b>${zone ? zone : "-"}</b></td>
+				</tr>
+				<tr>
+					<td style="text-align:left">Localidad:</td>
+					<td style="text-align:right"><b>${town}</b></td>
+				</tr>
+				<tr>
+					<td style="text-align:left">Dirección:</td>
+					<td style="text-align:right"><b>${address}</b></td>
 				</tr>
 			</table>
-		`
-		)
+		`;
+		})
 		// .bindTooltip((layer) => layer.feature.properties.empresabandera, {
 		// 	permanent: false,
 		// 	direction: "center",
@@ -243,9 +254,9 @@ function getGeoJsonObject(data) {
 				empresabandera: station.empresabandera.split(" ")[0],
 				precio: station.precio,
 				indice_tiempo: station.indice_tiempo,
-				localidad: station.localidad,
 				region: station.region,
-				precio: station.precio,
+				localidad: station.localidad,
+				direccion: station.direccion,
 				backgroundColor: backgroundColor,
 				textColor: getTextColor(backgroundColor),
 			},

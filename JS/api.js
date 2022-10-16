@@ -4,7 +4,7 @@ const $table = $("#data-table");
 const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
-const switchBtn = document.querySelector("#flexSwitch");
+const switchBtn = document.querySelector("#flex-switch");
 const ERROR_TEST_MESSAGE = `[Esto es un ejemplo] Uncaught TypeError: Cannot read properties of undefined (reading 'backdrop')
 at Ni._initializeBackDrop (modal.js:158:39)
 at new Ni (modal.js:69:27)
@@ -52,7 +52,9 @@ async function fetchLocalData(fileName) {
 }
 
 async function getLocalData() {
+	progressBar.style.display = "block";
 	const data = await fetchLocalData(LOCAL_FILE_NAME);
+	setTimeout(() => (progressBar.style.width = "100%"), 500);
 	return _.where(data, filters);
 }
 
@@ -96,7 +98,7 @@ const showErrorModal = (e = ERROR_TEST_MESSAGE) => {
 	let myErrorModal = new bootstrap.Modal(document.querySelector("#errorModal"));
 	console.log(myErrorModal);
 	let modalBody = document.querySelector(".error-modal-body");
-	modalBody.innerHTML += `<br><samp class="error-message">${e.toString()}</samp>`;
+	modalBody.innerHTML += `<samp class="error-message">${e.toString()}</samp>`;
 	myErrorModal.show();
 	return;
 };
@@ -106,6 +108,8 @@ $("#errorModal").on("hidden.bs.modal", function () {
 	switchBtn.toggleAttribute("checked");
 	console.log([switchBtn.checked]);
 	Storage.save([switchBtn.checked], "dataSwitch");
+	let errorMessage = document.querySelector(".error-message");
+	errorMessage ? errorMessage.remove() : false;
 	window.location.reload();
 });
 

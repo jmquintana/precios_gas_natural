@@ -73,8 +73,10 @@ const buttons = [
 	{ text: "Map", className: "mapButton" },
 ];
 
-// const myModal = document.getElementById("mapModal");
-// const myInput = document.getElementById("myInput");
-// myModal.addEventListener("shown.bs.modal", () => {
-// 	myInput.focus();
-// });
+const PRODUCT_DICT = {
+	"Nafta (súper) entre 92 y 95 Ron": "Nafta Súper",
+	"Nafta (premium) de más de 95 Ron": "Nafta Premium",
+	GNC: "GNC",
+	"Gas Oil Grado 2": "Gas Oil Grado 2",
+	"Gas Oil Grado 3": "Gas Oil Grado 3",
+};
