@@ -35,9 +35,9 @@ function toggleSpinner() {
 	document.getElementById("reset").classList.toggle("disabled");
 }
 
-async function fetchLocalData() {
+async function fetchLocalData(fileName) {
 	try {
-		const response = await fetch("./data/data.json");
+		const response = await fetch(`./data/${fileName}`);
 		const data = await response.json();
 		return data;
 	} catch (e) {
@@ -46,7 +46,7 @@ async function fetchLocalData() {
 }
 
 async function getLocalData() {
-	const data = await fetchLocalData();
+	const data = await fetchLocalData(LOCAL_FILE_NAME);
 	return _.where(data, filters);
 }
 
