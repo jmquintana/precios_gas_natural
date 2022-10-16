@@ -106,7 +106,7 @@ $("#errorModal").on("hidden.bs.modal", function () {
 	switchBtn.toggleAttribute("checked");
 	console.log([switchBtn.checked]);
 	Storage.save([switchBtn.checked], "dataSwitch");
-	loadTable().then(() => populateSelector("localidad", Storage.get()));
+	window.location.reload();
 });
 
 const handleSwitchBtn = (e) => {
