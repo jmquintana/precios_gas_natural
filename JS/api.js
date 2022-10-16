@@ -101,6 +101,13 @@ const showErrorModal = (e = ERROR_TEST_MESSAGE) => {
 	return;
 };
 
+//close modal event
+$("#errorModal").on("hidden.bs.modal", function () {
+	switchBtn.toggleAttribute("checked");
+	Storage.save([switchBtn.checked], "dataSwitch");
+	loadTable();
+});
+
 const handleSwitchBtn = (e) => {
 	Storage.save([e.target.checked], "dataSwitch");
 };
