@@ -105,6 +105,28 @@
                 </table>
             </div>
         </div>
+        <!-- Error Data Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-4" id="exampleModalLabel">Error al obtener los datos!</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body error-modal-body">
+                        <p>
+                            Se produjo un error al intentar obtener los datos del servidor. Se cargarán los datos locales.
+                        </p>
+                        <hr>
+                        <h5 for="message-text">Error:</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="divider">
             <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 264.292" preserveAspectRatio="none" shape-rendering="auto">
                 <path opacity="1" fill-rule="evenodd" clip-rule="evenodd" fill="#A0C1F7" d="M1129.263,43.549C998.916,54.132,838.062,142.227,800,139.454 C545.701,151.526,485.448,30.836,328.863,43.549C198.516,54.132,38.062,142.227,0,139.454v124.838h800.4h800.4V139.454 C1385.144,135.677,1285.849,30.836,1129.263,43.549z"></path>
