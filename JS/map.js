@@ -35,7 +35,6 @@ const tileLayerGroup = L.tileLayer(tile, {
 		'&copy; <a href="http://openstreetmap' +
 		'.org">OpenStreetMap</a> contributors',
 });
-
 let myRenderer = L.canvas({ padding: 0.5 });
 let globalData2 = [];
 let featureLayerGroup;
@@ -108,6 +107,7 @@ function plotMap(data) {
 		// 	className: "my-labels",
 		// })
 		.addTo(myMap);
+	L.control.locate().addTo(myMap);
 	myMap.fitBounds(featureLayerGroup.getBounds());
 	updateScale();
 }
@@ -153,33 +153,33 @@ myMap.on("move", updateScale);
 
 // var lastZoom;
 const tooltipThreshold = 14;
-// myMap.on("zoomend", function () {
-// 	var zoom = myMap.getZoom();
-// 	console.log(zoom);
-// 	if (zoom < tooltipThreshold && (!lastZoom || lastZoom >= tooltipThreshold)) {
-// 		myMap.eachLayer(function (l) {
-// 			if (l.getTooltip()) {
-// 				var tooltip = l.getTooltip();
-// 				l.unbindTooltip().bindTooltip(tooltip, {
-// 					permanent: false,
-// 				});
-// 			}
-// 		});
-// 	} else if (
-// 		zoom >= tooltipThreshold &&
-// 		(!lastZoom || lastZoom < tooltipThreshold)
-// 	) {
-// 		myMap.eachLayer(function (l) {
-// 			if (l.getTooltip()) {
-// 				var tooltip = l.getTooltip();
-// 				l.unbindTooltip().bindTooltip(tooltip, {
-// 					permanent: true,
-// 				});
-// 			}
-// 		});
-// 	}
-// 	lastZoom = zoom;
-// });
+myMap.on("zoomend", function () {
+	var zoom = myMap.getZoom();
+	console.log(zoom);
+	// 	if (zoom < tooltipThreshold && (!lastZoom || lastZoom >= tooltipThreshold)) {
+	// 		myMap.eachLayer(function (l) {
+	// 			if (l.getTooltip()) {
+	// 				var tooltip = l.getTooltip();
+	// 				l.unbindTooltip().bindTooltip(tooltip, {
+	// 					permanent: false,
+	// 				});
+	// 			}
+	// 		});
+	// 	} else if (
+	// 		zoom >= tooltipThreshold &&
+	// 		(!lastZoom || lastZoom < tooltipThreshold)
+	// 	) {
+	// 		myMap.eachLayer(function (l) {
+	// 			if (l.getTooltip()) {
+	// 				var tooltip = l.getTooltip();
+	// 				l.unbindTooltip().bindTooltip(tooltip, {
+	// 					permanent: true,
+	// 				});
+	// 			}
+	// 		});
+	// 	}
+	// 	lastZoom = zoom;
+});
 
 // let visibleGroup;
 // myMap.on("zoomend", () => {
