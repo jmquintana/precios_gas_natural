@@ -250,7 +250,7 @@ $(document).ready(() => {
 				populateSelector("localidad", data);
 				showTable(data);
 			})
-			.catch((e) => console.error(e));
+			.catch((e) => showErrorModal(e));
 	} else {
 		getLocalData()
 			.then((data) => {
