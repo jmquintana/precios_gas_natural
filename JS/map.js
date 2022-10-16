@@ -97,44 +97,8 @@ function plotMap(data) {
 		// 	className: "my-labels",
 		// })
 		.addTo(myMap);
-
-	// myMap.getZoom() >= tooltipThreshold
-	// 	? featureLayerGroup.bindTooltip(
-	// 			(layer) => layer.feature.properties.empresabandera,
-	// 			{ permanent: true, direction: "center" }
-	// 	  )
-	// 	: featureLayerGroup.bindTooltip(
-	// 			(layer) => layer.feature.properties.empresabandera,
-	// 			{ permanent: true, direction: "center" }
-	// 	  );
-
 	myMap.fitBounds(featureLayerGroup.getBounds());
-	// console.warn(countLayers());
 	updateScale();
-
-	// for (let d of data) {
-	// 	let lat_lng = [d.latitud, d.longitud];
-	// 	// let marker = L.marker(lat_lng, { icon: markerIcon })
-	// 	// let weight =
-	// 	// 	maxValue != minValue
-	// 	// 		? (d.precio - minValue) / (maxValue - minValue)
-	// 	// 		: 0.5;
-	// 	// let marker = myCircleMarker(lat_lng, weight);
-
-	// 	// marker.on("dblclick", function (e) {
-	// 	// 	myMap.setView(e.latlng, myMap.getZoom());
-	// 	// });
-	// 	// marker.on("mouseover", function (e) {
-	// 	// 	e.target.bringToFront();
-	// 	// });
-	// 	// marker.addTo(myMap);
-	// 	// markers.push(marker);
-	// 	// marker.bindTooltip(d.empresabandera.split(" ")[0], {
-	// 	// 	permanent: false,
-	// 	// 	direction: "center",
-	// 	// 	className: "my-labels",
-	// 	// });
-	// }
 }
 function getVisibleMarkers() {
 	let bounds = myMap.getBounds();

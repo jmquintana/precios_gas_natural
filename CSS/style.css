@@ -184,6 +184,10 @@ table.dataTable td {
     text-align: center
 }
 
+.modal-body p {
+    margin: 1rem;
+}
+
 @media (max-width: 1000px) {
     .form {
         display: grid;

@@ -81,9 +81,24 @@ async function getRemoteData() {
 		// Storage.save(allData);
 		return allData;
 	} catch (e) {
-		console.log(e);
+		handleFetchError(e);
 	}
 }
+
+const handleFetchError = (e) => {
+	// console.log("handle error");
+	triggerErrorModal(e);
+};
+
+const triggerErrorModal = (
+	e = "Esto es un ejemplo del error que puede aparecer"
+) => {
+	let myErrorModal = new bootstrap.Modal(document.querySelector("#errorModal"));
+	let modalBody = document.querySelector(".error-modal-body p");
+	modalBody.innerHTML = e.toString();
+	myErrorModal.show();
+	return;
+};
 
 const handleSwitchBtn = (e) => {
 	Storage.save([e.target.checked], "dataSwitch");
