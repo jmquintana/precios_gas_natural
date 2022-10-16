@@ -16,20 +16,16 @@ html {
     padding: 0%;
     margin: 0%;
     font-family: 'Inter', 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    height: 100vh;
+    min-height: 100vh;
     /* width: 100%; */
     /* overflow: hidden; */
     /* position: relative; */
 }
 
 .page-container {
-    position: relative;
+    /* position: relative; */
     min-height: 100vh;
 }
-
-/* body {
-    height: 100%;
-} */
 
 .navbar-brand {
     margin-left: 1rem;
@@ -48,20 +44,55 @@ html {
     justify-content: space-between;
 }
 
+/* .container { */
+/* padding: 0.2rem 0.2rem; */
+/* width: auto; */
+/* max-width: 1000px; */
+/* } */
+
 .main-header {
     box-shadow: 0px 2px 5px #B8BCC2;
 
 }
 
+.main {
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    margin-top: 1rem;
+    margin-bottom: 14rem;
+    /* justify-content: center; */
+    /* height: 500px; */
+    /* max-width: 300px; */
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 60vw;
+}
+
+.link-card {
+    text-decoration: none;
+    transition: all 0.3s ease-in;
+    color: #333333;
+}
+
+.card img {
+    /* height: 140px; */
+    object-fit: cover;
+    height: 15rem;
+    transition: transform 0.2s;
+}
+
+.card img:hover {
+    transform: scale(1.1);
+}
+
 .progress-bar,
 .progress {
     border-radius: 0px !important;
-}
-
-.container {
-    /* padding: 0.2rem 0.2rem; */
-    width: auto;
-    /* max-width: 1000px; */
 }
 
 .header {
@@ -222,14 +253,30 @@ table.dataTable td {
     }
 }
 
+.footer {
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: end; */
+    /* align-items: baseline; */
+    position: fixed;
+    bottom: 0;
+    height: 2rem;
+    width: 100vw;
+    /* background-color: transparent; */
+    /* background: #E9ECEF; */
+    /* border-bottom: 5px solid #E9ECEF; */
+    /* background: linear-gradient(0deg, #E9ECEF 0%, rgba(232, 237, 245, 1) 100%); */
+}
+
 .divider {
     display: flex;
-    position: absolute;
+    flex-direction: column;
+    position: fixed;
     overflow: hidden;
     width: 100%;
-    bottom: 3rem;
-    max-height: 50px;
-    height: 80%;
+    bottom: 0rem;
+    max-height: 6rem;
+    height: 100%;
     pointer-events: none;
 }
 
@@ -244,7 +291,7 @@ table.dataTable td {
     position: absolute;
     width: 200%;
     height: 100%;
-    margin-bottom: -7px;
+    /* margin-bottom: -7px; */
     min-height: 75px;
     max-height: 200px;
     animation: move-forever 35s cubic-bezier(.55, .5, .45, .5) infinite
@@ -307,25 +354,16 @@ table.dataTable td {
     margin: auto
 }
 
-.footer {
-    display: flex;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    height: 3rem;
-    width: 100vw;
-    background-color: transparent;
-    background: #E9ECEF;
-    /* border-bottom: 5px solid #E9ECEF; */
-    /* background: linear-gradient(0deg, #E9ECEF 0%, rgba(232, 237, 245, 1) 100%); */
-}
-
 .footer-text {
     display: flex;
     justify-content: center;
+    align-items: end;
 }
 
 .footer span {
+    position: fixed;
+    bottom: 0;
+    z-index: 1000;
     font-weight: 600;
 }
 
