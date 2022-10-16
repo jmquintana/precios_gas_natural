@@ -5,6 +5,12 @@ const filterSelectors = document.querySelectorAll(".form-select");
 const OPTION_ALL = "all";
 const progressBar = document.querySelector(".progress-bar");
 const switchBtn = document.querySelector("#flexSwitch");
+const ERROR_TEST_MESSAGE = `[Esto es un ejemplo] Uncaught TypeError: Cannot read properties of undefined (reading 'backdrop')
+at Ni._initializeBackDrop (modal.js:158:39)
+at new Ni (modal.js:69:27)
+at triggerErrorModal (api.js:96:21)
+at handleFetchError (api.js:90:2)
+at <anonymous>:1:1`;
 
 function isEmptyObj(obj) {
 	for (let prop in obj) {
@@ -81,21 +87,15 @@ async function getRemoteData() {
 		// Storage.save(allData);
 		return allData;
 	} catch (e) {
-		handleFetchError(e);
+		showErrorModal(e);
 	}
 }
 
-const handleFetchError = (e) => {
-	// console.log("handle error");
-	triggerErrorModal(e);
-};
-
-const triggerErrorModal = (
-	e = "Esto es un ejemplo del error que puede aparecer"
-) => {
+const showErrorModal = (e = ERROR_TEST_MESSAGE) => {
+	console.log("triggered error modal");
 	let myErrorModal = new bootstrap.Modal(document.querySelector("#errorModal"));
-	let modalBody = document.querySelector(".error-modal-body p");
-	modalBody.innerHTML = e.toString();
+	let modalBody = document.querySelector(".error-modal-body");
+	modalBody.innerHTML += `<br><samp class="error-message">${e.toString()}</samp>`;
 	myErrorModal.show();
 	return;
 };

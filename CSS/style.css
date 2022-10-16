@@ -184,8 +184,12 @@ table.dataTable td {
     text-align: center
 }
 
-.modal-body p {
+.modal-body {
     margin: 1rem;
+}
+
+.modal-body .error-message {
+    display: inline-block;
 }
 
 @media (max-width: 1000px) {
