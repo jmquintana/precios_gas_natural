@@ -4,6 +4,7 @@ const tile = `https://tile.openstreetmap.org/{z}/{x}/{y}.png`;
 const tile2 = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
 const colors = ["#008800", "#FFFF00", "#BB0000"];
 const MAX_ZOOM = 17;
+const MIN_MAX_COLLISION_THRESHOLD = 0.15;
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
 	return L.circleMarker(lat_lng, {
@@ -52,8 +53,8 @@ function plotMap(data) {
 			// });
 		},
 		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Datos Abiertos del Gobierno de la República Argentina`,
-		pointToLayer: function (feature, latlng) {
-			return L.circleMarker(latlng, {
+		pointToLayer: function (feature, latLng) {
+			return L.circleMarker(latLng, {
 				renderer: myRenderer,
 				color: feature.properties.backgroundColor,
 				radius: 16,
@@ -146,8 +147,6 @@ $("#mapModal").on("show.bs.modal", function () {
 $("#mapModal").on("hidden.bs.modal", function () {
 	myMap.removeLayer(featureLayerGroup);
 	quadtree = null;
-	// globalData2 = [];
-	// console.log({ globalData2 });
 });
 
 function countLayers() {
@@ -156,65 +155,13 @@ function countLayers() {
 	return counter;
 }
 myMap.on("move", updateScale);
-// myMap.on("zoomend", updateScale);
-// myMap.on("resize", updateScale);
 
 // var lastZoom;
 const tooltipThreshold = 14;
 myMap.on("zoomend", function () {
 	var zoom = myMap.getZoom();
 	console.log(zoom);
-	// 	if (zoom < tooltipThreshold && (!lastZoom || lastZoom >= tooltipThreshold)) {
-	// 		myMap.eachLayer(function (l) {
-	// 			if (l.getTooltip()) {
-	// 				var tooltip = l.getTooltip();
-	// 				l.unbindTooltip().bindTooltip(tooltip, {
-	// 					permanent: false,
-	// 				});
-	// 			}
-	// 		});
-	// 	} else if (
-	// 		zoom >= tooltipThreshold &&
-	// 		(!lastZoom || lastZoom < tooltipThreshold)
-	// 	) {
-	// 		myMap.eachLayer(function (l) {
-	// 			if (l.getTooltip()) {
-	// 				var tooltip = l.getTooltip();
-	// 				l.unbindTooltip().bindTooltip(tooltip, {
-	// 					permanent: true,
-	// 				});
-	// 			}
-	// 		});
-	// 	}
-	// 	lastZoom = zoom;
 });
-
-// let visibleGroup;
-// myMap.on("zoomend", () => {
-// 	updateScale();
-// 	// let visibleGroup = L.featureGroup(colliders);
-// 	let currentZoom = myMap.getZoom();
-// 	console.log(currentZoom);
-// 	if (currentZoom > 14) {
-// 		console.log("bindTooltip");
-// 		// visibleGroup.openTooltip();
-// 		// .addTo(myMap);
-// 		let bounds = myMap.getBounds();
-// 		let colliders = [];
-// 		colliders = quadtree.getColliders(bounds);
-// 		visibleGroup = L.featureGroup(colliders);
-// 		console.log(visibleGroup);
-// 		featureLayerGroup
-// 			.bindTooltip("YPF", {
-// 				permanent: true,
-// 				direction: "center",
-// 				className: "my-labels",
-// 			})
-// 			.addTo(myMap);
-// 	} else {
-// 		// visibleGroup.closeTooltip();
-// 	}
-// });
 
 //data manipulation
 function getFilteredDataFromTable() {
@@ -378,26 +325,20 @@ function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 	let minWeight = getWeight(visibleMin, minValue, maxValue);
 	let maxWeight = getWeight(visibleMax, minValue, maxValue);
 
-	if (maxWeight - minWeight < 0.12) {
+	if (maxWeight - minWeight < MIN_MAX_COLLISION_THRESHOLD) {
 		spanMax.style.opacity = 0;
 	} else {
 		spanMax.style.opacity = 1;
 	}
-	// if (minWeight >= 0 && maxWeight <= 1) {
 	spanMin.textContent = `$${Math.round(visibleMin)}`;
 	spanMax.textContent = `$${Math.round(visibleMax)}`;
 	spanMin.style.transform = `translate(-45px, ${-7.3 * minWeight - 2.3}rem)`;
 	spanMax.style.transform = `translate(-45px, ${-7.4 * maxWeight + 9.7}rem)`;
-	// }
-	// let min = getWeight(visibleMin, minValue, maxValue);
-	// let max = getWeight(visibleMax, minValue, maxValue);
-	const minColor = gradient(minValue, ...colors);
-	const maxColor = gradient(maxValue, ...colors);
 	const minValueText = document.querySelector(".min-scale-text");
 	const maxValueText = document.querySelector(".max-scale-text");
 	minValueText.textContent = `$${Math.round(minValue)}`;
 	maxValueText.textContent = `$${Math.round(maxValue)}`;
-	colorScale.style.background = `linear-gradient(${maxColor}, ${colors[1]}, ${minColor})`;
+	colorScale.style.background = `linear-gradient(${colors[0]}, ${colors[1]}, ${colors[2]})`;
 }
 
 //things that aren't in use
@@ -415,5 +356,3 @@ const myTriangleMarker = (lat_lng, weight) => {
 		// stroke: false,
 	});
 };
-
-// const markerIcon = L.icon.glyph({ prefix: "bi", glyph: "bi-fuel-pump" });
