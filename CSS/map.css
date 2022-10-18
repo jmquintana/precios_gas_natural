@@ -151,15 +151,7 @@
 }
 
 .popup-table * {
-    /* transition: all 200ms ease-in !important; */
-    -webkit-transition: all 150ms !important;
-    -moz-transition: all 150ms !important;
-    -o-transition: all 150ms !important;
-    transition: all 150ms !important;
-    transition-timing-function: ease-in !important;
-    -moz-transition-timing-function: ease-in !important;
-    -webkit-transition-timing-function: ease-in !important;
-    -o-transition-timing-function: ease-in !important;
+    transition: all 100ms ease-out !important;
 }
 
 .popup-table tr:hover {
