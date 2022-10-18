@@ -141,6 +141,10 @@
     /* background-color: #222222; */
 }
 
+.leaflet-control-locate-circle {
+    pointer-events: none !important;
+}
+
 .color-scale-text {
     white-space: nowrap;
     display: inline-block;

@@ -112,6 +112,9 @@ function plotMap(data) {
 	L.control
 		.locate({
 			locateOptions: {
+				setView: true,
+				watch: true,
+				layer: tileLayerGroup,
 				maxZoom: MAX_ZOOM,
 				enableHighAccuracy: true,
 			},
@@ -145,13 +148,28 @@ $("#mapModal").on("show.bs.modal", function () {
 });
 
 $("#mapModal").on("hidden.bs.modal", function () {
-	myMap.removeLayer(featureLayerGroup);
+	// myMap.removeLayer(featureLayerGroup);
+	// myMap.removeLayer(tileLayerGroup);
+	myMap.stopLocate();
+	document
+		.querySelector(
+			"#myMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div.leaflet-control-locate.leaflet-bar.leaflet-control > a"
+		)
+		.parentNode.remove();
+	layersGroups.forEach((group) => myMap.removeLayer(group));
+	let layersCount = countLayers();
+	console.log(layersCount);
 	quadtree = null;
 });
 
+let layersGroups = [];
+
 function countLayers() {
 	let counter = 0;
-	myMap.eachLayer((layer) => counter++);
+	myMap.eachLayer((layer) => {
+		layersGroups.push(layer);
+		counter++;
+	});
 	return counter;
 }
 myMap.on("move", updateScale);
