@@ -3,6 +3,7 @@ console.log("script map.js");
 const tile = `https://tile.openstreetmap.org/{z}/{x}/{y}.png`;
 const tile2 = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
 const colors = ["#008800", "#FFFF00", "#BB0000"];
+const MAX_ZOOM = 17;
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
 	return L.circleMarker(lat_lng, {
@@ -110,7 +111,7 @@ function plotMap(data) {
 	L.control
 		.locate({
 			locateOptions: {
-				maxZoom: 16,
+				maxZoom: MAX_ZOOM,
 				enableHighAccuracy: true,
 			},
 		})
