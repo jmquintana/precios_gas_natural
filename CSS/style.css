@@ -230,6 +230,14 @@ table.dataTable td {
 }
 
 @media (max-width: 1000px) {
+    .titles {
+        text-align: center;
+    }
+
+    .main {
+        margin-top: 0px;
+    }
+
     .main .row {
         width: auto !important;
     }
