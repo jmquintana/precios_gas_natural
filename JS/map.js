@@ -356,7 +356,7 @@ function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 	const maxValueText = document.querySelector(".max-scale-text");
 	minValueText.textContent = `$${Math.round(minValue)}`;
 	maxValueText.textContent = `$${Math.round(maxValue)}`;
-	colorScale.style.background = `linear-gradient(${colors[0]}, ${colors[1]}, ${colors[2]})`;
+	colorScale.style.background = `linear-gradient(${colors[2]}, ${colors[1]}, ${colors[0]})`;
 }
 
 //things that aren't in use
