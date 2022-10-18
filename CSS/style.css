@@ -230,6 +230,10 @@ table.dataTable td {
 }
 
 @media (max-width: 1000px) {
+    .main .row {
+        width: auto !important;
+    }
+
     .form {
         display: grid;
         grid-template-columns: repeat(2, 1fr)
