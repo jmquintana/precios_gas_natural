@@ -110,6 +110,7 @@ function plotMap(data) {
 	L.control
 		.locate({
 			locateOptions: {
+				maxZoom: 16,
 				enableHighAccuracy: true,
 			},
 		})
