@@ -48,6 +48,7 @@ async function fetchLocalData(fileName) {
 		const data = await response.json();
 		return data;
 	} catch (e) {
+		console.log("catching error");
 		console.log(e);
 	}
 }
@@ -251,34 +252,6 @@ function filtersToSelectors() {
 	});
 }
 
-const updateSwitchValue = () => {
-	let switchValue = Storage.get("dataSwitch")[0];
-	!switchValue ? switchBtn.toggleAttribute("checked") : false;
-	console.log({ switchValue });
-};
-
-$(document).ready(() => {
-	updateSwitchValue();
-	filtersToSelectors();
-	if (switchBtn.checked) {
-		getRemoteData()
-			.then((data) => {
-				console.log(data);
-				populateSelector("localidad", data);
-				showTable(data);
-			})
-			.catch((e) => showErrorModal(e));
-	} else {
-		getLocalData()
-			.then((data) => {
-				console.log(data);
-				populateSelector("localidad", data);
-				showTable(data);
-			})
-			.catch((e) => console.error(e));
-	}
-});
-
 let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
 );
@@ -330,3 +303,25 @@ const downloadAll = () => {
 		.catch((e) => showErrorModal(e));
 	filters = JSON.parse(JSON.stringify(filtersBackup));
 };
+
+$(document).ready(() => {
+	switchBtn.removeAttribute("checked");
+	filtersToSelectors();
+	if (switchBtn.checked) {
+		getRemoteData()
+			.then((data) => {
+				console.log(data);
+				populateSelector("localidad", data);
+				showTable(data);
+			})
+			.catch((e) => showErrorModal(e));
+	} else {
+		getLocalData()
+			.then((data) => {
+				console.log(data);
+				populateSelector("localidad", data);
+				showTable(data);
+			})
+			.catch((e) => console.error(e));
+	}
+});
