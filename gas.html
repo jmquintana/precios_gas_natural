@@ -103,11 +103,11 @@
             </div>
         </div>
         <!-- Error Data Modal -->
-        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade border-danger mb-3" id="errorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-4" id="exampleModalLabel">Error al obtener los datos!</h1>
+                        <h1 class="modal-title fs-4 text-danger" id="exampleModalLabel">Error al obtener los datos!</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body error-modal-body">
@@ -115,7 +115,10 @@
                             Se produjo un error al intentar obtener los datos del servidor. Se cargarán los datos locales.
                         </p>
                         <hr>
-                        <h5 for="message-text">Error:</h5>
+                        <details>
+                            <summary class="h5">Detalle:</summary>
+                            <samp class="error-message"></samp>
+                        </details>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
