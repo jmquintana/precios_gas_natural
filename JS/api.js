@@ -98,11 +98,9 @@ async function getRemoteData() {
 }
 
 const showErrorModal = (e = ERROR_TEST_MESSAGE) => {
-	console.log("triggered error modal");
 	let myErrorModal = new bootstrap.Modal(document.querySelector("#errorModal"));
-	console.log(myErrorModal);
-	let modalBody = document.querySelector(".error-modal-body");
-	modalBody.innerHTML += `<samp class="error-message">${e.toString()}</samp>`;
+	errorMessageElement = document.querySelector(".error-message");
+	errorMessageElement.textContent = e;
 	myErrorModal.show();
 	return;
 };
