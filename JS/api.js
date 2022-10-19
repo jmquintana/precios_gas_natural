@@ -48,15 +48,17 @@ async function fetchLocalData(fileName) {
 		const data = await response.json();
 		return data;
 	} catch (e) {
-		console.log("catching error");
 		console.log(e);
 	}
 }
 
 async function getLocalData() {
+	toggleSpinner();
 	progressBar.style.display = "block";
 	const data = await fetchLocalData(LOCAL_FILE_NAME);
 	setTimeout(() => (progressBar.style.width = "100%"), 500);
+	toggleSpinner();
+	addOptionsCount();
 	return _.where(data, filters);
 }
 

@@ -11,11 +11,12 @@ function save(data, id = "data") {
 
 function get(id = "data") {
 	const data = localStorage.getItem(id);
-	if (data.length) {
+	if (data && data.length) {
 		console.log("Getting data from localStorage!");
 		return JSON.parse(data);
 	} else {
-		console.error("Getting data from localStorage!");
+		return false;
+		console.error("Fail getting data from localStorage!");
 	}
 }
 

@@ -16,6 +16,7 @@ const myCircleMarker = (lat_lng, weight) => {
 	});
 };
 const myMap = new L.Map("myMap", {
+	gestureHandling: true,
 	fullscreenControl: {
 		pseudoFullscreen: true, // if true, fullscreen to page width and height
 	},
