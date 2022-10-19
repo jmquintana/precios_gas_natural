@@ -16,21 +16,21 @@ const myCircleMarker = (lat_lng, weight) => {
 	});
 };
 const myMap = new L.Map("myMap", {
-	zoomDelta: 0.25,
 	fullscreenControl: {
 		pseudoFullscreen: true, // if true, fullscreen to page width and height
 	},
 });
 const tileLayerGroup = L.tileLayer(tile, {
 	markerZoomAnimation: true,
-	maxZoom: 19,
+	maxZoom: MAX_ZOOM,
 	dragging: true,
-	touchZoom: false,
-	scrollWheelZoom: false,
+	touchZoom: true,
+	scrollWheelZoom: true,
 	boxZoom: false,
-	keyboard: false,
+	keyboard: true,
 	zoomControl: true,
-	attributionControl: false,
+	doubleClickZoom: true,
+	attributionControl: true,
 	closePopupOnClick: false,
 	trackResize: true,
 	attribution:
