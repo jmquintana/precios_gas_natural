@@ -29,12 +29,34 @@ const columns = [
 	// { title: "longitud", data: "longitud" },
 	// { title: "geojson", data: "geojson" },
 ];
+const columnsMobile = [
+	{ title: "Año-Mes", data: "indice_tiempo" },
+	// { title: "idempresa", data: "idempresa" },
+	// { title: "Cuit", data: "cuit" },
+	// { title: "Empresa", data: "empresa" },
+	// { title: "Dirección", data: "direccion" },
+	{ title: "Localidad", data: "localidad" },
+	// { title: "Provincia", data: "provincia" },
+	// { title: "region", data: "region" },
+	// { title: "idproducto", data: "idproducto" },
+	// { title: "Producto", data: "producto" },
+	// { title: "idtipohorario", data: "idtipohorario" },
+	// { title: "tipohorario", data: "tipohorario" },
+	{ title: "Precio", data: "precio" },
+	// { title: "Publicado", data: "fecha_vigencia" },
+	// { title: "idempresabandera", data: "idempresabandera" },
+	{ title: "Bandera", data: "empresabandera" },
+	// { title: "latitud", data: "latitud" },
+	// { title: "longitud", data: "longitud" },
+	// { title: "geojson", data: "geojson" },
+];
+
 const columnDefs = [
 	{
 		width: "10%",
 		className: "dt-center",
 		render: $.fn.dataTable.render.number(",", ".", 2, "").display,
-		targets: [5],
+		targets: [5], //[precio]
 	},
 	{
 		width: "10%",
@@ -43,13 +65,27 @@ const columnDefs = [
 			"YYYY-MM-DDTHH:mm:ss",
 			"DD/MM/YYYY HH:mm"
 		),
-		targets: [6],
+		targets: [6], //[fecha_vigencia]
 	},
 	{
 		width: "3%",
 		className: "dt-body-center",
-		orderData: [0, 1, 2],
-		targets: [0, 1],
+		orderData: [0, 1, 2], //[indice_tiempo, cuit, direccion]
+		targets: [0, 1], //[indice_tiempo, cuit]
+	},
+];
+const columnDefsMobile = [
+	{
+		width: "5%",
+		className: "dt-right",
+		render: $.fn.dataTable.render.number(",", ".", 2, "").display,
+		targets: [2], //[precio]
+	},
+	{
+		width: "3%",
+		className: "dt-body-center",
+		orderData: [0, 1, 2], //[indice_tiempo, cuit, direccion]
+		targets: [0], //[indice_tiempo, cuit]
 	},
 ];
 const excelStyles = [
