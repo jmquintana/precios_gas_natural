@@ -118,6 +118,13 @@ $("#errorModal").on("hidden.bs.modal", function () {
 const handleSwitchBtn = (e) => {
 	Storage.save([e.target.checked], "dataSwitch");
 	loadTable().then(() => populateSelector("localidad", Storage.get()));
+	hideTooltips();
+};
+
+const hideTooltips = () => {
+	setTimeout(() => {
+		tooltipList.forEach((tooltip) => tooltip.hide());
+	}, 1000);
 };
 
 switchBtn?.addEventListener("click", handleSwitchBtn);
@@ -191,6 +198,7 @@ document.getElementById("reset")?.addEventListener("click", (e) => {
 				populateSelector("localidad", data);
 			});
 	}
+	hideTooltips();
 });
 
 async function loadTable() {

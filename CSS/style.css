@@ -56,15 +56,23 @@ html {
 }
 
 .main {
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: center; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100% !important;
     margin-top: 1rem;
     margin-bottom: 8rem;
-    /* justify-content: center; */
     /* height: 500px; */
     /* max-width: 300px; */
+}
+
+
+#spinner {
+    margin: 10rem;
+}
+
+#spinner.hide {
+    display: none;
 }
 
 .cards-container {
@@ -152,14 +160,6 @@ td {
 
 .form-select {
     max-width: 95%;
-}
-
-#spinner {
-    margin: 10rem;
-}
-
-#spinner.hide {
-    display: none;
 }
 
 #table-div {
@@ -260,7 +260,10 @@ table.dataTable td {
         margin-top: 0.2rem;
         margin-bottom: 0rem;
         margin-left: 0rem;
+    }
 
+    #spinner {
+        margin: 6rem;
     }
 
     .dt-buttons {
