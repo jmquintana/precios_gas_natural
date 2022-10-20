@@ -139,14 +139,14 @@ td {
 }
 
 .form .selector {
-    margin: 0 1rem 1rem 1rem;
+    margin: 1rem 1rem 0rem 1rem;
     width: 100%;
 
 }
 
 .form .selector h5 {
-    margin-top: 0.8rem;
-    margin-bottom: 0.8rem;
+    margin-left: 0.8rem;
+    /* margin-top: 0.8rem; */
 
 }
 
@@ -194,9 +194,14 @@ table.dataTable td {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly !important;
-    margin: 1rem 1rem .75rem 1rem
-        /* margin-top: 1rem; */
-        /* margin-bottom: .75rem; */
+    margin-top: 1rem;
+    /* margin: 1rem 1rem .75rem 1rem */
+    /* margin-top: 1rem; */
+    /* margin-bottom: .75rem; */
+}
+
+.icons * {
+    cursor: pointer;
 }
 
 .form-check {
@@ -207,10 +212,6 @@ table.dataTable td {
 
 #reset.disabled {
     pointer-events: none
-}
-
-.icons * {
-    cursor: pointer;
 }
 
 .pad {
@@ -234,6 +235,14 @@ table.dataTable td {
         text-align: center;
     }
 
+    .header h2 {
+        font-size: larger;
+    }
+
+    .header h5 {
+        font-size: medium;
+    }
+
     .main {
         margin-top: 0px;
     }
@@ -242,19 +251,15 @@ table.dataTable td {
         width: auto !important;
     }
 
-    .form {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr)
-    }
-
     .form .selector {
-        margin: 0rem
+        margin: 0.5rem
     }
 
     .form .selector h5 {
         text-align: center;
         margin-top: 0.2rem;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0rem;
+        margin-left: 0rem;
 
     }
 
@@ -263,7 +268,7 @@ table.dataTable td {
     }
 
     .form {
-        margin-top: .5rem;
+        /* margin-top: .5rem; */
         display: grid;
         grid-template-columns: repeat(4, 1fr);
     }
@@ -279,7 +284,7 @@ table.dataTable td {
     .icons {
         margin: 0;
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         align-items: center;
         justify-content: baseline;
     }
