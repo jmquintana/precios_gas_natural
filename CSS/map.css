@@ -3,10 +3,6 @@
     --max-color: "#000000";
 }
 
-* {
-    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 .modal-body {
     padding: 0 !important;
     /* display: flex; */
@@ -35,7 +31,7 @@
 
 .leaflet-tooltip.my-labels {
     /* font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #222222;
     font-weight: bold;
     background: transparent;

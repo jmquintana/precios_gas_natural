@@ -56,6 +56,7 @@ function plotMap(data) {
 		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Datos Abiertos del Gobierno de la República Argentina`,
 		pointToLayer: function (feature, latLng) {
 			return L.circleMarker(latLng, {
+				className: "circleMarker",
 				renderer: myRenderer,
 				color: feature.properties.backgroundColor,
 				radius: 16,
