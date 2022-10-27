@@ -107,6 +107,7 @@ const buttons = [
 		excelStyles: excelStyles,
 	},
 	{ text: "Map", className: "mapButton" },
+	{ text: "Loc", className: "locButton" },
 ];
 
 const PRODUCT_DICT = {

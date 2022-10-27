@@ -133,6 +133,7 @@ function modifyButtons() {
 	const excelButton = document.querySelector(".excelButton");
 	const copyButton = document.querySelector(".copyButton");
 	const mapButton = document.querySelector(".mapButton");
+	const locButton = document.querySelector(".locButton");
 
 	if (excelButton) {
 		excelButton.classList.replace("dt-button", "btn-success");

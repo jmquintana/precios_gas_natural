@@ -43,6 +43,16 @@ let globalData2 = [];
 let featureLayerGroup;
 let quadtree = L.quadtree();
 
+const bloc = document.getElementById("bloque");
+navigator.geolocation.getCurrentPosition(showPosition);
+function showPosition(position) {
+	bloc.innerHTML =
+		"Latitud: " +
+		position.coords.latitude +
+		"<br>Longitud: " +
+		position.coords.longitude;
+}
+
 function plotMap(data) {
 	const dataset = getGeoJsonObject(data);
 	tileLayerGroup.addTo(myMap);
@@ -56,7 +66,6 @@ function plotMap(data) {
 		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Datos Abiertos del Gobierno de la República Argentina`,
 		pointToLayer: function (feature, latLng) {
 			return L.circleMarker(latLng, {
-				className: "circleMarker",
 				renderer: myRenderer,
 				color: feature.properties.backgroundColor,
 				radius: 16,
@@ -114,7 +123,7 @@ function plotMap(data) {
 	L.control
 		.locate({
 			locateOptions: {
-				setView: true,
+				// setView: true,
 				watch: true,
 				layer: tileLayerGroup,
 				maxZoom: MAX_ZOOM,
