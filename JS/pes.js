@@ -2,8 +2,11 @@ console.log("script pes.js");
 const PRECIOS_EN_SURTIDOR =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
 const LOCAL_FILE_NAME = "pes.json";
+// const PROVINCE = await getProvince();
+
 let filters = {
 	provincia: "CAPITAL FEDERAL",
+	// provincia: PROVINCE,
 	producto: "Nafta (súper) entre 92 y 95 Ron",
 	// empresabandera: "YPF",
 	idtipohorario: 2,
@@ -107,7 +110,6 @@ const buttons = [
 		excelStyles: excelStyles,
 	},
 	{ text: "Map", className: "mapButton" },
-	{ text: "Loc", className: "locButton" },
 ];
 
 const PRODUCT_DICT = {

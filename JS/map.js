@@ -43,15 +43,60 @@ let globalData2 = [];
 let featureLayerGroup;
 let quadtree = L.quadtree();
 
-const bloc = document.getElementById("bloque");
-navigator.geolocation.getCurrentPosition(showPosition);
-function showPosition(position) {
-	bloc.innerHTML =
-		"Latitud: " +
-		position.coords.latitude +
-		"<br>Longitud: " +
-		position.coords.longitude;
+// navigator.geolocation.getCurrentPosition(showPosition);
+
+// async function showPosition(position) {
+// 	console.log(position.coords);
+// 	const province = await getUserProvince(
+// 		-45.92401275457338, // position.coords.latitude,
+// 		-67.55585276343744 // position.coords.longitude
+// 	);
+// 	console.log({ province });
+// 	document.getElementById("provincia").value = province;
+// }
+
+async function getUserProvince(lat, lon) {
+	// navigator.geolocation.getCurrentPosition()
+	let response = await fetch(
+		`https://apis.datos.gob.ar/georef/api/ubicacion?lat=${lat}&lon=${lon}`
+	);
+	const result = await response.json();
+	let province = normalizeText(result.ubicacion.provincia.nombre);
+	province =
+		province == "CIUDAD AUTONOMA DE BUENOS AIRES"
+			? "CAPITAL FEDERAL"
+			: province;
+	return province;
 }
+
+async function getProvince() {
+	// navigator.geolocation.getCurrentPosition(showPosition);
+
+	navigator.geolocation.getCurrentPosition(async (position) => {
+		try {
+			let response = await fetch(
+				`https://apis.datos.gob.ar/georef/api/ubicacion?lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+			);
+			const result = await response.json();
+			let province = normalizeText(result.ubicacion.provincia.nombre);
+			province =
+				province == "CIUDAD AUTONOMA DE BUENOS AIRES"
+					? "CAPITAL FEDERAL"
+					: province;
+			console.log(province);
+			return province;
+		} catch (e) {
+			console.log(e);
+		}
+	});
+}
+
+const normalizeText = (str) => {
+	return str
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toUpperCase();
+};
 
 function plotMap(data) {
 	const dataset = getGeoJsonObject(data);
