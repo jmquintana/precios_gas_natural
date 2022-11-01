@@ -12,16 +12,16 @@ Find [here](https://precios-energia.netlify.app/index.html) the Web App Deployed
 
 <img src="./img/home.png"
      alt="Home"
-     style="float: center; width: 600px;" />
+     style="float: center; width: 800px;" />
 
 - Natural Gas table information.
 
 <img src="./img/gas.png"
      alt="Home"
-     style="float: center; width: 600px;" />
+     style="float: center; width: 800px;" />
 
 - Map with service stations prices.
 
 <img src="./img/map.png"
      alt="Home"
-     style="float: center; width: 600px;" />
+     style="float: center; width: 800px;" />
