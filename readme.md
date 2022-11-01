@@ -4,7 +4,7 @@ This Web App Demo that displays information about natural gas and fuel prices at
 
 #### Demo
 
-Find <a href="https://precios-energia.netlify.app/index.html" target="_blank">here</a> the Web App Deployed!
+Find [here](https://precios-energia.netlify.app/index.html) the Web App Deployed!
 
 #### Screenshots/Features
 
