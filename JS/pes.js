@@ -2,15 +2,15 @@ console.log("script pes.js");
 const PRECIOS_EN_SURTIDOR =
 	"/api/3/action/datastore_search?resource_id=80ac25de-a44a-4445-9215-090cf55cfda5";
 const LOCAL_FILE_NAME = "pes.json";
-// const PROVINCE = await getProvince();
 
+//filters by default
 let filters = {
 	provincia: "CAPITAL FEDERAL",
-	// provincia: PROVINCE,
 	producto: "Nafta (súper) entre 92 y 95 Ron",
-	// empresabandera: "YPF",
 	idtipohorario: 2,
 };
+
+//all available columns in the dataset (choose cols of interest)
 const columns = [
 	{ title: "Año-Mes", data: "indice_tiempo" },
 	// { title: "idempresa", data: "idempresa" },
@@ -32,6 +32,8 @@ const columns = [
 	// { title: "longitud", data: "longitud" },
 	// { title: "geojson", data: "geojson" },
 ];
+
+//chosen cols for mobile platform (not yet implemented)
 const columnsMobile = [
 	{ title: "Año-Mes", data: "indice_tiempo" },
 	// { title: "idempresa", data: "idempresa" },
@@ -54,6 +56,7 @@ const columnsMobile = [
 	// { title: "geojson", data: "geojson" },
 ];
 
+//some format for chosen cols
 const columnDefs = [
 	{
 		width: "10%",
@@ -77,6 +80,8 @@ const columnDefs = [
 		targets: [0, 1], //[indice_tiempo, cuit]
 	},
 ];
+
+//format for cols for mobile platform (not yet implemented)
 const columnDefsMobile = [
 	{
 		width: "5%",
@@ -91,6 +96,8 @@ const columnDefsMobile = [
 		targets: [0], //[indice_tiempo, cuit]
 	},
 ];
+
+//cols format for downloadable excel
 const excelStyles = [
 	{
 		cells: ["E", "F", "G", "H", "I", "J", "K"],
@@ -100,6 +107,7 @@ const excelStyles = [
 	},
 ];
 const colReorder = { order: [5, 3, 2, 1, 0] };
+
 let endpoint = PRECIOS_EN_SURTIDOR;
 
 const buttons = [

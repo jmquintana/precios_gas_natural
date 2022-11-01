@@ -13,6 +13,7 @@ const ERROR_TEST_MESSAGE = `[Esto es un ejemplo] Uncaught TypeError: Cannot
 							at handleFetchError (api.js:90:2)
 							at <anonymous>:1:1`;
 
+// check if an object is empty
 function isEmptyObj(obj) {
 	for (let prop in obj) {
 		if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -22,6 +23,7 @@ function isEmptyObj(obj) {
 	return JSON.stringify(obj) === JSON.stringify({});
 }
 
+//generate a string with the filters of the api endpoint
 function urlFilters(filters) {
 	if (isEmptyObj(filters)) {
 		return "";
@@ -42,6 +44,7 @@ function toggleSpinner() {
 	document.getElementById("reset").classList.toggle("disabled");
 }
 
+//when remote data isn't available
 async function fetchLocalData(fileName) {
 	try {
 		const response = await fetch(`./data/${fileName}`);
@@ -52,6 +55,7 @@ async function fetchLocalData(fileName) {
 	}
 }
 
+//get and filter the local data
 async function getLocalData() {
 	toggleSpinner();
 	progressBar.style.display = "block";
@@ -62,6 +66,18 @@ async function getLocalData() {
 	return _.where(data, filters);
 }
 
+//getting the data from the Datos Argentina Api
+
+/*
+When the app is deployed in an 'https' host (like Netlify), throws this error: 
+Access to fetch at 'https://{api-endpoint}' from origin 'https://precios-energia.netlify.app' has been blocked by CORS policy: 
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+If an opaque response serves your needs, set the request's mode to 'no-cors' 
+to fetch the resource with CORS disabled.
+
+*/
+
+//this method runs well from Localhost.
 async function getRemoteData() {
 	try {
 		toggleSpinner();
@@ -97,6 +113,7 @@ async function getRemoteData() {
 	}
 }
 
+//fetch error handler
 const showErrorModal = (e = ERROR_TEST_MESSAGE) => {
 	let myErrorModal = new bootstrap.Modal(document.querySelector("#errorModal"));
 	errorMessageElement = document.querySelector(".error-message");
@@ -133,7 +150,6 @@ function modifyButtons() {
 	const excelButton = document.querySelector(".excelButton");
 	const copyButton = document.querySelector(".copyButton");
 	const mapButton = document.querySelector(".mapButton");
-	const locButton = document.querySelector(".locButton");
 
 	if (excelButton) {
 		excelButton.classList.replace("dt-button", "btn-success");
@@ -170,6 +186,7 @@ function resetSelector(selectorId) {
 	console.log(document.getElementById(`${selectorId}`).value);
 }
 
+//checks if an option exists in a list of a certain selector element
 function optionExist(option, filterSelector) {
 	const options = [...filterSelector.options].map((el) => el.value);
 	return options.includes(option);
@@ -253,6 +270,7 @@ function updateFilters() {
 	console.log(filters);
 }
 
+//fill selector elements with actual filters
 function filtersToSelectors() {
 	filterSelectors.forEach((filterSelector) => {
 		if (filters[filterSelector.id]) {
@@ -264,6 +282,7 @@ function filtersToSelectors() {
 let tooltipTriggerList = [].slice.call(
 	document.querySelectorAll('[data-bs-toggle="tooltip"]')
 );
+
 let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 	return new bootstrap.Tooltip(tooltipTriggerEl);
 });
@@ -272,6 +291,7 @@ function getUniques(key, arr) {
 	return [...new Set(arr.map((x) => x[key]))].sort();
 }
 
+//populate a selector with unique values
 function populateSelector(columnName, data) {
 	const values = getUniques(columnName, data);
 	$(`#${columnName}`)
@@ -282,6 +302,7 @@ function populateSelector(columnName, data) {
 	);
 }
 
+//get and set the number of different available options of a selector element in the 'all-option' of each selector
 function addOptionsCount() {
 	filterSelectors.forEach((filterSelector) => {
 		if (filterSelector[0].value === OPTION_ALL) {
@@ -292,7 +313,6 @@ function addOptionsCount() {
 	});
 }
 
-//download json file and save to disk
 function download(content, fileName, contentType) {
 	let a = document.createElement("a");
 	let file = new Blob([content], { type: contentType });
@@ -301,6 +321,7 @@ function download(content, fileName, contentType) {
 	a.click();
 }
 
+//download a json file and save it to disk (not used)
 const downloadAll = () => {
 	let filtersBackup = JSON.parse(JSON.stringify(filters));
 	filters = {};
@@ -313,6 +334,7 @@ const downloadAll = () => {
 	filters = JSON.parse(JSON.stringify(filtersBackup));
 };
 
+//runs api fetch when page is loaded
 $(document).ready(() => {
 	switchBtn.removeAttribute("checked");
 	filtersToSelectors();

@@ -1,10 +1,12 @@
 console.log("script map.js");
 
+//variable declarations
 const tile = `https://tile.openstreetmap.org/{z}/{x}/{y}.png`;
 const tile2 = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
 const colors = ["#008800", "#FFFF00", "#BB0000"];
 const MAX_ZOOM = 17;
 const MIN_MAX_COLLISION_THRESHOLD = 0.15;
+const tooltipThreshold = 14;
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
 	return L.circleMarker(lat_lng, {
@@ -43,70 +45,15 @@ let globalData2 = [];
 let featureLayerGroup;
 let quadtree = L.quadtree();
 
-// navigator.geolocation.getCurrentPosition(showPosition);
-
-// async function showPosition(position) {
-// 	console.log(position.coords);
-// 	const province = await getUserProvince(
-// 		-45.92401275457338, // position.coords.latitude,
-// 		-67.55585276343744 // position.coords.longitude
-// 	);
-// 	console.log({ province });
-// 	document.getElementById("provincia").value = province;
-// }
-
-async function getUserProvince(lat, lon) {
-	// navigator.geolocation.getCurrentPosition()
-	let response = await fetch(
-		`https://apis.datos.gob.ar/georef/api/ubicacion?lat=${lat}&lon=${lon}`
-	);
-	const result = await response.json();
-	let province = normalizeText(result.ubicacion.provincia.nombre);
-	province =
-		province == "CIUDAD AUTONOMA DE BUENOS AIRES"
-			? "CAPITAL FEDERAL"
-			: province;
-	return province;
-}
-
-async function getProvince() {
-	// navigator.geolocation.getCurrentPosition(showPosition);
-
-	navigator.geolocation.getCurrentPosition(async (position) => {
-		try {
-			let response = await fetch(
-				`https://apis.datos.gob.ar/georef/api/ubicacion?lat=${position.coords.latitude}&lon=${position.coords.longitude}`
-			);
-			const result = await response.json();
-			let province = normalizeText(result.ubicacion.provincia.nombre);
-			province =
-				province == "CIUDAD AUTONOMA DE BUENOS AIRES"
-					? "CAPITAL FEDERAL"
-					: province;
-			console.log(province);
-			return province;
-		} catch (e) {
-			console.log(e);
-		}
-	});
-}
-
-const normalizeText = (str) => {
-	return str
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.toUpperCase();
-};
-
 function plotMap(data) {
 	const dataset = getGeoJsonObject(data);
 	tileLayerGroup.addTo(myMap);
 	featureLayerGroup = L.geoJSON(dataset, {
 		onEachFeature: function (feature, layer) {
 			quadtree.add(layer);
-			// layer.on("mouseover", function (e) {
-			// 	e.target.bringToFront();
-			// });
+			layer.on("mouseover", function (e) {
+				e.target.bringToFront();
+			});
 		},
 		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Datos Abiertos del Gobierno de la República Argentina`,
 		pointToLayer: function (feature, latLng) {
@@ -179,15 +126,6 @@ function plotMap(data) {
 	myMap.fitBounds(featureLayerGroup.getBounds());
 	updateScale();
 }
-function getVisibleMarkers() {
-	let bounds = myMap.getBounds();
-	let colliders = quadtree.getColliders(bounds);
-	let data = [];
-	for (var i = 0, len = colliders.length; i < len; ++i) {
-		data.push(colliders[i]);
-	}
-	return data;
-}
 
 //events definition
 $("#mapModal").on("show.bs.modal", function () {
@@ -203,9 +141,8 @@ $("#mapModal").on("show.bs.modal", function () {
 	}, 300);
 });
 
+let layersGroups = [];
 $("#mapModal").on("hidden.bs.modal", function () {
-	// myMap.removeLayer(featureLayerGroup);
-	// myMap.removeLayer(tileLayerGroup);
 	myMap.stopLocate();
 	document
 		.querySelector(
@@ -218,8 +155,6 @@ $("#mapModal").on("hidden.bs.modal", function () {
 	quadtree = null;
 });
 
-let layersGroups = [];
-
 function countLayers() {
 	let counter = 0;
 	myMap.eachLayer((layer) => {
@@ -230,8 +165,6 @@ function countLayers() {
 }
 myMap.on("move", updateScale);
 
-// var lastZoom;
-const tooltipThreshold = 14;
 myMap.on("zoomend", function () {
 	var zoom = myMap.getZoom();
 	console.log(zoom);
@@ -250,20 +183,16 @@ function filterDataWithLocations(data) {
 
 const removeOutliers = (arr) => {
 	const arrMonth = arr.map((el) => moment(el.indice_tiempo));
-	// console.log(arrMonth);
-	const maxMonth = moment.max(arrMonth);
-	// console.log(maxMonth);
-	const perviousMonth = moment(maxMonth).add(-1, "month");
-	// const max = moment(maxMonth).format("MM-YYYY");
-	// const prev = moment(previousMonth).format("MM-YYYY");
-	// console.log({ prev, max });
+	const lastMonth = moment.max(arrMonth);
+	const previousMonth = moment(lastMonth).add(-1, "month");
 	return arr.filter(
 		(el) =>
-			el.indice_tiempo == maxMonth.format("YYYY-MM") ||
-			el.indice_tiempo == perviousMonth.format("YYYY-MM")
+			el.indice_tiempo == lastMonth.format("YYYY-MM") ||
+			el.indice_tiempo == previousMonth.format("YYYY-MM")
 	);
 };
 
+//transform data from api to a GeoJson valid format
 function getGeoJsonObject(data) {
 	const dataWithoutOutliers = removeOutliers(data); //, "precio", 0.9, 100);
 	let [minValue, maxValue] = getMinMax(dataWithoutOutliers, "precio");
@@ -307,7 +236,7 @@ function getMinMax(data, property) {
 }
 
 //other auxiliary calculations
-//how to get a color from a gradient based on a value?
+//get a color from a gradient based on a value
 function pickHex(color1, color2, weight) {
 	let w1 = weight;
 	let w2 = 1 - w1;
@@ -319,7 +248,7 @@ function pickHex(color1, color2, weight) {
 	return rgb;
 }
 
-// t in range 0..1, start-middle-end are colors in hex e.g. #FF00FF
+//t in range 0..1, start-middle-end are colors in hex e.g. #FF00FF
 function gradient(t, start, middle, end) {
 	return t >= 0.5
 		? linear(middle, end, (t - 0.5) * 2)
@@ -333,7 +262,7 @@ function linear(s, e, x) {
 	return "#" + r + g + b;
 }
 
-// a,b are hex values from 00 to FF; x is real number in range 0..1
+//a, b are hex values from 00 to FF; x is real number in range 0..1
 function byteLinear(a, b, x) {
 	let y = (("0x" + a) * (1 - x) + ("0x" + b) * x) | 0;
 	return y.toString(16).padStart(2, "0"); // hex output
@@ -377,6 +306,16 @@ const getWeight = (actualValue, minValue, maxValue) => {
 };
 
 //dom manipulation
+function getVisibleMarkers() {
+	let bounds = myMap.getBounds();
+	let colliders = quadtree.getColliders(bounds);
+	let data = [];
+	for (var i = 0, len = colliders.length; i < len; ++i) {
+		data.push(colliders[i]);
+	}
+	return data;
+}
+
 function updateScale() {
 	let visibleData = getVisibleMarkers();
 	console.log(visibleData);
@@ -416,6 +355,13 @@ function setColorScale(minValue, visibleMin, visibleMax, maxValue) {
 }
 
 //things that aren't in use
+const normalizeText = (str) => {
+	return str
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toUpperCase();
+};
+
 const myTriangleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
 	return L.triangleMarker(lat_lng, {
@@ -430,3 +376,51 @@ const myTriangleMarker = (lat_lng, weight) => {
 		// stroke: false,
 	});
 };
+
+// navigator.geolocation.getCurrentPosition(showPosition);
+
+// async function showPosition(position) {
+// 	console.log(position.coords);
+// 	const province = await getUserProvince(
+// 		-45.92401275457338, // position.coords.latitude,
+// 		-67.55585276343744 // position.coords.longitude
+// 	);
+// 	console.log({ province });
+// 	document.getElementById("provincia").value = province;
+// }
+
+async function getUserProvince(lat, lon) {
+	// navigator.geolocation.getCurrentPosition()
+	let response = await fetch(
+		`https://apis.datos.gob.ar/georef/api/ubicacion?lat=${lat}&lon=${lon}`
+	);
+	const result = await response.json();
+	let province = normalizeText(result.ubicacion.provincia.nombre);
+	province =
+		province == "CIUDAD AUTONOMA DE BUENOS AIRES"
+			? "CAPITAL FEDERAL"
+			: province;
+	return province;
+}
+
+async function getProvince() {
+	// navigator.geolocation.getCurrentPosition(showPosition);
+
+	navigator.geolocation.getCurrentPosition(async (position) => {
+		try {
+			let response = await fetch(
+				`https://apis.datos.gob.ar/georef/api/ubicacion?lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+			);
+			const result = await response.json();
+			let province = normalizeText(result.ubicacion.provincia.nombre);
+			province =
+				province == "CIUDAD AUTONOMA DE BUENOS AIRES"
+					? "CAPITAL FEDERAL"
+					: province;
+			console.log(province);
+			return province;
+		} catch (e) {
+			console.log(e);
+		}
+	});
+}

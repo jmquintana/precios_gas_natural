@@ -2,11 +2,15 @@ console.log("script gas.js");
 const PRECIOS_GAS_RES_1 =
 	"/api/3/action/datastore_search?resource_id=d87ca6ab-2979-474b-994a-e4ba259bb217";
 const LOCAL_FILE_NAME = "gas.json";
+
+//filters by default
 let filters = {
 	// anio: 2022,
 	// cuenca: "Noroeste",
 	// contrato: "TOTAL",
 };
+
+//all available columns in the dataset (choose cols of interest)
 const columns = [
 	// { title: "ID", data: "id_pub" },
 	{ title: "Año", data: "anio" },
@@ -21,6 +25,7 @@ const columns = [
 	{ title: "PPP", data: "precio_ppp" },
 	{ title: "Expo", data: "precio_expo" },
 ];
+//some format for chosen cols
 const columnDefs = [
 	{
 		width: "10%",
@@ -35,6 +40,7 @@ const columnDefs = [
 		targets: [0, 1],
 	},
 ];
+//cols format for downloadable excel
 const excelStyles = [
 	{
 		cells: ["E", "F", "G", "H", "I", "J", "K"],
