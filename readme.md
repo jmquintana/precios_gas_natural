@@ -1,3 +1,5 @@
+[![wakatime](https://wakatime.com/badge/github/jmquintana/precios_energia.svg)](https://wakatime.com/badge/github/jmquintana/precios_energia)
+
 ## Precios de la Energía Web App
 
 This Web App Demo that displays information about natural gas and fuel prices at service stations in Argentina.
