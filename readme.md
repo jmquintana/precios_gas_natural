@@ -4,18 +4,24 @@ This Web App Demo that displays information about natural gas and fuel prices at
 
 #### Demo
 
-Find [here](https://precios-energia.netlify.app/index.html) the Web App Deployed
+Find [here](https://precios-energia.netlify.app/index.html) the Web App Deployed!
 
 #### Screenshots/Features
 
-- Hompage.
+- Homepage.
 
-![Image text](./img/home.png)
+<img src="./img/home.png"
+     alt="Home"
+     style="float: center; width: 600px;" />
 
 - Natural Gas table information.
 
-![Image text](./img/gas.png)
+<img src="./img/gas.png"
+     alt="Home"
+     style="float: center; width: 600px;" />
 
 - Map with service stations prices.
 
-![Image text](./img/map.png)
+<img src="./img/map.png"
+     alt="Home"
+     style="float: center; width: 600px;" />
