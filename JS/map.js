@@ -22,6 +22,8 @@ const myMap = new L.Map("myMap", {
 	fullscreenControl: {
 		pseudoFullscreen: true, // if true, fullscreen to page width and height
 	},
+}).on("click", function (ev) {
+	updateTooltips();
 });
 const tileLayerGroup = L.tileLayer(tile, {
 	markerZoomAnimation: true,
@@ -92,17 +94,17 @@ function plotMap(data) {
 			return { color: feature.properties.backgroundColor };
 		},
 	})
-		.bindPopup((layer) => {
-			const company = layer.feature.properties.empresabandera;
-			const product = PRODUCT_DICT[layer.feature.properties.producto];
-			const price = layer.feature.properties.precio;
-			const month = layer.feature.properties.indice_tiempo;
-			const zone = layer.feature.properties.region;
-			const town = layer.feature.properties.localidad;
-			const address = layer.feature.properties.direccion;
-			const unit = product == "GNC" ? `$/m<sup>3</sup>` : `$/litro`;
-
-			return `
+		.bindPopup(
+			(layer) => {
+				const company = layer.feature.properties.empresabandera;
+				const product = PRODUCT_DICT[layer.feature.properties.producto];
+				const price = layer.feature.properties.precio;
+				const month = layer.feature.properties.indice_tiempo;
+				const zone = layer.feature.properties.region;
+				const town = layer.feature.properties.localidad;
+				const address = layer.feature.properties.direccion;
+				const unit = product == "GNC" ? `$/m<sup>3</sup>` : `$/litro`;
+				return `
 			<div class="popupHeader" style="text-align:center"><b>${company}</b> (${product})</div>
 			<table class="popup-table">
 				<tr>
@@ -127,8 +129,17 @@ function plotMap(data) {
 				</tr>
 			</table>
 		`;
+			},
+			{
+				closePopupOnClick: false,
+			}
+		)
+		.on("popupopen", function (ev) {
+			updateTooltips();
 		})
-
+		.on("popupclose", function (ev) {
+			updateTooltips();
+		})
 		.addTo(myMap);
 	L.control
 		.locate({
@@ -170,7 +181,7 @@ $("#mapModal").on("hidden.bs.modal", function () {
 	layersGroups.forEach((group) => myMap.removeLayer(group));
 	hideMarkerTooltips(lastVisibleMarkers);
 	let layersCount = countLayers();
-	// console.log(layersCount);
+	console.log(layersCount);
 	quadtree = null;
 });
 
