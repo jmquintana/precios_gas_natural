@@ -67,12 +67,25 @@ function plotMap(data) {
 				opacity: 0.5,
 				fillOpacity: 0.8,
 			})
-				.bindTooltip((layer) => layer.feature.properties.empresabandera, {
-					permanent: false,
-					offset: L.point(0, -24),
-					direction: "center",
-					className: "my-labels",
-				})
+				.bindTooltip(
+					(layer) => `<table class="tooltip-table">
+									<tr>
+										<td style="text-align:center">${layer.feature.properties.empresabandera}</td>
+									</tr>
+									<tr>
+										<td style="text-align:center" class="price-tooltip">${Math.round(
+											layer.feature.properties.precio
+										)}</td>
+									</tr>
+								</table>
+								`,
+					{
+						permanent: false,
+						offset: L.point(0, -12),
+						direction: "center",
+						className: "my-labels",
+					}
+				)
 				.addTo(myMap);
 		},
 		style: function (feature) {
