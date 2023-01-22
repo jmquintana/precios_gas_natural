@@ -6,7 +6,7 @@ const tile2 = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
 const colors = ["#008800", "#FFFF00", "#BB0000"];
 const MAX_ZOOM = 17;
 const MIN_MAX_COLLISION_THRESHOLD = 0.15;
-const tooltipThreshold = 14;
+const TOOLTIP_THRESHOLD_ZOOM = 12;
 const myCircleMarker = (lat_lng, weight) => {
 	const color = gradient(weight, ...colors);
 	return L.circleMarker(lat_lng, {
@@ -58,13 +58,22 @@ function plotMap(data) {
 		attribution: `<a href="http://datos.energia.gob.ar/dataset/">Datos Argentina</a> - <a href="https://datos.gob.ar/dataset/energia-precios-surtidor---resolucion-3142016">Precios en surtidor - Res 314/2016</a> - Datos Abiertos del Gobierno de la República Argentina`,
 		pointToLayer: function (feature, latLng) {
 			return L.circleMarker(latLng, {
+				// bubblingMouseEvents: true,
 				renderer: myRenderer,
 				color: feature.properties.backgroundColor,
 				radius: 16,
-				fillOpacity: 0.8,
 				stroke: false,
-				bubblingMouseEvents: true,
-			}).addTo(myMap);
+				weight: 2,
+				opacity: 0.5,
+				fillOpacity: 0.8,
+			})
+				.bindTooltip((layer) => layer.feature.properties.empresabandera, {
+					permanent: false,
+					offset: L.point(0, -24),
+					direction: "center",
+					className: "my-labels",
+				})
+				.addTo(myMap);
 		},
 		style: function (feature) {
 			return { color: feature.properties.backgroundColor };
@@ -106,11 +115,7 @@ function plotMap(data) {
 			</table>
 		`;
 		})
-		// .bindTooltip((layer) => layer.feature.properties.empresabandera, {
-		// 	permanent: false,
-		// 	direction: "center",
-		// 	className: "my-labels",
-		// })
+
 		.addTo(myMap);
 	L.control
 		.locate({
@@ -150,8 +155,9 @@ $("#mapModal").on("hidden.bs.modal", function () {
 		)
 		.parentNode.remove();
 	layersGroups.forEach((group) => myMap.removeLayer(group));
+	hideMarkerTooltips(lastVisibleMarkers);
 	let layersCount = countLayers();
-	console.log(layersCount);
+	// console.log(layersCount);
 	quadtree = null;
 });
 
@@ -163,12 +169,47 @@ function countLayers() {
 	});
 	return counter;
 }
-myMap.on("move", updateScale);
+
+let lastVisibleMarkers = [];
+
+myMap.on("moveend", () => {
+	updateScale();
+	updateTooltips();
+});
 
 myMap.on("zoomend", function () {
 	var zoom = myMap.getZoom();
 	console.log(zoom);
+	updateTooltips();
 });
+
+const showMarkerTooltips = (data) => {
+	data.forEach((layer) => layer.openTooltip());
+};
+
+const hideMarkerTooltips = (data) => {
+	data.forEach((layer) => layer.closeTooltip());
+};
+
+const TOOLTIP_THRESHOLD_QTY = 120;
+
+const updateTooltips = () => {
+	const zoom = myMap.getZoom();
+	const visibleData = getVisibleMarkers();
+
+	// const condition = zoom >= TOOLTIP_THRESHOLD_ZOOM
+	const condition = visibleData.length <= TOOLTIP_THRESHOLD_QTY;
+	if (condition) {
+		const notVisibleMarkers = lastVisibleMarkers.filter(
+			(marker) => !visibleData.includes(marker)
+		);
+		hideMarkerTooltips(notVisibleMarkers);
+		showMarkerTooltips(visibleData);
+		lastVisibleMarkers = visibleData;
+	} else {
+		hideMarkerTooltips(visibleData);
+	}
+};
 
 //data manipulation
 function getFilteredDataFromTable() {
@@ -196,7 +237,7 @@ const removeOutliers = (arr) => {
 function getGeoJsonObject(data) {
 	const dataWithoutOutliers = removeOutliers(data); //, "precio", 0.9, 100);
 	let [minValue, maxValue] = getMinMax(dataWithoutOutliers, "precio");
-	console.log(minValue, maxValue);
+	// console.log(minValue, maxValue);
 	const features = dataWithoutOutliers.map((station) => {
 		const weight = getWeight(station.precio, minValue, maxValue);
 		const backgroundColor = gradient(weight, ...colors);
@@ -318,15 +359,15 @@ function getVisibleMarkers() {
 
 function updateScale() {
 	let visibleData = getVisibleMarkers();
-	console.log(visibleData);
+	// console.log(visibleData);
 	let visibleDataProperties = visibleData.map((el) => el.feature.properties);
 	let cleanVisibleData = removeOutliers(visibleDataProperties);
 	let cleanData = Storage.get("dataWithoutOutliers");
-	console.log(cleanData);
+	// console.log(cleanData);
 	let [minValue, maxValue] = getMinMax(cleanData, "precio");
 	if (cleanVisibleData.length) {
 		let [visibleMin, visibleMax] = getMinMax(cleanVisibleData, "precio");
-		console.log({ minValue, visibleMin, visibleMax, maxValue });
+		// console.log({ minValue, visibleMin, visibleMax, maxValue });
 		setColorScale(minValue, visibleMin, visibleMax, maxValue);
 	}
 }

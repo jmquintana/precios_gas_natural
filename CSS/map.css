@@ -32,12 +32,15 @@
 .leaflet-tooltip.my-labels {
     /* font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #222222;
+    color: #222;
     font-weight: bold;
     background: transparent;
     border: 0;
     box-shadow: none;
-    font-size: 1.4em;
+    font-size: 1.2em;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    /* transition: all 0.1s ease-in; */
+    transition: opacity 0.3s ease-in;
 }
 
 .color-scale-main-container {
